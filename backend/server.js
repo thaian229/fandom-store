@@ -9,7 +9,7 @@ const pool = new Pool({
 
 pool.connect()
 .then(() => console.log("Connected successfully"))
-.then(() => pool.query(`SELECT * FROM accounts`))
+.then(() => pool.query(`SELECT * FROM products`))
 .then(results => console.table(results.rows))
 .catch(e => console.log(e))
 .finally(() => pool.end());
