@@ -1,15 +1,44 @@
-const {Pool} = require('pg')
-const pool = new Pool({
-    user: "bvtnerlu",
-    host: "satao.db.elephantsql.com",
-    database: "bvtnerlu",
-    password: "em-a94IGU_ucyq_I85PWooGB6zHdlZGb",
-    port: 5432
-  });
+const express = require('express');
+const mountRoutes = require('./routes');
+const cors = require('cors');
+const session = require('express-session');
 
-pool.connect()
-.then(() => console.log("Connected successfully"))
-.then(() => pool.query(`SELECT * FROM products`))
-.then(results => console.table(results.rows))
-.catch(e => console.log(e))
-.finally(() => pool.end());
+const app = express();
+
+app.use(
+    cors({
+        origin: "localhost",
+        credentials: true,
+        allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+    })
+);
+
+app.use(express.static('public'));
+
+app.use(session({
+    secret: 'keyboard cat',
+}));
+
+app.set('view engine', 'ejs');
+
+// router
+mountRoutes(app);
+
+//start server
+app.listen(3001, (err) => {
+    if (err) {
+        throw err;
+    }
+    console.log('Server listen on port 3001');
+});
+
+
+
+
+
+
+
+
+
+
+
