@@ -5,44 +5,23 @@ const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")
 
 const userRouter = express.Router();
 
-userRouter.get("/getAll", async (req, res) => {
-  try {
-    const data = await db.query("SELECT * FROM accounts");
-    console.table(data.rows);
-    res.status(201).json({
-      success: true,
-      message: "success",
-      data: data.rows,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: err,
-      data: data.rows,
-    });
-  }
-});
+userRouter.get("/register", async (req, res) => {});
 
-userRouter.get("/getid/:id", async (req, res) => {
-  try {
-    data = await db.query("SELECT * FROM accounts WHERE id=$1", [
-      req.params.id,
-    ]);
-    console.table(data.rows);
-    res.status(201).json({
-      success: true,
-      message: "success",
-      data: data.rows,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      success: false,
-      message: err,
-      data: data.rows,
-    });
-  }
-});
+userRouter.get("/login", async (req, res) => {});
+
+userRouter.get("/logout", async (req, res) => {});
+
+userRouter.get("/profile", async (req, res) => {});
+
+userRouter.get("/cart", async (req, res) => {});
+
+userRouter.get("/orderHistory", async (req, res) => {});
+
+userRouter.post("/update", async (req, res) => {});
+
+userRouter.post("/addToCart", async (req, res) => {});
+//==>
+userRouter.post("/makeOrder", async (req, res) => {});
+
 
 module.exports = userRouter;
