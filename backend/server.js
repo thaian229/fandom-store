@@ -2,6 +2,8 @@ const express = require('express');
 const mountRoutes = require('./routes');
 const cors = require('cors');
 const session = require('express-session');
+const bodyParser = require('body-parser');
+
 
 const app = express();
 
@@ -19,7 +21,7 @@ app.use(session({
     secret: 'keyboard cat',
 }));
 
-app.set('view engine', 'ejs');
+app.use(bodyParser.json());
 
 // router
 mountRoutes(app);
