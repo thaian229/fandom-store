@@ -25,7 +25,7 @@ CREATE TABLE products (
 
 CREATE TABLE users (
 	acc_id uuid NOT NULL,
-	full_name VARCHAR(50) NOT NULL,
+	full_name VARCHAR(50),
 	ava_url TEXT DEFAULT 'https://miro.medium.com/max/720/1*W35QUSvGpcLuxPo3SRTH4w.png',
 	address TEXT,
 	dob DATE,
