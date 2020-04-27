@@ -8,8 +8,6 @@ const userRouter = express.Router();
 userRouter.post("/register", async (req, res) => {
     // get email and password from req.body
     const { email, password } = req.body;
-    console.log(email)
-    console.log(password)
 
     // validate email
     if (!email || !emailRegex.test(email)) {
@@ -63,7 +61,46 @@ userRouter.post("/register", async (req, res) => {
     }
 });
 
-userRouter.post("/login", async (req, res) => {});
+userRouter.post("/login", async (req, res) => {
+    // get email and password from req.body
+    const { email, password } = req.body;
+
+    // check email existance
+    try {
+        const { rows } = await db.query(`SELECT id, email, password FROM accounts WHERE email = $1::text LIMIT 1`, [email])
+        if (!rows[0]) {
+            res.status(400).json({
+                success: false,
+                message: 'This email does not exist',
+            });
+        } else if (!bcryptjs.compareSync(password, rows[0].password)) {
+            res.status(400).json({
+                success: false,
+                message: 'Wrong password',
+            });
+        } else {
+            // save info to session storage
+            req.session.currentUser = {
+                id: rows[0].id,
+                email: rows[0].email,
+            }
+
+            // response
+            res.status(201).json({
+                success: true,
+                message: 'Login successfully',
+                data: {
+                    email: rows[0].email,
+                },
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+});
 
 userRouter.get("/logout", async (req, res) => {});
 
