@@ -102,19 +102,31 @@ userRouter.post("/login", async (req, res) => {
     }
 });
 
-userRouter.get("/logout", async (req, res) => {});
+userRouter.get("/logout", async (req, res) => {
+    try {
+        await req.session.destroy;
+        res.status(200).json({
+            success: true,
+            message: 'Logout successfully',
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+});
 
 userRouter.get("/profile", async (req, res) => {});
+
+userRouter.post("/update", async (req, res) => {});
+
+userRouter.post("/addToCart", async (req, res) => {});
 
 userRouter.get("/cart", async (req, res) => {});
 
 userRouter.get("/orderHistory", async (req, res) => {});
 
-userRouter.post("/update", async (req, res) => {});
-
-userRouter.post("/addToCart", async (req, res) => {});
-//==>
 userRouter.post("/makeOrder", async (req, res) => {});
-
 
 module.exports = userRouter;
