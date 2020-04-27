@@ -73,19 +73,13 @@ postRouter.post("/updateViews", async (req, res) => {
     }
 }); //
 
-
-
-
-// Hai phần /search/:keyword và /searchTag/:tag đang bị lỗi.
-// Những phần còn lại không động vào, động vào là ăn kẹc.
-
 postRouter.get("/search/:keyword", async (req, res) => {
     //take keyword from URL
     console.log(req.params.keyword);
     const keyword = req.params.keyword;
     //Check keyword from db
     try{
-        const { rows } = await db.query(`SELECT * FROM products WHERE prod_name ILIKE '%${keyword}%'`);
+        const { rows } = await db.query(`SELECT * FROM products WHERE prod_name ILIKE $1::text`,['%'+keyword+'%']);
         console.log(rows);
         res.status(200).json({
             success: true,
@@ -105,8 +99,12 @@ postRouter.get("/searchTag/:tag", async (req, res) => {
     console.log(req.params.tag);
     const tag = req.params.tag;
     try{
-        const {rows} = await db.query(`SELECT prod_name FROM products WHERE tags = '$1::text'`, [tag]);
+        const {rows} = await db.query(`SELECT prod_name FROM products WHERE tags = $1::text`, [tag]);
         console.log(rows);
+        res.status(200).json({
+            success: true,
+            data: rows
+        })
     }
     catch(error){
         res.status(500).json({
@@ -115,19 +113,6 @@ postRouter.get("/searchTag/:tag", async (req, res) => {
         });
     }
 }); //neu thua thoi gian thi update thanh nhieu category sau.
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 postRouter.post("/makeComment", async (req, res) => {
     // check authentication
