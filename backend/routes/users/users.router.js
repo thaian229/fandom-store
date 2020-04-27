@@ -155,7 +155,40 @@ userRouter.get("/profile", async (req, res) => {
     }
 });
 
-userRouter.post("/update", async (req, res) => {});
+userRouter.post("/update", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // take info from req.body
+        const { full_name, address, dob } = req.body;
+        // save in database
+        try {
+            const TEXT = `
+            UPDATE users
+            SET
+                full_name = $1::text,
+                address = $2::text,
+                dob = $3::date
+            WHERE
+                acc_id = $4::uuid;`
+            await db.query(TEXT, [full_name, address, dob, userID])
+            res.status(201).json({
+                success: true,
+                message: 'Update successfully',
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
 userRouter.post("/addToCart", async (req, res) => {});
 
