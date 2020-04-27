@@ -38,6 +38,7 @@ userRouter.post("/register", async (req, res) => {
                     await db.query(`INSERT INTO accounts (email, password) VALUES ($1::text, $2::text)`, [email, hashPassword]);
                     const { rows } = await db.query(`SELECT id FROM accounts WHERE email = $1::text LIMIT 1`, [email])
                     await db.query(`INSERT INTO users (acc_id) VALUES ($1::uuid)`, [rows[0].id])
+                    await db.query(`INSERT INTO carts (acc_id) VALUES ($1::uuid)`, [rows[0].id])
                     res.status(201).json({
                         success: true,
                         data: {
@@ -125,10 +126,12 @@ userRouter.get("/profile", async (req, res) => {
     if (req.session.currentUser && req.session.currentUser.id) {
         const userID = req.session.currentUser.id;
         // get all profile related info: full_name, address, dob, email, created_at
-        const TEXT = `SELECT u.full_name, u.address, u.dob, a.email, a.created_at, a.is_admin
-                      FROM accounts a JOIN users u ON (a.id = u.acc_id)
-                      WHERE a.id = $1::uuid
-                      LIMIT 1`
+        const TEXT = `
+            SELECT u.full_name, u.address, u.dob, a.email, a.created_at, a.is_admin
+            FROM accounts a JOIN users u ON (a.id = u.acc_id)
+            WHERE a.id = $1::uuid
+            LIMIT 1
+            `
         try {
             const { rows } = await db.query(TEXT, [userID]);
             res.status(201).json({
@@ -155,14 +158,220 @@ userRouter.get("/profile", async (req, res) => {
     }
 });
 
-userRouter.post("/update", async (req, res) => {});
+userRouter.post("/update", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // take info from req.body
+        const { full_name, address, dob } = req.body;
+        // save in database
+        try {
+            const TEXT = `
+                UPDATE users
+                SET
+                    full_name = $1::text,
+                    address = $2::text,
+                    dob = $3::date
+                WHERE
+                    acc_id = $4::uuid;
+                `
+            await db.query(TEXT, [full_name, address, dob, userID])
+            res.status(201).json({
+                success: true,
+                message: 'Update successfully',
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
-userRouter.post("/addToCart", async (req, res) => {});
+userRouter.post("/addToCart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // take prod_id, quantity from req.body
+        const { prod_id, quantity } = req.body;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // update into database
+        try {
+            const TEXT = `
+                INSERT INTO cart_items (prod_id, quantity, cart_id)
+                VALUES
+                    ($1::uuid, $2, $3::uuid)
+                `
+            await db.query(TEXT, [prod_id, quantity, cart_id])
+            res.status(201).json({
+                success: true,
+                message: 'Add to cart successfully',
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
-userRouter.get("/cart", async (req, res) => {});
+userRouter.get("/cart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // query and sent data
+        try {
+            const TEXT = `
+                SELECT ci.id, ci.prod_id, ci.quantity, ci.created_at
+                FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
+                WHERE c.id = $1::uuid
+                `
+            const { rows } = await db.query(TEXT, [userID]);
+            console.table(rows)
+            res.status(200).json({
+                success: true,
+                cart_id: cart_id,
+                data: rows,
+            });
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
-userRouter.get("/orderHistory", async (req, res) => {});
+userRouter.get("/orderHistory", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // retrieve list of orders 
+        try {
+            const TEXT = `
+                SELECT id, created_at FROM orders
+                WHERE acc_id = $1::uuid
+                `
+            const results = await db.query(TEXT, [userID]);
+            const orderList = results.rows; // .rows is an array of object each object contain id of the orders
+            // take detail of each order
+            try {
+                let sendBackData = [];
+                orderList.forEach(async (item) => {
+                    const TEXT = `
+                        SELECT prod_id, quantity FROM order_items
+                        WHERE oder_items.order_id = $1::uuid
+                        `
+                    const results = await db.query(TEXT, [item.id]);
+                    sendBackData.push({
+                        order_id: item.id,
+                        created_at: item.created_at,
+                        order_detail: results.rows,
+                    });
+                })
+                // return data
+                res.status(200).json({
+                    success: true,
+                    data: sendBackData,
+                })
+            } catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: error.message,
+                });
+            }
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
-userRouter.post("/makeOrder", async (req, res) => {});
+userRouter.post("/makeOrder", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        // take user and cart id
+        const userID = req.session.currentUser.id;
+        // take list of product
+        const TEXT = `
+                SELECT  ci.prod_id, ci.quantity
+                FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
+                WHERE c.id = $1::uuid
+                `
+        const { rows } = await db.query(TEXT, [userID]);
+        // make new order
+        try {
+            const order_id_returning = await db.query(`INSERT INTO orders (acc_id) VALUES ($1::uuid) RETURNING id`, [userID])
+            const order_id = order_id_returning.rows[0].id;
+            // make list of order items
+            try {
+                const TEXT_ORDER_ITEM = `
+                    INSERT INTO order_items (order_id, prod_id, quantity)
+                    VALUES
+                        ($1::uuid, $2::uuid, $3)
+                `
+                rows.forEach( async (item) => {
+                    await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
+                })
+                res.status(201).json({
+                    success: true,
+                    message: 'Make order successfully',
+                });
+            } catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: error.message,
+                });
+            }
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
+
+userRouter.get("/test", async (req, res) => {
+    const data = await db.query(`SELECT id, email, is_admin FROM accounts`);
+    console.table(data.rows);
+    console.log(data.rows);
+    res.status(200).json({
+        success: true,
+        data: data.rows,
+    })
+});
 
 module.exports = userRouter;
