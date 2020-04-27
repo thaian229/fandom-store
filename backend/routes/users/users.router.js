@@ -38,6 +38,7 @@ userRouter.post("/register", async (req, res) => {
                     await db.query(`INSERT INTO accounts (email, password) VALUES ($1::text, $2::text)`, [email, hashPassword]);
                     const { rows } = await db.query(`SELECT id FROM accounts WHERE email = $1::text LIMIT 1`, [email])
                     await db.query(`INSERT INTO users (acc_id) VALUES ($1::uuid)`, [rows[0].id])
+                    await db.query(`INSERT INTO carts (acc_id) VALUES ($1::uuid)`, [rows[0].id])
                     res.status(201).json({
                         success: true,
                         data: {
@@ -190,7 +191,39 @@ userRouter.post("/update", async (req, res) => {
     }
 });
 
-userRouter.post("/addToCart", async (req, res) => {});
+userRouter.post("/addToCart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // take prod_id, quantity from req.body
+        const { prod_id, quantity } = req.body;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // update into database
+        try {
+            const TEXT = `
+            INSERT INTO cart_items (prod_id, quantity, cart_id)
+            VALUES
+                ($1::uuid, $2, $3::uuid)
+            `
+            await db.query(TEXT, [prod_id, quantity, cart_id])
+            res.status(201).json({
+                success: true,
+                message: 'Add to cart successfully',
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
 userRouter.get("/cart", async (req, res) => {});
 
