@@ -269,7 +269,7 @@ userRouter.get("/orderHistory", async (req, res) => {
         // retrieve list of orders 
         try {
             const TEXT = `
-                SELECT id FROM orders
+                SELECT id, created_at FROM orders
                 WHERE acc_id = $1::uuid
                 `
             const results = await db.query(TEXT, [userID]);
@@ -285,6 +285,7 @@ userRouter.get("/orderHistory", async (req, res) => {
                     const results = await db.query(TEXT, [item.id]);
                     sendBackData.push({
                         order_id: item.id,
+                        created_at: item.created_at,
                         order_detail: results.rows,
                     });
                 })
@@ -313,7 +314,55 @@ userRouter.get("/orderHistory", async (req, res) => {
     }
 });
 
-userRouter.post("/makeOrder", async (req, res) => { });
+userRouter.post("/makeOrder", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        // take user and cart id
+        const userID = req.session.currentUser.id;
+        // take list of product
+        const TEXT = `
+                SELECT  ci.prod_id, ci.quantity
+                FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
+                WHERE c.id = $1::uuid
+                `
+        const { rows } = await db.query(TEXT, [userID]);
+        // make new order
+        try {
+            const order_id_returning = await db.query(`INSERT INTO orders (acc_id) VALUES ($1::uuid) RETURNING id`, [userID])
+            const order_id = order_id_returning.rows[0].id;
+            // make list of order items
+            try {
+                const TEXT_ORDER_ITEM = `
+                    INSERT INTO order_items (order_id, prod_id, quantity)
+                    VALUES
+                        ($1::uuid, $2::uuid, $3)
+                `
+                rows.forEach( async (item) => {
+                    await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
+                })
+                res.status(201).json({
+                    success: true,
+                    message: 'Make order successfully',
+                });
+            } catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: error.message,
+                });
+            }
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
 userRouter.get("/test", async (req, res) => {
     const data = await db.query(`SELECT id, email, is_admin FROM accounts`);
