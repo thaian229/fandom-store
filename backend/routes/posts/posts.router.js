@@ -48,7 +48,36 @@ postRouter.post("/editItem", async (req, res) => {});
 
 postRouter.post("/removeItem", async (req, res) => {}); 
 
-postRouter.post("/updateViews", async (req, res) => {}); //
+postRouter.post("/updateViews", async (req, res) => {
+    //get the Item has new view
+    const { prod_id } = req.body;
+    const { rows } = await db.query(`SELECT views FROM products WHERE id = $1::uuid LIMIT 1`, [prod_id]);
+    const newViews = rows[0].views+1;
+    try {
+        const TEXT = `
+            UPDATE products
+            SET views = $1
+            WHERE id = $2::uuid
+        `
+    await db.query(TEXT, [newViews, prod_id])
+    res.status(201).json({
+        success: true,
+        message: 'Update views successfully',
+    })
+    }
+    catch (error){
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}); //
+
+
+
+
+// Hai phần /search/:keyword và /searchTag/:tag đang bị lỗi.
+// Những phần còn lại không động vào, động vào là ăn kẹc.
 
 postRouter.get("/search/:keyword", async (req, res) => {
     //take keyword from URL
@@ -56,8 +85,12 @@ postRouter.get("/search/:keyword", async (req, res) => {
     const keyword = req.params.keyword;
     //Check keyword from db
     try{
-        const {rows} = await db.query(`SELECT prod_name FROM products WHERE prod_name LIKE '%$1::text%'`, [keyword]);
+        const { rows } = await db.query(`SELECT * FROM products WHERE prod_name ILIKE '%${keyword}%'`);
         console.log(rows);
+        res.status(200).json({
+            success: true,
+            data: rows
+        })
     }
     catch(error){
         res.status(500).json({
@@ -67,10 +100,34 @@ postRouter.get("/search/:keyword", async (req, res) => {
     }
 }); //
 
-postRouter.get("/search/:tag", async (req, res) => {
+postRouter.get("/searchTag/:tag", async (req, res) => {
     //1sp <-> 1 tag
-
+    console.log(req.params.tag);
+    const tag = req.params.tag;
+    try{
+        const {rows} = await db.query(`SELECT prod_name FROM products WHERE tags = '$1::text'`, [tag]);
+        console.log(rows);
+    }
+    catch(error){
+        res.status(500).json({
+            success: false,
+            messeage: error.messeage,
+        });
+    }
 }); //neu thua thoi gian thi update thanh nhieu category sau.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 postRouter.post("/makeComment", async (req, res) => {
     // check authentication
