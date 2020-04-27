@@ -225,7 +225,39 @@ userRouter.post("/addToCart", async (req, res) => {
     }
 });
 
-userRouter.get("/cart", async (req, res) => {});
+userRouter.get("/cart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // query and sent data
+        try {
+            const TEXT = `
+            SELECT ci.id, ci.prod_id, ci.quantity, ci.created_at
+            FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
+            WHERE c.id = $1::uuid
+            `
+            const { rows } = await db.query(TEXT, [userID]);
+            console.table(rows)
+            res.status(200).json({
+                success: true,
+                cart_id: cart_id,
+                data: rows,
+            });
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
 userRouter.get("/orderHistory", async (req, res) => {});
 
