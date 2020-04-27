@@ -37,6 +37,7 @@ userRouter.post("/register", async (req, res) => {
                 try {
                     await db.query(`INSERT INTO accounts (email, password) VALUES ($1::text, $2::text)`, [email, hashPassword]);
                     const { rows } = await db.query(`SELECT id FROM accounts WHERE email = $1::text LIMIT 1`, [email])
+                    await db.query(`INSERT INTO users (acc_id) VALUES ($1::uuid)`, [rows[0].id])
                     res.status(201).json({
                         success: true,
                         data: {
@@ -67,7 +68,7 @@ userRouter.post("/login", async (req, res) => {
 
     // check email existance
     try {
-        const { rows } = await db.query(`SELECT id, email, password FROM accounts WHERE email = $1::text LIMIT 1`, [email])
+        const { rows } = await db.query(`SELECT id, email, password, is_admin FROM accounts WHERE email = $1::text LIMIT 1`, [email])
         if (!rows[0]) {
             res.status(400).json({
                 success: false,
@@ -91,6 +92,7 @@ userRouter.post("/login", async (req, res) => {
                 message: 'Login successfully',
                 data: {
                     email: rows[0].email,
+                    is_admin: rows[0].is_admin,
                 },
             });
         }
@@ -117,7 +119,41 @@ userRouter.get("/logout", async (req, res) => {
     }
 });
 
-userRouter.get("/profile", async (req, res) => {});
+userRouter.get("/profile", async (req, res) => {
+    // check weather login? 
+    console.log(req.session.currentUser)
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // get all profile related info: full_name, address, dob, email, created_at
+        const TEXT = `SELECT u.full_name, u.address, u.dob, a.email, a.created_at, a.is_admin
+                      FROM accounts a JOIN users u ON (a.id = u.acc_id)
+                      WHERE a.id = $1::uuid
+                      LIMIT 1`
+        try {
+            const { rows } = await db.query(TEXT, [userID]);
+            res.status(201).json({
+                success: true,
+                data: {
+                    full_name: rows[0].full_name,
+                    address: rows[0].address,
+                    dob: rows[0].dob,
+                    email: rows[0].email,
+                    created_at: rows[0].created_at,
+                },
+            });
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
 
 userRouter.post("/update", async (req, res) => {});
 
