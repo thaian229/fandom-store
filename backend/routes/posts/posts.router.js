@@ -7,7 +7,7 @@ const postRouter = express.Router();
 postRouter.get("/getItem/:id", async (req, res) => { }); //
 
 postRouter.post("/addItem", async (req, res) => {
-    if (req.session.currentUser && req.session.currentUser.id && req.session.is_admin) {
+    if (req.session.currentUser && req.session.currentUser.id && req.session.currentUser.is_admin) {
 
         const insertTEXT = `INSERT INTO products(prod_name, price, image_url, description, stock, tags) 
                             VALUES ($1::text, $2, $3::text[], $4::text, $5, $6::text)
@@ -15,11 +15,12 @@ postRouter.post("/addItem", async (req, res) => {
         const { prod_name, price, image_url, description, stock, tags } = req.body;
 
         try {
-            const returnedID = await db.query(insertTEXT, [prod_name, price, image_url, description, stock, tags]);
+            const new_id_returning = await db.query(insertTEXT, [prod_name, price, image_url, description, stock, tags]);
+            const new_id = new_id_returning.rows[0].id;
             res.status(201).json({
                 success: true,
                 data: {
-                    id: returnedID
+                    id: new_id
                 },
                 message: "new item added successfully"
             })
@@ -41,7 +42,7 @@ postRouter.post("/addItem", async (req, res) => {
 });
 
 postRouter.post("/editItem", async (req, res) => {
-    if (req.session.currentUser && req.session.currentUser.id && req.session.is_admin) {
+    if (req.session.currentUser && req.session.currentUser.id && req.session.currentUser.is_admin) {
 
         const editTEXT = `UPDATE products 
                         SET prod_name=$1::text, price=$2, image_url=$3::text[], description=$4::text, stock=$5, tags=$6::text
@@ -72,7 +73,7 @@ postRouter.post("/editItem", async (req, res) => {
 });
 
 postRouter.post("/removeItem", async (req, res) => {
-    if (req.session.currentUser && req.session.currentUser.id && req.session.is_admin) {
+    if (req.session.currentUser && req.session.currentUser.id && req.session.currentUser.is_admin) {
 
         const deleteTEXT = `DELETE FROM products WHERE id=$1::uuid`;
         const { id } = req.body;

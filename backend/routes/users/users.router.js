@@ -85,7 +85,8 @@ userRouter.post("/login", async (req, res) => {
             req.session.currentUser = {
                 id: rows[0].id,
                 email: rows[0].email,
-            }
+                is_admin: rows[0].is_admin,
+            };
 
             // response
             res.status(201).json({
