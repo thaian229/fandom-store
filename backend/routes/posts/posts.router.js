@@ -11,21 +11,25 @@ postRouter.post("/addItem", async (req, res) => {
 
         const userID = req.session.currentUser.id;
         const TEXT = `SELECT is_admin FROM accounts WHERE id=$1::uuid`;
-        const insertTEXT = `INSERT INTO products(prod_name, price, image_url, description, stock, tag) 
-                            VALUES ($1::text, $2, $3::text, $4::text, $5, $6, $7::text)`;
-        const { prod_name, price, image_url, description, stock, tag } = req.body;
+        const insertTEXT = `INSERT INTO products (prod_name, price, image_url, description, stock, tags) 
+                            VALUES ($1::text, $2, $3::text[], $4::text, $5, $6::text)`;
+        const { prod_name, price, image_url, description, stock, tags } = req.body;
+        console.log(prod_name)
 
         try {
             const { rows } = await db.query(TEXT, [userID]);
+            console.log('1')
             if (rows[0].is_admin) {
                 try {
-                    await db.query(insertTEXT, [prod_name, price, image_url, description, stock, tag]);
+                    await db.query(insertTEXT, [prod_name, price, image_url, description, stock, tags]);
+                    console.log('2')
                     res.status(201).json({
                         success: true,
                         message: "new item added successfully"
                     })
                 }
                 catch (e) {
+                    console.log('e1')
                     res.status(500).json({
                         success: false,
                         message: e
@@ -39,6 +43,7 @@ postRouter.post("/addItem", async (req, res) => {
             }
         }
         catch (err) {
+            console.log('e2')
             res.status(500).json({
                 success: false,
                 message: err
