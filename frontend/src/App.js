@@ -18,7 +18,6 @@ import './App.css';
 const { Header } = Layout;
 
 class App extends React.Component {
-
     render() {
         return (
             <div>
@@ -34,13 +33,13 @@ class App extends React.Component {
                 </Layout>
                 <Router>
                     <Route path='/' exact={true} component={HomeScreen} />
-                    <Route path='/product' component={ProductScreen} />
+                    <Route path='/product/:prod_id' component={ProductScreen} />
                     <Route path='/cart' component={CartScreen} />
                     <Route path='/login' component={LoginScreen} />
                     <Route path='/register' component={RegisterScreen} />
                     <Route path='/profile' component={ProfileScreen} />
                     <Route path='/addItem' component={AddItemScreen} />
-                    <Route path='/editItem' component={EditItemScreen} />
+                    <Route path='/editItem/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
                 </Router>
             </div >
