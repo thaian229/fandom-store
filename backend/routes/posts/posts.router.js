@@ -7,11 +7,13 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
     //Take id from URL
     console.log(req.params.id);
     const prodID = req.params.id;
+
+    const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1'
     //Check product from db
     try {
-        const { rows } = await db.query('SELECT * FROM products WHERE id = $1::uuid LIMIT 1', [prodID]);
+        const { rows } = await db.query(TEXT, [prodID]);
         if (!rows[0]) {
-            res.status(400).json({
+            res.status(404).json({
                 success: false,
                 messeage: 'Product not found',
             });
@@ -172,50 +174,83 @@ postRouter.get("/getPagination", async (req, res) => {
 
 });
 
-postRouter.post("/updateViews", async (req, res) => {
-    //get the Item has new view
-    const { prod_id } = req.body;
-    const { rows } = await db.query(`SELECT views FROM products WHERE id = $1::uuid LIMIT 1`, [prod_id]);
-    const newViews = rows[0].views + 1;
-    try {
-        const TEXT = `
-            UPDATE products
-            SET views = $1
-            WHERE id = $2::uuid
-        `
-        await db.query(TEXT, [newViews, prod_id])
-        res.status(201).json({
-            success: true,
-            message: 'Update views successfully',
-        })
-    }
-    catch (error) {
+postRouter.get("/searchPopular", async (req, res) => {
+    const pageSize = Number(req.query.pageSize);
+    const searchValue = String(req.query.searchValue);
+
+    if (isNaN(pageSize)) {
         res.status(500).json({
             success: false,
-            message: error,
-        });
+            message: 'pageSize is invalid',
+        })
+    } else if (pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE prod_name ILIKE $1::text
+                    ORDER BY sold DESC
+                    LIMIT $2
+                `
+            const { rows } = await db.query(TEXT, ['%' + searchValue + '%', pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
     }
+
 });
 
-postRouter.get("/search/:keyword", async (req, res) => {
-    //take keyword from URL
-    console.log(req.params.keyword);
-    const keyword = req.params.keyword;
-    //Check keyword from db
-    try {
-        const { rows } = await db.query(`SELECT * FROM products WHERE prod_name ILIKE $1::text`, ['%' + keyword + '%']);
-        console.log(rows);
-        res.status(200).json({
-            success: true,
-            data: rows
-        })
-    }
-    catch (error) {
+postRouter.get("/searchPagination", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    const searchValue = String(req.query.searchValue);
+
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
         res.status(500).json({
             success: false,
-            messeage: error,
-        });
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE prod_name ILIKE $1::text
+                    OFFSET $2
+                    LIMIT $3
+                `
+            const { rows } = await db.query(TEXT, ['%' + searchValue + '%', ((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
     }
+
 });
 
 postRouter.get("/category", async (req, res) => {
@@ -242,7 +277,7 @@ postRouter.get("/category", async (req, res) => {
                     OFFSET $2
                     LIMIT $3
                 `
-            const { rows } = await db.query(TEXT, ['%' + tags + '%', ((pageNumber - 1) * pageSize), pageSize]);
+            const { rows } = await db.query(TEXT, [tags, ((pageNumber - 1) * pageSize), pageSize]);
             res.status(201).json({
                 success: true,
                 data: rows,
@@ -256,6 +291,30 @@ postRouter.get("/category", async (req, res) => {
         }
     }
 
+});
+
+postRouter.post("/updateViews", async (req, res) => {
+    //get the Item has new view
+    const { prod_id } = req.body;
+    const TEXT = `
+            UPDATE products
+            SET views = views + 1
+            WHERE id = $1::uuid
+        `
+    try {
+        await db.query(TEXT, [prod_id])
+        res.status(201).json({
+            success: true,
+            message: 'Update views successfully',
+        })
+    }
+
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error,
+        });
+    }
 });
 
 postRouter.post("/makeComment", async (req, res) => {

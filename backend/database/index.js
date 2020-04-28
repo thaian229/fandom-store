@@ -1,10 +1,10 @@
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: "bvtnerlu",
-  host: "satao.db.elephantsql.com",
-  database: "bvtnerlu",
-  password: "Oq5jbXifegwkVVoU951jegUofOtDU7Yx",
+  user: "postgres",
+  host: "localhost",
+  database: "fandom_store",
+  password: "04126152",
   port: 5432
 });
 
