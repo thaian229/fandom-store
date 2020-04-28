@@ -31,7 +31,7 @@ class App extends React.Component {
               <Menu.Item key="3">nav 3</Menu.Item>
             </Menu>
           </Header>
-          <Content >
+          <Content>
             <Router>
               <Route path='/' component={HomeScreen} exact={true} />
               <Route path='/product' component={ProductScreen} />

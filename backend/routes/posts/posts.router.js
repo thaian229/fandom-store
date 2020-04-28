@@ -135,6 +135,43 @@ postRouter.post("/removeItem", async (req, res) => {
     }
 });
 
+postRouter.get("/getPagination", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    OFFSET $1
+                    LIMIT $2
+                `
+            const { rows } = await db.query(TEXT, [((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
 postRouter.post("/updateViews", async (req, res) => {
     //get the Item has new view
     const { prod_id } = req.body;
@@ -181,24 +218,44 @@ postRouter.get("/search/:keyword", async (req, res) => {
     }
 });
 
-postRouter.get("/searchTag/:tag", async (req, res) => {
-    //1sp <-> 1 tag
-    console.log(req.params.tag);
-    const tag = req.params.tag;
-    try {
-        const { rows } = await db.query(`SELECT * FROM products WHERE tags = $1::text`, [tag]);
-        console.log(rows);
-        res.status(200).json({
-            success: true,
-            data: rows
-        })
-    }
-    catch (error) {
+postRouter.get("/category", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    const tags = String(req.query.tag);
+
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
         res.status(500).json({
             success: false,
-            messeage: error,
-        });
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE tags ILIKE $1::text
+                    OFFSET $2
+                    LIMIT $3
+                `
+            const { rows } = await db.query(TEXT, ['%' + tags + '%', ((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
     }
+
 });
 
 postRouter.post("/makeComment", async (req, res) => {
@@ -239,12 +296,10 @@ postRouter.get("/getAllComment/:prodid", async (req, res) => {
     console.log(prodid)
     try {
         const TEXT = `
-                SELECT u.acc_id, u.full_name, u.ava_url, a.email, a.is_admin, c.created_at, c.content  
+                SELECT a.id, a.full_name, a.ava_url, a.email, a.is_admin, c.created_at, c.content  
                 FROM comments c
                 JOIN accounts a
                 ON c.acc_id = a.id
-                JOIN users u
-                ON u.acc_id = a.id
                 WHERE c.prod_id = $1::uuid
             `
         const { rows } = await db.query(TEXT, [prodid]);
