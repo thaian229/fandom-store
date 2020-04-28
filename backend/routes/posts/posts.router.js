@@ -5,7 +5,7 @@ const postRouter = express.Router();
 
 postRouter.get(`/getItem/:id`, async (req, res) => {
     //Take id from URL
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const prodID = req.params.id;
 
     const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1'
@@ -30,7 +30,7 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
                     views: rows[0].views,
                     stock: rows[0].stock,
                     sold: rows[0].sold,
-                    tag: rows[0].tag,
+                    tags: rows[0].tags,
                 },
             });
         }
@@ -159,6 +159,44 @@ postRouter.get("/getPagination", async (req, res) => {
                     LIMIT $2
                 `
             const { rows } = await db.query(TEXT, [((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
+postRouter.get("/getRecommended", async (req, res) => {
+    const pageSize = 4;
+    const tag = String(req.query.tag);
+
+    if (isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else if (pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE tags ILIKE $1::text
+                    LIMIT $2
+                    `
+            const { rows } = await db.query(TEXT, [tag, pageSize]);
             res.status(201).json({
                 success: true,
                 data: rows,
