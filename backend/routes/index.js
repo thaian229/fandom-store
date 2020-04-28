@@ -7,6 +7,3 @@ module.exports = app => {
     app.use('/api/posts', postRouter);
     app.use('/api/uploads', uploadRouter);
 }
-
-
-
