@@ -7,11 +7,13 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
     //Take id from URL
     console.log(req.params.id);
     const prodID = req.params.id;
+
+    const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1'
     //Check product from db
     try {
-        const { rows } = await db.query('SELECT * FROM products WHERE id = $1::uuid LIMIT 1', [prodID]);
+        const { rows } = await db.query(TEXT, [prodID]);
         if (!rows[0]) {
-            res.status(400).json({
+            res.status(404).json({
                 success: false,
                 messeage: 'Product not found',
             });
@@ -135,68 +137,182 @@ postRouter.post("/removeItem", async (req, res) => {
     }
 });
 
+postRouter.get("/getPagination", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    OFFSET $1
+                    LIMIT $2
+                `
+            const { rows } = await db.query(TEXT, [((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
+postRouter.get("/searchPopular", async (req, res) => {
+    const pageSize = Number(req.query.pageSize);
+    const searchValue = String(req.query.searchValue);
+
+    if (isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else if (pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE prod_name ILIKE $1::text
+                    ORDER BY sold DESC
+                    LIMIT $2
+                `
+            const { rows } = await db.query(TEXT, ['%' + searchValue + '%', pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
+postRouter.get("/searchPagination", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    const searchValue = String(req.query.searchValue);
+
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE prod_name ILIKE $1::text
+                    OFFSET $2
+                    LIMIT $3
+                `
+            const { rows } = await db.query(TEXT, ['%' + searchValue + '%', ((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
+postRouter.get("/category", async (req, res) => {
+    const pageNumber = Number(req.query.pageNumber);
+    const pageSize = Number(req.query.pageSize);
+    const tags = String(req.query.tag);
+
+    if (isNaN(pageNumber) || isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else if (pageNumber < 1 || pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageNumber && pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE tags ILIKE $1::text
+                    OFFSET $2
+                    LIMIT $3
+                `
+            const { rows } = await db.query(TEXT, [tags, ((pageNumber - 1) * pageSize), pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
 postRouter.post("/updateViews", async (req, res) => {
     //get the Item has new view
     const { prod_id } = req.body;
-    const { rows } = await db.query(`SELECT views FROM products WHERE id = $1::uuid LIMIT 1`, [prod_id]);
-    const newViews = rows[0].views + 1;
-    try {
-        const TEXT = `
+    const TEXT = `
             UPDATE products
-            SET views = $1
-            WHERE id = $2::uuid
+            SET views = views + 1
+            WHERE id = $1::uuid
         `
-        await db.query(TEXT, [newViews, prod_id])
+    try {
+        await db.query(TEXT, [prod_id])
         res.status(201).json({
             success: true,
             message: 'Update views successfully',
         })
     }
+
     catch (error) {
         res.status(500).json({
             success: false,
             message: error,
-        });
-    }
-});
-
-postRouter.get("/search/:keyword", async (req, res) => {
-    //take keyword from URL
-    console.log(req.params.keyword);
-    const keyword = req.params.keyword;
-    //Check keyword from db
-    try {
-        const { rows } = await db.query(`SELECT * FROM products WHERE prod_name ILIKE $1::text`, ['%' + keyword + '%']);
-        console.log(rows);
-        res.status(200).json({
-            success: true,
-            data: rows
-        })
-    }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            messeage: error,
-        });
-    }
-});
-
-postRouter.get("/searchTag/:tag", async (req, res) => {
-    //1sp <-> 1 tag
-    console.log(req.params.tag);
-    const tag = req.params.tag;
-    try {
-        const { rows } = await db.query(`SELECT * FROM products WHERE tags = $1::text`, [tag]);
-        console.log(rows);
-        res.status(200).json({
-            success: true,
-            data: rows
-        })
-    }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            messeage: error,
         });
     }
 });
@@ -239,12 +355,10 @@ postRouter.get("/getAllComment/:prodid", async (req, res) => {
     console.log(prodid)
     try {
         const TEXT = `
-                SELECT u.acc_id, u.full_name, u.ava_url, a.email, a.is_admin, c.created_at, c.content  
+                SELECT a.id, a.full_name, a.ava_url, a.email, a.is_admin, c.created_at, c.content  
                 FROM comments c
                 JOIN accounts a
                 ON c.acc_id = a.id
-                JOIN users u
-                ON u.acc_id = a.id
                 WHERE c.prod_id = $1::uuid
             `
         const { rows } = await db.query(TEXT, [prodid]);

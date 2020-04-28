@@ -18,7 +18,6 @@ import './App.css';
 const { Header } = Layout;
 
 class App extends React.Component {
-
     render() {
         return (
             <div>
