@@ -36,7 +36,7 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
     catch (error) {
         res.status(500).json({
             success: false,
-            messeage: error.messeage,
+            messeage: error,
         });
     }
 }); //
@@ -155,10 +155,10 @@ postRouter.post("/updateViews", async (req, res) => {
     catch (error) {
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: error,
         });
     }
-}); 
+});
 
 postRouter.get("/search/:keyword", async (req, res) => {
     //take keyword from URL
@@ -176,17 +176,17 @@ postRouter.get("/search/:keyword", async (req, res) => {
     catch (error) {
         res.status(500).json({
             success: false,
-            messeage: error.messeage,
+            messeage: error,
         });
     }
-}); 
+});
 
 postRouter.get("/searchTag/:tag", async (req, res) => {
     //1sp <-> 1 tag
     console.log(req.params.tag);
     const tag = req.params.tag;
     try {
-        const { rows } = await db.query(`SELECT prod_name FROM products WHERE tags = $1::text`, [tag]);
+        const { rows } = await db.query(`SELECT * FROM products WHERE tags = $1::text`, [tag]);
         console.log(rows);
         res.status(200).json({
             success: true,
@@ -196,10 +196,10 @@ postRouter.get("/searchTag/:tag", async (req, res) => {
     catch (error) {
         res.status(500).json({
             success: false,
-            messeage: error.messeage,
+            messeage: error,
         });
     }
-}); 
+});
 
 postRouter.post("/makeComment", async (req, res) => {
     // check authentication
@@ -222,7 +222,7 @@ postRouter.post("/makeComment", async (req, res) => {
         catch (error) {
             res.status(500).json({
                 success: false,
-                message: error.message,
+                message: error,
             });
         }
     }
@@ -232,6 +232,33 @@ postRouter.post("/makeComment", async (req, res) => {
             message: 'Unauthenticated, access denied',
         });
     }
-}); 
+});
+
+postRouter.get("/getAllComment/:prodid", async (req, res) => {
+    const prodid = req.params.prodid;
+    console.log(prodid)
+    try {
+        const TEXT = `
+                SELECT u.acc_id, u.full_name, u.ava_url, a.email, a.is_admin, c.created_at, c.content  
+                FROM comments c
+                JOIN accounts a
+                ON c.acc_id = a.id
+                JOIN users u
+                ON u.acc_id = a.id
+                WHERE c.prod_id = $1::uuid
+            `
+        const { rows } = await db.query(TEXT, [prodid]);
+        res.status(201).json({
+            success: true,
+            data: rows,
+        })
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error
+        });
+    }
+});
 
 module.exports = postRouter;
