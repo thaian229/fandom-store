@@ -174,6 +174,44 @@ postRouter.get("/getPagination", async (req, res) => {
 
 });
 
+postRouter.get("/getRecommended", async (req, res) => {
+    const pageSize = 4;
+    const tag = String(req.query.tag);
+
+    if (isNaN(pageSize)) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else if (pageSize < 1 || pageSize > 40) {
+        res.status(500).json({
+            success: false,
+            message: 'pageSize is invalid',
+        })
+    } else {
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    WHERE tags ILIKE $1::text
+                    LIMIT $2
+                `
+            const { rows } = await db.query(TEXT, [tag, pageSize]);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+    }
+
+});
+
 postRouter.get("/searchPopular", async (req, res) => {
     const pageSize = Number(req.query.pageSize);
     const searchValue = String(req.query.searchValue);
