@@ -4,21 +4,11 @@ import { Button } from "antd";
 class LoginScreen extends React.Component {
 
     state = {
-        currentUser: {}
-    }
-
-    componentWillMount() {
-        const email = window.sessionStorage.getItem("email");
-        const id = window.sessionStorage.getItem("id");
-        const is_admin = window.sessionStorage.getItem("is_admin");
-
-        this.setState({
-            currentUser: {
-                email: email,
-                id: id,
-                is_admin: is_admin
-            }
-        })
+        currentUser: {
+            email: window.sessionStorage.getItem("email"),
+            id: window.sessionStorage.getItem("id"),
+            is_admin: window.sessionStorage.getItem("is_admin")
+        },
     }
 
     login = () => {
