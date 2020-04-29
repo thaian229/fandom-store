@@ -11,11 +11,11 @@ const { Pool } = require("pg");
 // });
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    password: "22114455",
-    database: "fandom_store",
-    port: 5432,
+  user: "postgres",
+  host: "localhost",
+  database: "fandom_store",
+  password: "22114455",
+  port: 5432
 });
 
 pool
