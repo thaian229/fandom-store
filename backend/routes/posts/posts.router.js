@@ -195,7 +195,7 @@ postRouter.get("/getRecommended", async (req, res) => {
                     FROM products
                     WHERE tags ILIKE $1::text
                     LIMIT $2
-                    `
+                  `
             const { rows } = await db.query(TEXT, [tag, pageSize]);
             res.status(201).json({
                 success: true,
