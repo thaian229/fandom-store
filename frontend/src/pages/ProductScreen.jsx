@@ -220,7 +220,7 @@ class ProductScreen extends React.Component {
                 <Row>
                     <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                 </Row>
-                <Row gutter={[32, 16]}>
+                <Row gutter={[32, 16]} >
                     <Col span={2}>
                         <div></div>
                     </Col>
@@ -229,7 +229,15 @@ class ProductScreen extends React.Component {
                             {this.state.prod_data.image_url.map((item, index) => {
                                 return (
                                     <div key={index}>
-                                        <img srs={item} alt='an img'></img>
+                                        <img 
+                                            src={item} 
+                                            alt='an img' 
+                                            style={{ 
+                                                display: 'block', 
+                                                maxHeight: '100%', 
+                                                objectFit: 'cover'
+                                            }}>
+                                        </img>
                                     </div>
                                 );
                             })}
