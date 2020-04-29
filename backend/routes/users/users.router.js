@@ -2,12 +2,13 @@ const express = require("express");
 const db = require("../../database");
 const bcryptjs = require("bcryptjs");
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const telenumRegex = /^\d+$/;
 
 const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res) => {
     // get email and password from req.body
-    const { email, password } = req.body;
+    const { email, password, full_name, tel_num } = req.body;
 
     // validate email
     if (!email || !emailRegex.test(email)) {
@@ -19,6 +20,11 @@ userRouter.post("/register", async (req, res) => {
         res.status(400).json({
             success: false,
             message: 'Password must be at least 6 characters',
+        });
+    } else if (!telenumRegex.test(tel_num)){
+        res.status(400).json({
+            success: false,
+            message: 'Invalue telephone number',
         });
     } else {
         // check weather email exist or not
@@ -35,16 +41,20 @@ userRouter.post("/register", async (req, res) => {
 
                 // save to database
                 try {
-                    await db.query(`INSERT INTO accounts (email, password) VALUES ($1::text, $2::text)`, [email, hashPassword]);
-                    const { rows } = await db.query(`SELECT id FROM accounts WHERE email = $1::text LIMIT 1`, [email])
-                    await db.query(`INSERT INTO users (acc_id) VALUES ($1::uuid)`, [rows[0].id])
+                    const TEXT = `
+                        INSERT INTO accounts (email, password, full_name, tel_num)
+                        VALUES
+                            ($1::text, $2::text, $3::text, $4::text)
+                        RETURNING
+                            id
+                        `
+                    const { rows } = await db.query(TEXT, [email, hashPassword, full_name, tel_num]);
                     await db.query(`INSERT INTO carts (acc_id) VALUES ($1::uuid)`, [rows[0].id])
                     res.status(201).json({
                         success: true,
                         data: {
                             id: rows[0].id,
                             email: email,
-                            password: '',
                         },
                     });
                 } catch (e) { // error on INSERT INTO
@@ -69,7 +79,12 @@ userRouter.post("/login", async (req, res) => {
 
     // check email existance
     try {
-        const { rows } = await db.query(`SELECT id, email, password, is_admin FROM accounts WHERE email = $1::text LIMIT 1`, [email])
+        const TEXT = `
+            SELECT id, email, password, is_admin 
+            FROM accounts 
+            WHERE email = $1::text LIMIT 1
+            `
+        const { rows } = await db.query(TEXT, [email])
         if (!rows[0]) {
             res.status(400).json({
                 success: false,
@@ -95,8 +110,10 @@ userRouter.post("/login", async (req, res) => {
                 data: {
                     email: rows[0].email,
                     is_admin: rows[0].is_admin,
+                    id: rows[0].id,
                 },
             });
+            req.session.cookie.expires = false;
         }
     } catch (err) {
         res.status(500).json({
@@ -104,6 +121,8 @@ userRouter.post("/login", async (req, res) => {
             message: err.message,
         });
     }
+    console.log(req.headers.cookie);
+
 });
 
 userRouter.get("/logout", async (req, res) => {
@@ -128,22 +147,15 @@ userRouter.get("/profile", async (req, res) => {
         const userID = req.session.currentUser.id;
         // get all profile related info: full_name, address, dob, email, created_at
         const TEXT = `
-            SELECT u.full_name, u.address, u.dob, a.email, a.created_at, a.is_admin
-            FROM accounts a JOIN users u ON (a.id = u.acc_id)
-            WHERE a.id = $1::uuid
-            LIMIT 1
+            SELECT email, full_name, tel_num, address, dob, cart_qty, ava_url, created_at
+            FROM accounts
+            WHERE id = $1::uuid
             `
         try {
             const { rows } = await db.query(TEXT, [userID]);
             res.status(201).json({
                 success: true,
-                data: {
-                    full_name: rows[0].full_name,
-                    address: rows[0].address,
-                    dob: rows[0].dob,
-                    email: rows[0].email,
-                    created_at: rows[0].created_at,
-                },
+                data: rows[0],
             });
         } catch (err) {
             res.status(500).json({
@@ -164,19 +176,21 @@ userRouter.post("/update", async (req, res) => {
     if (req.session.currentUser && req.session.currentUser.id) {
         const userID = req.session.currentUser.id;
         // take info from req.body
-        const { full_name, address, dob } = req.body;
+        const { full_name, tel_num, address, dob, ava_url } = req.body;
         // save in database
         try {
             const TEXT = `
                 UPDATE users
                 SET
                     full_name = $1::text,
-                    address = $2::text,
-                    dob = $3::date
+                    tel_num = $2::text,
+                    address = $3::text,
+                    dob = $4::date,
+                    ava_url = $5::text
                 WHERE
-                    acc_id = $4::uuid;
+                    acc_id = $6::uuid;
                 `
-            await db.query(TEXT, [full_name, address, dob, userID])
+            await db.query(TEXT, [full_name, tel_num, address, dob, ava_url, userID])
             res.status(201).json({
                 success: true,
                 message: 'Update successfully',
@@ -211,9 +225,17 @@ userRouter.post("/addToCart", async (req, res) => {
                     ($1::uuid, $2, $3::uuid)
                 `
             await db.query(TEXT, [prod_id, quantity, cart_id])
+            const TEXT_UPDATE_CART_QTY = `
+                UPDATE accounts
+                SET cart_qty = cart_qty + 1
+                WHERE id = $1::uuid
+                RETURNING cart_qty
+            `
+            const cart_qty_return = await db.query(TEXT_UPDATE_CART_QTY, [userID])
             res.status(201).json({
                 success: true,
                 message: 'Add to cart successfully',
+                cart_qty: cart_qty_return.rows[0].cart_qty,
             })
         } catch (err) {
             res.status(500).json({
@@ -249,6 +271,45 @@ userRouter.get("/cart", async (req, res) => {
                 cart_id: cart_id,
                 data: rows,
             });
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
+
+userRouter.get("/removeFromCart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        // take prod_id, quantity from req.body
+        const { cart_items_id } = req.body;
+        // update into database
+        try {
+            const TEXT = `
+                DELETE FROM cart_items
+                WHERE id = $1::uuid
+                `
+            await db.query(TEXT, [cart_items_id])
+            const TEXT_UPDATE_CART_QTY = `
+                UPDATE accounts
+                SET cart_qty = cart_qty - 1
+                WHERE id = $1::uuid
+                RETURNING cart_qty
+            `
+            const cart_qty_return = await db.query(TEXT_UPDATE_CART_QTY, [userID])
+            res.status(201).json({
+                success: true,
+                message: 'Add to cart successfully',
+                cart_qty: cart_qty_return.rows[0].cart_qty,
+            })
         } catch (err) {
             res.status(500).json({
                 success: false,

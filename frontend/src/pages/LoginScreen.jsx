@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button} from "antd";
+import { Form, Input, Button, Alert} from "antd";
 //import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import './LoginScreen.css';
@@ -8,6 +8,7 @@ class LoginScreen extends React.Component {
     state = {
         email: '',
         password: '',
+        err: '',
     };
 
     handleEmailChange = (event) => {
@@ -43,7 +44,9 @@ class LoginScreen extends React.Component {
             })
             .then((data) => {
                 if (!data.success) {
-                    window.location.href = '/HomeScreen';
+                  this.setState({
+                    err: data.message,
+                });
                 } else {
                     // save current user to local storage
                     window.localStorage.setItem('email', data.data.email);
@@ -55,13 +58,16 @@ class LoginScreen extends React.Component {
             })
             .catch((error) => {
                 console.log(error);
+                this.setState({
+                  err: error.message,
+              });
             });
     };
 
     render() {
         const layout = {
             labelCol: {
-              span: 8,
+              span: 7,
             },
             wrapperCol: {
               span: 16,
@@ -82,71 +88,80 @@ class LoginScreen extends React.Component {
           };
         
           return (
-            <Form 
-            onFinish={this.handleFormSubmit}
-            className="loginBox"
-              {...layout}
-              name="basic"
-              initialValues={{
-                remember: true,
-              }}
-              //onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your email!',
-                  },
-                ]}
+            <div className='pageLogin'>
+              <div className="loginBox">
+                <div className='greeting'>
+                  Wellcome
+                </div>
+                <div className='inputLogin'>
+                <Form 
+              onFinish={this.handleFormSubmit}
+                {...layout}
+                name="basic"
+                initialValues={{
+                  remember: true,
+                }}
+                //onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
               >
-                <Input 
-                    placeholder="Email"
-                    onChange={this.handleEmailChange}
-                />
-              </Form.Item>
-        
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                ]}
-              >
-                <Input.Password 
-                    placeholder="Password"
-                    onChange={this.handlePasswordChange}
-                />
-              </Form.Item>
+                <Form.Item
+                  label="E-mail"
+                  name="email"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
+                    {
+                      required: true,
+                      message: 'Please input your email!',
+                    },
+                  ]}
+                >
+                  <Input 
+                      placeholder="Email"
+                      onChange={this.handleEmailChange}
+                  />
+                </Form.Item>
+          
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input your password!',
+                    },
+                  ]}
+                >
+                  <Input.Password 
+                      placeholder="Password"
+                      onChange={this.handlePasswordChange}
+                  />
+                </Form.Item>
 
-              <Form.Item {...tailLayout}>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
+                <div className='errorLogin'>
+                  {this.state.err ? (
+                    <Alert
+                    message={this.state.err}
+                    type="error"
+                    showIcon
+                  />
+                  ): null}
+                </div>
+
+                <Form.Item {...tailLayout}>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+                </div>
+              </div>
+            </div>
           );
     }
 }
 
 export default LoginScreen;
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
