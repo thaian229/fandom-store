@@ -5,7 +5,7 @@ const postRouter = express.Router();
 
 postRouter.get(`/getItem/:id`, async (req, res) => {
     //Take id from URL
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const prodID = req.params.id;
 
     const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1'
@@ -30,7 +30,7 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
                     views: rows[0].views,
                     stock: rows[0].stock,
                     sold: rows[0].sold,
-                    tag: rows[0].tag,
+                    tags: rows[0].tags,
                 },
             });
         }
@@ -195,7 +195,7 @@ postRouter.get("/getRecommended", async (req, res) => {
                     FROM products
                     WHERE tags ILIKE $1::text
                     LIMIT $2
-                `
+                  `
             const { rows } = await db.query(TEXT, [tag, pageSize]);
             res.status(201).json({
                 success: true,
@@ -390,7 +390,7 @@ postRouter.post("/makeComment", async (req, res) => {
 
 postRouter.get("/getAllComment/:prodid", async (req, res) => {
     const prodid = req.params.prodid;
-    console.log(prodid)
+    // console.log(prodid)
     try {
         const TEXT = `
                 SELECT a.id, a.full_name, a.ava_url, a.email, a.is_admin, c.created_at, c.content  

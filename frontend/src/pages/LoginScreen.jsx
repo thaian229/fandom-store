@@ -26,7 +26,6 @@ class LoginScreen extends React.Component {
 
     handleFormSubmit = (event) => {
         //event.preventDefault();
-
         fetch(`http://localhost:3001/api/users/login`, {
             method: "POST",
             credentials: 'include',
@@ -63,7 +62,6 @@ class LoginScreen extends React.Component {
               });
             });
     };
-
     render() {
         const layout = {
             labelCol: {
