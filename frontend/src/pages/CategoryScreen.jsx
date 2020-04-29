@@ -13,7 +13,7 @@ class CategoryScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin")
+            is_admin: window.sessionStorage.getItem("is_admin") === "true"
         },
         currentCategory: window.location.href.split("/")[window.location.href.split("/").length - 1],
         data: [],
@@ -137,8 +137,8 @@ class CategoryScreen extends React.Component {
 
     handleScroll = (event) => {
         console.log(document.body.scrollHeight)
-        if (document.body.clientHeight + window.scrollY == (document.body.scrollHeight)) {
-            if (this.state.data.length == this.state.pageSize * (this.state.pageNumber))
+        if (document.body.clientHeight + window.scrollY === (document.body.scrollHeight)) {
+            if (this.state.data.length === this.state.pageSize * (this.state.pageNumber))
                 this.dataFetch(this.state.pageSize, this.state.pageNumber)
         }
     }
@@ -298,8 +298,9 @@ class CategoryScreen extends React.Component {
 
                             {
                                 this.state.data.map((item, index) => {
+                                    let key = `product${index}` 
                                     return (
-                                        <Col xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
+                                        <Col key={key} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
                                             <Card
                                                 hoverable={true}
                                                 loading={this.state.loading}
