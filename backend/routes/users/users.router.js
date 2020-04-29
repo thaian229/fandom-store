@@ -110,8 +110,10 @@ userRouter.post("/login", async (req, res) => {
                 data: {
                     email: rows[0].email,
                     is_admin: rows[0].is_admin,
+                    id: rows[0].id,
                 },
             });
+            req.session.cookie.expires = false;
         }
     } catch (err) {
         res.status(500).json({
@@ -119,6 +121,8 @@ userRouter.post("/login", async (req, res) => {
             message: err.message,
         });
     }
+    console.log(req.headers.cookie);
+
 });
 
 userRouter.get("/logout", async (req, res) => {

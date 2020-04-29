@@ -66,9 +66,25 @@ uploadRouter.post("/post/avatar", uploadAvatar.single("image"), async (req, res)
 	try {
 		fs.renameSync(`public/avatar/${req.file.filename}`, `public/avatar/${fixedName}`);
 		const data = await Jimp.read(`public/avatar/${fixedName}`);
-		data.resize(200, Jimp.AUTO) // resize
-			.quality(100) // set JPEG quality
-			.write(`public/avatar/${fixedName}`); // save
+		console.log(data);
+
+		if (data.bitmap.height <= data.bitmap.width) {
+			data.resize(Jimp.AUTO, 200) // resize
+				.quality(100) // set JPEG quality
+				.crop(Math.floor((data.bitmap.width - 200) / 2), 0, 200, 200, err => {
+					console.log(err);
+				})
+				.write(`public/avatar/${fixedName}`); // save
+		} else {
+			data.resize(200, Jimp.AUTO) // resize
+				.quality(100) // set JPEG quality
+				.crop(0, Math.floor((data.bitmap.height - 200) / 2), 200, 200, err => {
+					console.log(err);
+				})
+				.write(`public/avatar/${fixedName}`); // save
+		}
+
+
 		res.status(200).json({
 			success: true,
 			imgUrl: `http://localhost:3001/upload/avatar/${fixedName}`
@@ -97,10 +113,25 @@ uploadRouter.post("/post/thumbnail", uploadThumbnail.single("image"), async (req
 
 	try {
 		fs.renameSync(`public/thumbnail/${req.file.filename}`, `public/thumbnail/${fixedName}`);
+
 		const data = await Jimp.read(`public/thumbnail/${fixedName}`);
-		data.resize(200, Jimp.AUTO) // resize
-			.quality(100) // set JPEG quality
-			.write(`public/thumbnail/${fixedName}`); // save
+
+		if (data.bitmap.height <= data.bitmap.width) {
+			data.resize(Jimp.AUTO, 720) // resize
+				.quality(100) // set JPEG quality
+				.crop(Math.floor((data.bitmap.width - 720) / 2), 0, 720, 720, err => {
+					console.log(err);
+				})
+				.write(`public/thumbnail/${fixedName}`); // save
+		} else {
+			data.resize(720, Jimp.AUTO) // resize
+				.quality(100) // set JPEG quality
+				.crop(0, Math.floor((data.bitmap.height - 720) / 2), 720, 720, err => {
+					console.log(err);
+				})
+				.write(`public/thumbnail/${fixedName}`); // save
+		}
+
 		res.status(200).json({
 			success: true,
 			imgUrl: `http://localhost:3001/upload/thumbnail/${fixedName}`
