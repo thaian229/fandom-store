@@ -8,8 +8,17 @@ class LoginScreen extends React.Component {
     state = {
         email: '',
         password: '',
+        is_admin: false,
         err: '',
     };
+
+    componentWillMount(){
+      const email = window.localStorage.getItem('email');
+      const id = window.localStorage.getItem('id');
+      if(email && id){
+        window.location.href = '/HomeScreen';
+      }
+    }
 
     handleEmailChange = (event) => {
         this.setState({
@@ -49,9 +58,10 @@ class LoginScreen extends React.Component {
                 } else {
                     // save current user to local storage
                     window.localStorage.setItem('email', data.data.email);
-                    window.localStorage.setItem('fullName', data.data.fullName);
+                    window.localStorage.setItem('is_admin', data.data.is_admin);
+                    window.localStorage.setItem('id', data.data.id);
                     
-                    // redirect user
+                    // redirect user  
                     window.location.href = '/HomeScreen';
                 }
             })
@@ -150,10 +160,15 @@ class LoginScreen extends React.Component {
 
                 <Form.Item {...tailLayout}>
                   <Button type="primary" htmlType="submit">
-                    Submit
+                    Login
                   </Button>
                 </Form.Item>
-              </Form>
+
+                <Form.Item {...tailLayout}>
+                  Don't have account? <a href="/register">Register here</a>
+                </Form.Item>
+                
+                </Form>
                 </div>
               </div>
             </div>

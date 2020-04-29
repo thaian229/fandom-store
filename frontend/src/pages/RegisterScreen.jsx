@@ -227,6 +227,12 @@ class RegisterScreen extends React.Component {
                         Register
                         </Button>
                     </Form.Item>
+
+                    <Form.Item 
+                        {...tailLayout}
+                    >
+                        Already had an account? <a href="\login">Login here</a>
+                    </Form.Item>
                 </Form>
                 </div>
                 </div>
