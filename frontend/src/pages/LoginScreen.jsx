@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button} from "antd";
 //import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import './LoginScreen.css';
@@ -24,7 +24,7 @@ class LoginScreen extends React.Component {
     };
 
     handleFormSubmit = (event) => {
-        event.preventDefault();
+        //event.preventDefault();
 
         fetch(`http://localhost:3001/api/users/login`, {
             method: "POST",
@@ -38,12 +38,11 @@ class LoginScreen extends React.Component {
             }),
         })
             .then((res) => {
+                //console.log(res.json);
                 return res.json();
             })
             .then((data) => {
-                console.log(data)
                 if (!data.success) {
-                    console.log(data);
                     window.location.href = '/HomeScreen';
                 } else {
                     // save current user to local storage
@@ -74,9 +73,9 @@ class LoginScreen extends React.Component {
               span: 16,
             },
           };
-          const onFinish = values => {
+          //const onFinish = values => {
             //console.log('Success:', values);
-          };
+          //};
         
           const onFinishFailed = errorInfo => {
             //console.log('Failed:', errorInfo);
@@ -84,14 +83,14 @@ class LoginScreen extends React.Component {
         
           return (
             <Form 
-            onSubmit={this.handleFormSubmit}
+            onFinish={this.handleFormSubmit}
             className="loginBox"
               {...layout}
               name="basic"
               initialValues={{
                 remember: true,
               }}
-              onFinish={onFinish}
+              //onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
               <Form.Item
