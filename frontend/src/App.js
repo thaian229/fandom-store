@@ -16,7 +16,7 @@ import OrderHistoryScreen from './pages/OrderHistoryScreen';
 
 import './App.css';
 import './styles/HomeScreen.css'
-
+import CategoryScreen from './pages/CategoryScreen';
 
 const { Header } = Layout;
 
@@ -33,6 +33,7 @@ class App extends React.Component {
                 </Layout>
                 <Router>
                     <Route path='/' exact={true} component={HomeScreen} />
+                    <Route path='/category/:tag' component={CategoryScreen} />
                     <Route path='/product/:prod_id' component={ProductScreen} />
                     <Route path='/cart' component={CartScreen} />
                     <Route path='/login' component={LoginScreen} />

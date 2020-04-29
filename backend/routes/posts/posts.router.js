@@ -294,7 +294,7 @@ postRouter.get("/searchPagination", async (req, res) => {
 postRouter.get("/category", async (req, res) => {
     const pageNumber = Number(req.query.pageNumber);
     const pageSize = Number(req.query.pageSize);
-    const tags = String(req.query.tag);
+    const tag = String(req.query.tag);
 
     if (isNaN(pageNumber) || isNaN(pageSize)) {
         res.status(500).json({
@@ -315,7 +315,7 @@ postRouter.get("/category", async (req, res) => {
                     OFFSET $2
                     LIMIT $3
                 `
-            const { rows } = await db.query(TEXT, [tags, ((pageNumber - 1) * pageSize), pageSize]);
+            const { rows } = await db.query(TEXT, [tag, ((pageNumber - 1) * pageSize), pageSize]);
             res.status(201).json({
                 success: true,
                 data: rows,
