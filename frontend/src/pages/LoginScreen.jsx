@@ -16,7 +16,7 @@ class LoginScreen extends React.Component {
       const email = window.localStorage.getItem('email');
       const id = window.localStorage.getItem('id');
       if(email && id){
-        window.location.href = '/HomeScreen';
+        window.location.href = '/';
       }
     }
 
@@ -62,7 +62,7 @@ class LoginScreen extends React.Component {
                     window.localStorage.setItem('id', data.data.id);
                     
                     // redirect user  
-                    window.location.href = '/HomeScreen';
+                    window.location.href = '/';
                 }
             })
             .catch((error) => {
