@@ -347,7 +347,7 @@ class ProductScreen extends React.Component {
                     </Col>
                     <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
-                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_datacmt_data} />}
+                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                         <Comment
                             avatar={
                                 <Avatar
