@@ -12,6 +12,7 @@ class LoginScreen extends React.Component {
     }
 
     login = () => {
+
         fetch(`http://localhost:3001/api/users/login`, {
             credentials: "include",
             method: "POST",
@@ -19,8 +20,8 @@ class LoginScreen extends React.Component {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: "vmhoang1999@gmail.com",
-                password: 'hoang123'
+                email: "thaian229@gmail.com",
+                password: '22114455'
             })
         })
             .then(res => {
@@ -47,7 +48,6 @@ class LoginScreen extends React.Component {
                     window.alert(err.message);
                 }
             });
-
     }
     render() {
         return (
