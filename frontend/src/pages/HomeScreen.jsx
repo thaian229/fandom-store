@@ -1,5 +1,5 @@
 import React from "react";
-import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, PayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel } from "antd";
 
 const { Meta } = Card;
@@ -13,7 +13,7 @@ class HomeScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin")
+            is_admin: window.sessionStorage.getItem("is_admin") === "true"
         },
         data: [],
         loading: true,
@@ -135,10 +135,29 @@ class HomeScreen extends React.Component {
 
     handleScroll = (event) => {
         console.log(document.body.scrollHeight)
-        if (document.body.clientHeight + window.scrollY == (document.body.scrollHeight)) {
-            if (this.state.data.length == this.state.pageSize * (this.state.pageNumber))
+        if (document.body.clientHeight + window.scrollY === (document.body.scrollHeight)) {
+            if (this.state.data.length === this.state.pageSize * (this.state.pageNumber))
                 this.dataFetch(this.state.pageSize, this.state.pageNumber)
         }
+    }
+
+    handleLogout = () => {
+        fetch(`http://localhost:3001/api/users/logout`, {
+            credentials: "include",
+            method: "GET"
+        })
+            .then(data => {
+                return data.json();
+            })
+            .then(data => {
+                console.log(data.message)
+                window.sessionStorage.clear();
+                window.localStorage.clear();
+            })
+            .catch(e => {
+                console.log(e)
+            })
+        window.location.pathname = '/login'
     }
 
     render() {
@@ -221,8 +240,8 @@ class HomeScreen extends React.Component {
                                                     event.preventDefault();
                                                     this.addItem()
                                                 }
-                                                }>New Item</Button>
-
+                                                }>
+                                                New Item</Button>
                                         ) : null
                                     }
                                 >
@@ -284,8 +303,9 @@ class HomeScreen extends React.Component {
 
                             {
                                 this.state.data.map((item, index) => {
+                                    let key = `product${index}`
                                     return (
-                                        <Col xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
+                                        <Col key={key} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
                                             <Card
                                                 hoverable={true}
                                                 loading={this.state.loading}
@@ -337,6 +357,7 @@ class HomeScreen extends React.Component {
                         </Row>
                     </Col>
                 </Row>
+                <Button onClick={(event) => this.handleLogout()}>Logout</Button>
             </div >
         )
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
 import HomeScreen from './pages/HomeScreen';
 import CartScreen from './pages/CartScreen';
@@ -29,7 +29,6 @@ class App extends React.Component {
                     <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
                         <div className="logo" />
                     </Header>
-
                 </Layout>
                 <Router>
                     <Route path='/' exact={true} component={HomeScreen} />
@@ -43,7 +42,6 @@ class App extends React.Component {
                     <Route path='/editItem/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
                 </Router>
-
             </div >
         );
     };
