@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 260px;
+  line-height: 260px;
+  background: #364d79;
+  overflow: hidden;
+}

@@ -390,7 +390,7 @@ postRouter.post("/makeComment", async (req, res) => {
 
 postRouter.get("/getAllComment/:prodid", async (req, res) => {
     const prodid = req.params.prodid;
-    console.log(prodid)
+    // console.log(prodid)
     try {
         const TEXT = `
                 SELECT a.id, a.full_name, a.ava_url, a.email, a.is_admin, c.created_at, c.content  
