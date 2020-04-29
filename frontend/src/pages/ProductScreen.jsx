@@ -1,5 +1,6 @@
 import React from "react";
-import { } from "antd";
+import { Typography } from "antd";
+const { Title } = Typography;
 
 class ProductScreen extends React.Component {
     state = {
@@ -92,7 +93,9 @@ class ProductScreen extends React.Component {
 
     render() {
         return (
-            <div></div>
+            <div>
+                <Title>{this.state.prod_data.prod_name}</Title>
+            </div>
         )
     }
 }
