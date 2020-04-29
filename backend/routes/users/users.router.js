@@ -21,7 +21,7 @@ userRouter.post("/register", async (req, res) => {
             success: false,
             message: 'Password must be at least 6 characters',
         });
-    } else if (!telenumRegex.test(tel_num)){
+    } else if (!telenumRegex.test(tel_num)) {
         res.status(400).json({
             success: false,
             message: 'Invalue telephone number',
@@ -260,11 +260,12 @@ userRouter.get("/cart", async (req, res) => {
         // query and sent data
         try {
             const TEXT = `
-                SELECT ci.id, ci.prod_id, ci.quantity, ci.created_at
-                FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
-                WHERE c.id = $1::uuid
+                SELECT ci.id, p.prod_name, ci.prod_id , ci.quantity, p.price
+                FROM
+                    cart_items ci JOIN products p ON (ci.prod_id = p.id)
+                WHERE ci.cart_id = $1::uuid
                 `
-            const { rows } = await db.query(TEXT, [userID]);
+            const { rows } = await db.query(TEXT, [cart_id]);
             console.table(rows)
             res.status(200).json({
                 success: true,
@@ -285,7 +286,7 @@ userRouter.get("/cart", async (req, res) => {
     }
 });
 
-userRouter.get("/removeFromCart", async (req, res) => {
+userRouter.post("/removeFromCart", async (req, res) => {
     // check authentication
     if (req.session.currentUser && req.session.currentUser.id) {
         const userID = req.session.currentUser.id;
@@ -399,7 +400,7 @@ userRouter.post("/makeOrder", async (req, res) => {
                     VALUES
                         ($1::uuid, $2::uuid, $3)
                 `
-                rows.forEach( async (item) => {
+                rows.forEach(async (item) => {
                     await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
                 })
                 res.status(201).json({
