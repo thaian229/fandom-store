@@ -1,6 +1,6 @@
 import React from "react";
 import { ShoppingCartOutlined, EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic } from "antd";
+import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification } from "antd";
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -34,13 +34,28 @@ const Editor = ({ onChange, onSubmit, submitingComment, commentValue }) => (
     </div>
 );
 
+const openFailAddToCartNotification = (type, error) => {
+    notification[type]({
+      message: 'Fail To Add',
+      description: error,
+    });
+};
+
+const openSuccessAddToCartNotification = type => {
+    notification[type]({
+      message: 'Add To Cart Successfully',
+      description:
+        'Go check your cart to place order',
+    });
+};
+
 
 class ProductScreen extends React.Component {
     state = {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin")
+            is_admin: window.sessionStorage.getItem("is_admin") === 'true'
         },
         prod_id: undefined,
         prod_data: {
@@ -164,8 +179,10 @@ class ProductScreen extends React.Component {
                     this.setState({
                         errMessage: data.message,
                     })
+                    openFailAddToCartNotification('error', this.state.errMessage)
                 } else {
                     console.log("add successfully")
+                    openSuccessAddToCartNotification('success')
                 }
             })
             .catch((error) => {
@@ -347,7 +364,7 @@ class ProductScreen extends React.Component {
                     </Col>
                     <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
-                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_datacmt_data} />}
+                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                         <Comment
                             avatar={
                                 <Avatar
