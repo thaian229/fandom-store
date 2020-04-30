@@ -174,7 +174,7 @@ class CartScreen extends React.Component {
                                 {this.state.cart_items.map((item) => {
                                     return (
                                         <>
-                                            <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0' }}>
+                                            <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
                                                 <Col span={6}>
                                                     <Title level={4} style={{ textAlign: 'center' }} ><a onClick={(event) => { this.handleProductClick(item.prod_id) }}>{item.prod_name}</a> </Title>
                                                 </Col>
