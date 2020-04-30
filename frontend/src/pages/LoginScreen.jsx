@@ -18,7 +18,31 @@ class LoginScreen extends React.Component {
 
     componentWillMount() {
         if (this.state.localUser.email && this.state.localUser.id) {
-            window.location.href = '/';
+            fetch(`http://localhost:3001/api/users/restoreSession`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: this.state.localUser.id,
+                    email: this.state.localUser.email,
+                    is_admin: this.state.localUser.is_admin,
+                }),
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    if(!data.success) {
+                        console.log('false to restore session')
+                    } else {
+                        window.location.href = '/';
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
         }
     }
 
