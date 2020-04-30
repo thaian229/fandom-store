@@ -1,13 +1,13 @@
 import React from "react";
-import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel } from "antd";
+import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, HomeOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel, Breadcrumb } from "antd";
 
 const { Meta } = Card;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 
 
-class HomeScreen extends React.Component {
+class CategoryScreen extends React.Component {
 
     state = {
         currentUser: {
@@ -15,6 +15,7 @@ class HomeScreen extends React.Component {
             id: window.sessionStorage.getItem("id"),
             is_admin: window.sessionStorage.getItem("is_admin") === "true"
         },
+        currentCategory: window.location.href.split("/")[window.location.href.split("/").length - 1],
         data: [],
         loading: true,
         pageSize: 16,
@@ -24,6 +25,7 @@ class HomeScreen extends React.Component {
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
         window.addEventListener('scroll', this.handleScroll);
+        console.log(window.location.href.split("/")[window.location.href.split("/").length - 1])
     }
 
     handleClick = e => {
@@ -31,7 +33,7 @@ class HomeScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
-        fetch(`http://localhost:3001/api/posts/getPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}`, {
+        fetch(`http://localhost:3001/api/posts/category?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&tag=${this.state.currentCategory}`, {
             credentials: "include",
             method: "GET"
         })
@@ -141,25 +143,6 @@ class HomeScreen extends React.Component {
         }
     }
 
-    handleLogout = () => {
-        fetch(`http://localhost:3001/api/users/logout`, {
-            credentials: "include",
-            method: "GET"
-        })
-            .then(data => {
-                return data.json();
-            })
-            .then(data => {
-                console.log(data.message)
-                window.sessionStorage.clear();
-                window.localStorage.clear();
-            })
-            .catch(e => {
-                console.log(e)
-            })
-        window.location.pathname = '/login'
-    }
-
     render() {
         return (
             <div style={{ marginTop: `65px` }}>
@@ -228,7 +211,19 @@ class HomeScreen extends React.Component {
                                 <PageHeader
                                     className="site-page-header"
                                     // onBack={() => null}
-                                    title="Fandom Paradise"
+                                    title={
+                                        <Breadcrumb>
+                                            <Breadcrumb.Item href="http://localhost:3000">
+                                                <HomeOutlined style={{ marginBottom: "1px" }} />
+                                            </Breadcrumb.Item>
+                                            <Breadcrumb.Item>
+                                                <span>Categories</span>
+                                            </Breadcrumb.Item>
+                                            <Breadcrumb.Item>
+                                                <span>{this.state.currentCategory}</span>
+                                            </Breadcrumb.Item>
+                                        </Breadcrumb>
+                                    }
                                     style={{ paddingLeft: "2vw" }}
                                     extra={
                                         this.state.currentUser.is_admin ? (
@@ -240,8 +235,8 @@ class HomeScreen extends React.Component {
                                                     event.preventDefault();
                                                     this.addItem()
                                                 }
-                                                }>
-                                                New Item</Button>
+                                                }>New Item</Button>
+
                                         ) : null
                                     }
                                 >
@@ -303,7 +298,7 @@ class HomeScreen extends React.Component {
 
                             {
                                 this.state.data.map((item, index) => {
-                                    let key = `product${index}`
+                                    let key = `product${index}` 
                                     return (
                                         <Col key={key} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
                                             <Card
@@ -357,10 +352,9 @@ class HomeScreen extends React.Component {
                         </Row>
                     </Col>
                 </Row>
-                <Button onClick={(event) => this.handleLogout()}>Logout</Button>
             </div >
         )
     }
 }
 
-export default HomeScreen;
+export default CategoryScreen;

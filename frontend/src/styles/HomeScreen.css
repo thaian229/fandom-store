@@ -2,7 +2,8 @@
     text-align: center;
     line-height: 160px;
     overflow: hidden;
-    height: 20vw
+    height: 20vw;
+    background-color: white;
   }
   
   .ant-carousel .slick-slide h3 {
