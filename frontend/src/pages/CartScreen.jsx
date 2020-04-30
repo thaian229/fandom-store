@@ -1,10 +1,10 @@
 import React from "react";
-import { Row, Col, Typography, Button, Divider, Empty, Result, notification} from "antd";
+import { Row, Col, Typography, Button, Divider, Empty, Result, notification } from "antd";
 const { Title } = Typography;
 
 const openSuccessRemoveNotification = (type) => {
     notification[type]({
-      message: 'Removed Item',
+        message: 'Removed Item',
     });
 };
 
@@ -117,6 +117,24 @@ class CartScreen extends React.Component {
                         this.setState({
                             placedOrderSuccess: true,
                         })
+                        fetch(`http://localhost:3001/api/users/clearCart`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then((resp) => {
+                                return resp.json()
+                            })
+                            .then((data2) => {
+                                if(!data2.success) {
+                                    console.log(data2.message)
+                                }
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            })
                     }
                 })
                 .catch((err) => {
@@ -165,7 +183,7 @@ class CartScreen extends React.Component {
                                 {(this.state.numItem === 0) ? (
                                     (
                                         <div style={{ marginTop: '25px' }}>
-                                            <Empty description='Your Cart Is Empty'> 
+                                            <Empty description='Your Cart Is Empty'>
                                                 <Button type="primary" onClick={() => window.location.pathname = `/`}>Browse Products</Button>
                                             </Empty>
                                         </div>

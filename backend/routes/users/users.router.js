@@ -345,6 +345,45 @@ userRouter.post("/removeFromCart", async (req, res) => {
     }
 });
 
+userRouter.post("/clearCart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // update into database
+        try {
+            const TEXT = `
+                DELETE FROM cart_items
+                WHERE cart_id = $1::uuid
+                `
+            await db.query(TEXT, [cart_id])
+            const TEXT_UPDATE_CART_QTY = `
+                UPDATE accounts
+                SET cart_qty = 0
+                WHERE id = $1::uuid
+                RETURNING cart_qty
+            `
+            const cart_qty_return = await db.query(TEXT_UPDATE_CART_QTY, [userID])
+            res.status(201).json({
+                success: true,
+                message: 'Cart Cleared',
+                cart_qty: cart_qty_return.rows[0].cart_qty,
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
+
 userRouter.get("/orderHistory", async (req, res) => {
     // check authentication
     if (req.session.currentUser && req.session.currentUser.id) {
@@ -354,6 +393,7 @@ userRouter.get("/orderHistory", async (req, res) => {
             const TEXT = `
                 SELECT id, created_at FROM orders
                 WHERE acc_id = $1::uuid
+                ORDER BY created_at DESC
                 `
             const results = await db.query(TEXT, [userID]);
             const orderList = results.rows; // .rows is an array of object each object contain id of the orders
@@ -365,8 +405,8 @@ userRouter.get("/orderHistory", async (req, res) => {
                 var itemDone = 0;
                 orderList.forEach(async (item) => {
                     const TEXT = `
-                        SELECT prod_id, quantity 
-                        FROM order_items oi
+                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price 
+                        FROM order_items oi JOIN products p ON (oi.prod_id = p.id)
                         WHERE oi.order_id = $1::uuid
                         `;
                     const results = await db.query(TEXT, [item.id]);
