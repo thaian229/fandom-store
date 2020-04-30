@@ -1,0 +1,81 @@
+.info{
+    
+    display: inline-block;
+    margin: 2vh;
+    width: 100vh;   
+}
+
+.fullName{
+  
+    width: 50vh;
+    font-size: 36px;
+}
+
+.changeName{
+ 
+}
+
+.address{
+
+    display: inline-block;
+    width: 50vh;
+}
+
+.changeAddress{
+    
+    display: inline-block;
+}
+
+.phone{
+ 
+    display: inline-block;
+    width: 50vh;
+}
+
+.changePhone{
+  
+    display: inline-block;
+}
+
+.avatar{
+    
+    display: inline-block;
+    margin: 2vh;
+    height: 300px;
+    width: 300px;
+}
+
+.address-box{
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    font-size: 16px;
+}
+
+.phone-box{
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    font-size: 16px;
+}
+
+.email{
+    
+    width: 50vh;
+    display: inline-block;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    font-size: 16px;
+}
+
+.profile{
+   
+    height: 500px;
+    padding: 10px;
+}
+
+.pageProfile{
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: calc(100vh - 65px);
+    padding: 5%
+}
+

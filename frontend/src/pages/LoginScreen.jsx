@@ -13,8 +13,9 @@ class LoginScreen extends React.Component {
     };
 
     componentWillMount(){
-      const email = window.localStorage.getItem('email');
-      const id = window.localStorage.getItem('id');
+      const email = window.sessionStorage.getItem('email');
+      const id = window.sessionStorage.getItem('id');
+      
       if(email && id){
         window.location.href = '/';
       }
@@ -56,10 +57,10 @@ class LoginScreen extends React.Component {
                     err: data.message,
                 });
                 } else {
-                    // save current user to local storage
-                    window.localStorage.setItem('email', data.data.email);
-                    window.localStorage.setItem('is_admin', data.data.is_admin);
-                    window.localStorage.setItem('id', data.data.id);
+                    // save current user to session storage
+                    window.sessionStorage.setItem('email', data.data.email);
+                    window.sessionStorage.setItem('is_admin', data.data.is_admin);
+                    window.sessionStorage.setItem('id', data.data.id);
                     
                     // redirect user  
                     window.location.href = '/';
