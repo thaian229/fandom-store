@@ -223,6 +223,7 @@ class ProductScreen extends React.Component {
                 this.setState({
                     submitingComment: false,
                 })
+                this.componentDidMount();
             })
             .catch(err => {
                 if (err) {
@@ -355,7 +356,7 @@ class ProductScreen extends React.Component {
                     <Col span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                         <div>
-                            <Collapse defaultActiveKey={['1']} >
+                            <Collapse>
                                 <Panel header="See Full Desciption" key="1">
                                     <p>{this.state.prod_data.description}</p>
                                 </Panel>

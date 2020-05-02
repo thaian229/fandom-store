@@ -23,7 +23,7 @@ CREATE TABLE products (
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	description TEXT,
 	views INT DEFAULT 0,
-	stock INT DEFAULT 1,
+	stock INT DEFAULT 100,
 	sold INT DEFAULT 0,
 	tags TEXT,
 	CONSTRAINT products_pkey PRIMARY KEY (id)

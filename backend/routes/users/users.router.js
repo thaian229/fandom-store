@@ -474,12 +474,26 @@ userRouter.post("/makeOrder", async (req, res) => {
                     VALUES
                         ($1::uuid, $2::uuid, $3)
                 `
+                const TEXT_UPDATE_PROD = `
+                    UPDATE products
+                    SET stock = stock - $1,
+                        sold = sold + $1
+                    WHERE id = $2::uuid
+                `
                 rows.forEach(async (item) => {
                     try {
                         // console.log(item)
                         await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
                     } catch (e1) {
                         console.log(e1)
+                    }
+                })
+                rows.forEach(async (item1) => {
+                    try {
+                        // console.log(item)
+                        await db.query(TEXT_UPDATE_PROD, [item1.quantity, item1.prod_id]);
+                    } catch (e2) {
+                        console.log(e2)
                     }
                 })
                 res.status(201).json({
