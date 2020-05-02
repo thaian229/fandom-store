@@ -87,7 +87,7 @@ uploadRouter.post("/post/avatar", uploadAvatar.single("image"), async (req, res)
 
 		res.status(200).json({
 			success: true,
-			imgUrl: `http://localhost:3001/api/uploads/get/avatar/${fixedName}`
+			imgUrl: `http://localhost:3001/avatar/${fixedName}`
 		});
 	}
 	catch (error) {
