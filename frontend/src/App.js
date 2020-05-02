@@ -39,7 +39,7 @@ class App extends React.Component {
                     <Route path='/register' component={RegisterScreen} />
                     <Route path='/profile' component={ProfileScreen} />
                     <Route path='/addItem' component={AddItemScreen} />
-                    <Route path='/editItem/:prod_id' component={EditItemScreen} />
+                    <Route path='/edit/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
                 </Router>
             </div >

@@ -1,7 +1,9 @@
 import React from "react";
-import { Upload, Modal, Button, Form, Input, InputNumber } from 'antd';
+import { Upload, Modal, Button, Form, Input, InputNumber, Col, Row, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import FormItem from "antd/lib/form/FormItem";
+
+const { Option } = Select;
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -12,16 +14,35 @@ function getBase64(file) {
     });
 }
 
+const children = [];
+{
+    children.push(<Option key="K-Album">K-Album</Option>);
+    children.push(<Option key="K-Merchandise">K-Merchandise</Option>);
+    children.push(<Option key="K-Concert">K-Concert</Option>);
+    children.push(<Option key="K-Keyring">K-Keyring</Option>);
+    children.push(<Option key="K-Artbook">K-Artbook</Option>);
+    children.push(<Option key="K-Photocard">K-Photocard</Option>);
+    children.push(<Option key="K-Slogan">K-Slogan</Option>);
+    children.push(<Option key="K-Other">K-Other</Option>);
+    children.push(<Option key="J-Album">J-Album</Option>);
+    children.push(<Option key="J-Merchandise">J-Merchandise</Option>);
+    children.push(<Option key="J-Concert">J-Concert</Option>);
+    children.push(<Option key="J-Keyring">J-Keyring</Option>);
+    children.push(<Option key="J-Artbook">J-Artbook</Option>);
+    children.push(<Option key="J-Photocard">J-Photocard</Option>);
+    children.push(<Option key="J-Slogan">J-Slogan</Option>);
+    children.push(<Option key="J-Other">J-Other</Option>);
+}
+
 const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
 };
 
 const validateMessages = {
     required: '${label} is required!',
     types: {
-        email: '${label} is not validate email!',
-        number: '${label} is not a validate number!',
+        number: '${label} is not valid!',
     },
     number: {
         range: '${label} must be between ${min} and ${max}',
@@ -36,7 +57,12 @@ class AddItemScreen extends React.Component {
             is_admin: window.sessionStorage.getItem("is_admin") === "true"
         },
         data: {
-
+            prod_name: '',
+            price: 0,
+            image_url: [],
+            description: '',
+            stock: 0,
+            tags: ''
         },
         previewVisible: false,
         previewImage: '',
@@ -46,7 +72,7 @@ class AddItemScreen extends React.Component {
         previewVisibleT: false,
         previewImageT: '',
         previewTitleT: '',
-        finalImgUrls: []
+        finalImgUrls: [],
     }
 
     componentWillMount() {
@@ -57,9 +83,9 @@ class AddItemScreen extends React.Component {
         }
     }
 
-    handleCancel = () => this.setState({ previewVisible: false });
+    handleCancelImg = () => this.setState({ previewVisible: false });
 
-    handlePreview = async file => {
+    handlePreviewImg = async file => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
@@ -71,11 +97,11 @@ class AddItemScreen extends React.Component {
         });
     };
 
-    handleChange = ({ fileList }) => { this.setState({ fileList }); console.log(this.state.fileList) }
+    handleChangeImg = ({ fileList }) => { this.setState({ fileList }); console.log(this.state.fileList) }
 
-    handleCancelT = () => this.setState({ previewVisibleT: false });
+    handleCancelImgT = () => this.setState({ previewVisibleT: false });
 
-    handlePreviewT = async file => {
+    handlePreviewImgT = async file => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
@@ -87,9 +113,10 @@ class AddItemScreen extends React.Component {
         });
     };
 
-    handleChangeT = ({ fileList }) => this.setState({ thumbnail: fileList });
+    handleChangeImgT = ({ fileList }) => this.setState({ thumbnail: fileList });
 
     itemCreate = () => {
+        console.log(this.state)
         fetch(`http://localhost:3001/api/posts/addItem`, {
             credentials: "include",
             method: "POST",
@@ -121,8 +148,7 @@ class AddItemScreen extends React.Component {
             });
     }
 
-    getImageUrls = (event) => {
-        event.preventDefault();
+    getImageUrlsAndCreate = (event) => {
         let formDataProd = new FormData()
         let formDataThumbnail = new FormData()
 
@@ -147,7 +173,8 @@ class AddItemScreen extends React.Component {
             })
             .then(data => {
                 console.log(data.imgUrl)
-                this.state.finalImgUrls.push(data.imgUrl)
+                const finalImgUrls = []
+                finalImgUrls.push(data.imgUrl)
                 fetch(`http://localhost:3001/api/uploads/post/productImg`, {
                     credentials: "include",
                     method: "POST",
@@ -162,8 +189,15 @@ class AddItemScreen extends React.Component {
                     .then(data2 => {
                         console.log(data2.imgUrls);
                         data2.imgUrls.map(item => {
-                            this.state.finalImgUrls.push(item)
+                            finalImgUrls.push(item)
                         })
+                        this.setState({
+                            data: {
+                                ...this.state.data,
+                                image_url: finalImgUrls
+                            }
+                        })
+                        this.itemCreate()
                     })
                     .catch(er => {
                         if (er) {
@@ -183,7 +217,57 @@ class AddItemScreen extends React.Component {
 
     }
 
-    onFinish = () => { }
+    handleChangeCategories = value => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                tags: value
+            }
+        });
+        console.log(value)
+    };
+
+    handleProdNameChange = event => {
+        event.preventDefault()
+        this.setState({
+            data: {
+                ...this.state.data,
+                prod_name: event.target.value
+            }
+        });
+    }
+
+    handlePriceChange = value => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                price: value
+            }
+        });
+    }
+
+    handleStockChange = value => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                stock: value
+            }
+        });
+    }
+
+    handleDescriptionChange = event => {
+        event.preventDefault()
+        this.setState({
+            data: {
+                ...this.state.data,
+                description: event.target.value
+            }
+        });
+    }
+
+    onFinish = () => {
+        this.getImageUrlsAndCreate();
+    }
 
     render() {
 
@@ -196,72 +280,90 @@ class AddItemScreen extends React.Component {
         );
 
         return (
-            <div>
-
-                <Button onClick={this.getImageUrls}>TEST</Button>
-                <Form {...layout} name="nest-messages" onFinish={this.onFinish()} validateMessages={validateMessages}>
-                    <FormItem>
-                        <Upload
-                            name={['product', 'prodImgs']}
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onPreview={this.handlePreview}
-                            onChange={this.handleChange}
-                        >
-                            {fileList.length >= 4 ? null : uploadButton}
-                        </Upload>
+            <Row align="middle" justify="space-around" style={{ paddingTop: "50px" }}>
+                <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
+                    {/* <Button onClick={this.getImageUrls}>TEST</Button> */}
+                    <Form {...layout} name="nest-messages" onFinish={event => { this.onFinish() }} validateMessages={validateMessages} style={{ margin: "10px", paddingRight: "20px" }}>
+                        <Row align="middle" justify="space-around">
+                            <Col>
+                                <h1>
+                                    ADD NEW PRODUCT
+                            </h1>
+                            </Col>
+                        </Row>
+                        <Form.Item name={['product', 'prod_name']} label="Product Name" rules={[{ required: true }]}>
+                            <Input style={{ maxWidth: "700px" }} onChange={this.handleProdNameChange} />
+                        </Form.Item>
+                        <FormItem label="Product Image" name={['product', 'prodImgs']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
+                            <Upload
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                listType="picture-card"
+                                fileList={fileList}
+                                onPreview={this.handlePreviewImg}
+                                onChange={this.handleChangeImg}
+                            >
+                                {fileList.length >= 4 ? null : uploadButton}
+                            </Upload>
+                        </FormItem>
                         <Modal
                             visible={previewVisible}
                             title={previewTitle}
                             footer={null}
-                            onCancel={this.handleCancel}
+                            onCancel={this.handleCancelImg}
                         >
                             <img alt="example" style={{ width: '100%' }} src={previewImage} />
                         </Modal>
-                    </FormItem>
-                    <FormItem>
-                        <Upload
-                            name={['product', 'thumbnail']}
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
-                            fileList={thumbnail}
-                            onPreview={this.handlePreviewT}
-                            onChange={this.handleChangeT}
-                        >
-                            {thumbnail.length >= 1 ? null : uploadButton}
-                        </Upload>
+                        <FormItem label="Thumbnail" name={['product', 'thumbnail']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
+                            <Upload
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                listType="picture-card"
+                                fileList={thumbnail}
+                                onPreview={this.handlePreviewImgT}
+                                onChange={this.handleChangeImgT}
+                            >
+                                {thumbnail.length >= 1 ? null : uploadButton}
+                            </Upload>
+                        </FormItem>
                         <Modal
                             visible={previewVisibleT}
                             title={previewTitleT}
                             footer={null}
-                            onCancel={this.handleCancelT}
+                            onCancel={this.handleCancelImgT}
                         >
                             <img alt="example" style={{ width: '100%' }} src={previewImageT} />
                         </Modal>
-                    </FormItem>
-                    <Form.Item name={['product', 'name']} label="Product Name" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['product', 'email']} label="Price" rules={[{ type: 'email' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['product', 'age']} label="Age" rules={[{ type: 'number', min: 0, max: 99 }]}>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item name={['product', 'website']} label="Website">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['product', 'introduction']} label="Introduction">
-                        <Input.TextArea />
-                    </Form.Item>
-                    <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                        <Button type="primary" htmlType="submit">
-                            Submit
+                        <Form.Item name={['product', 'price']} label="Price (USD)" rules={[{ type: 'number', min: 0, required: true }]}>
+                            <InputNumber
+                                defaultValue={0}
+                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                onChange={this.handlePriceChange} />
+                        </Form.Item>
+                        <Form.Item name={['product', 'stock']} label="Stock" rules={[{ type: 'number', min: 0, required: true }]}>
+                            <InputNumber
+                                defaultValue={0}
+                                onChange={this.handleStockChange} />
+                        </Form.Item>
+                        <Form.Item name={['product', 'tags']} label="Category" rules={[{ required: true }]}>
+                            <Select
+                                mode="single"
+                                style={{ width: "100%", maxWidth: "700px" }}
+                                placeholder="Please select"
+                                onChange={this.handleChangeCategories}
+                            >
+                                {children}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name={['product', 'description']} label="Description" rules={[{ required: true }]}>
+                            <Input.TextArea style={{ maxWidth: "700px" }} onChange={this.handleDescriptionChange} />
+                        </Form.Item>
+                        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+                            <Button type="primary" htmlType="submit">
+                                Submit
                     </Button>
-                    </Form.Item>
-                </Form>
-            </div>
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
         )
     }
 }
