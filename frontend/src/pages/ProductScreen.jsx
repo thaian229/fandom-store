@@ -82,6 +82,12 @@ class ProductScreen extends React.Component {
     };
 
     componentDidMount() {
+        const divs = document.querySelectorAll(".ant-carousel .slick-slide")
+
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.height = "30vw"
+        }
+
         // take params
         const { prod_id } = this.props.match.params;
         this.setState({
@@ -250,7 +256,7 @@ class ProductScreen extends React.Component {
     };
 
     handleEdit = (event) => {
-        window.location.pathname = `/editItem/${this.state.prod_id}`
+        window.location.pathname = `/edit/${this.state.prod_id}`
     }
 
     handleDelete = (event) => {
@@ -298,7 +304,7 @@ class ProductScreen extends React.Component {
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
-                            style={{ width: "100%" }}
+                            style={{ width: "100%", height: "30vw" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
@@ -308,7 +314,13 @@ class ProductScreen extends React.Component {
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
-                                                    width: '100%',
+                                                    maxHeight: '30vw',
+                                                    marginTop: "auto",
+                                                    marginBottom: "auto",
+                                                    marginLeft: "auto",
+                                                    marginRight: "auto",
+                                                    verticalAlign: "middle",
+                                                    maxWidth: "100%"
                                                 }}>
                                             </img>
                                         </div>

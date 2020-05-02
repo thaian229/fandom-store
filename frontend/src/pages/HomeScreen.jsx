@@ -25,6 +25,10 @@ class HomeScreen extends React.Component {
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
         window.addEventListener('scroll', this.handleScroll);
+        const divs=document.querySelectorAll(".ant-carousel .slick-slide")
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.height="20vw"
+        }
     }
 
     handleClick = e => {
