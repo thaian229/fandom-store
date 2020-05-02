@@ -15,7 +15,6 @@ import ProductScreen from './pages/ProductScreen';
 import OrderHistoryScreen from './pages/OrderHistoryScreen';
 
 import './App.css';
-import './styles/HomeScreen.css'
 import CategoryScreen from './pages/CategoryScreen';
 
 const { Header } = Layout;

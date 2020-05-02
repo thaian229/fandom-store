@@ -1,6 +1,7 @@
 import React from "react";
 import { ShoppingCartOutlined, EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification } from "antd";
+import '../styles/ProductScreen.css';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { TextArea } = Input;
@@ -293,7 +294,7 @@ class ProductScreen extends React.Component {
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
                     <Col lg={1} span={0}></Col>
-                    <Col lg={12} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
+                    <Col lg={12} span={24} style={{ marginBottom: "1vw", paddingLeft: "2vw", paddingRight: "1vw", width: '33vw' }}>
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
@@ -302,7 +303,7 @@ class ProductScreen extends React.Component {
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
                                     return (
-                                        <div key={index}>
+                                        <div key={index} >
                                             <img
                                                 src={item}
                                                 alt='cannot load'

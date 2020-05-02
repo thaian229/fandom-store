@@ -1,6 +1,7 @@
 import React from "react";
 import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel } from "antd";
+import '../styles/HomeScreen.css';
 
 const { Meta } = Card;
 const { confirm } = Modal;

@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, Button, Alert } from "antd";
 //import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import './LoginScreen.css';
+import '../styles/LoginScreen.css';
 
 class LoginScreen extends React.Component {
     state = {
