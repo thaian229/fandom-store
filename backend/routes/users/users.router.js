@@ -206,7 +206,7 @@ userRouter.post("/update", async (req, res) => {
         // save in database
         try {
             const TEXT = `
-                UPDATE users
+                UPDATE accounts
                 SET
                     full_name = $1::text,
                     tel_num = $2::text,
@@ -214,7 +214,7 @@ userRouter.post("/update", async (req, res) => {
                     dob = $4::date,
                     ava_url = $5::text
                 WHERE
-                    acc_id = $6::uuid;
+                    id = $6::uuid;
                 `
             await db.query(TEXT, [full_name, tel_num, address, dob, ava_url, userID])
             res.status(201).json({
