@@ -15,7 +15,8 @@ class CategoryScreen extends React.Component {
             id: window.sessionStorage.getItem("id"),
             is_admin: window.sessionStorage.getItem("is_admin") === "true"
         },
-        currentCategory: window.location.href.split("/")[window.location.href.split("/").length - 1],
+        currentMarket: window.location.href.split("/")[window.location.href.split("/").length - 1].split('-')[0] + "-Market",
+        currentCategory: window.location.href.split("/")[window.location.href.split("/").length - 1].split('-')[1],
         data: [],
         loading: true,
         pageSize: 16,
@@ -33,7 +34,7 @@ class CategoryScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
-        fetch(`http://localhost:3001/api/posts/category?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&tag=${this.state.currentCategory}`, {
+        fetch(`http://localhost:3001/api/posts/category?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&tag=${this.state.currentMarket[0] + '-' + this.state.currentCategory}`, {
             credentials: "include",
             method: "GET"
         })
@@ -137,7 +138,7 @@ class CategoryScreen extends React.Component {
 
     handleScroll = (event) => {
         console.log(document.body.scrollHeight)
-        if (document.body.clientHeight + window.scrollY === (document.body.scrollHeight)) {
+        if (document.body.clientHeight + Math.floor(window.scrollY) === (document.body.scrollHeight) || document.body.clientHeight + Math.ceil(window.scrollY) === (document.body.scrollHeight)) {
             if (this.state.data.length === this.state.pageSize * (this.state.pageNumber))
                 this.dataFetch(this.state.pageSize, this.state.pageNumber)
         }
@@ -165,17 +166,17 @@ class CategoryScreen extends React.Component {
                                 }
                             >
                                 <Menu.ItemGroup key="g1" title="Official Releases">
-                                    <Menu.Item key="2" onClick={(event) => { this.handleClickTag("K-Albums") }}>Albums</Menu.Item>
-                                    <Menu.Item key="3" onClick={(event) => { this.handleClickTag("K-Merchandises") }}>Merchandises</Menu.Item>
-                                    <Menu.Item key="4" onClick={(event) => { this.handleClickTag("K-Concerts") }}>Concerts</Menu.Item>
+                                    <Menu.Item key="2" onClick={(event) => { this.handleClickTag("K-Album") }}>Albums</Menu.Item>
+                                    <Menu.Item key="3" onClick={(event) => { this.handleClickTag("K-Merchandise") }}>Merchandises</Menu.Item>
+                                    <Menu.Item key="4" onClick={(event) => { this.handleClickTag("K-Concert") }}>Concerts</Menu.Item>
                                 </Menu.ItemGroup>
                                 <Menu.ItemGroup key="g2" title="Fansite Goods">
-
-                                    <Menu.Item key="5" onClick={(event) => { this.handleClickTag("K-Keyrings") }}>Keyrings</Menu.Item>
-                                    <Menu.Item key="6" onClick={(event) => { this.handleClickTag("book") }}>Artbooks</Menu.Item>
-                                    <Menu.Item key="7" onClick={(event) => { this.handleClickTag("K-Photocards") }}>Photocards</Menu.Item>
-                                    <Menu.Item key="8" onClick={(event) => { this.handleClickTag("K-Postcards") }}>Postcards</Menu.Item>
-                                    <Menu.Item key="9" onClick={(event) => { this.handleClickTag("K-Slogans") }}>Slogans</Menu.Item>
+                                    <Menu.Item key="5" onClick={(event) => { this.handleClickTag("K-Keyring") }}>Keyrings</Menu.Item>
+                                    <Menu.Item key="6" onClick={(event) => { this.handleClickTag("K-Artbook") }}>Artbooks</Menu.Item>
+                                    <Menu.Item key="7" onClick={(event) => { this.handleClickTag("K-Photocard") }}>Photocards</Menu.Item>
+                                    <Menu.Item key="8" onClick={(event) => { this.handleClickTag("K-Postcard") }}>Postcards</Menu.Item>
+                                    <Menu.Item key="9" onClick={(event) => { this.handleClickTag("K-Slogan") }}>Slogans</Menu.Item>
+                                    <Menu.Item key="10" onClick={(event) => { this.handleClickTag("K-Other") }}>Others</Menu.Item>
                                 </Menu.ItemGroup>
                             </SubMenu>
                             <SubMenu
@@ -186,10 +187,19 @@ class CategoryScreen extends React.Component {
                                     </span>
                                 }
                             >
-
-                                <SubMenu key="sub3" title="Submenu">
-
-                                </SubMenu>
+                                <Menu.ItemGroup key="g1" title="Official Releases">
+                                    <Menu.Item key="22" onClick={(event) => { this.handleClickTag("J-Album") }}>Albums</Menu.Item>
+                                    <Menu.Item key="23" onClick={(event) => { this.handleClickTag("J-Merchandise") }}>Merchandises</Menu.Item>
+                                    <Menu.Item key="24" onClick={(event) => { this.handleClickTag("J-Concert") }}>Concerts</Menu.Item>
+                                </Menu.ItemGroup>
+                                <Menu.ItemGroup key="g2" title="Fansite Goods">
+                                    <Menu.Item key="25" onClick={(event) => { this.handleClickTag("J-Keyring") }}>Keyrings</Menu.Item>
+                                    <Menu.Item key="26" onClick={(event) => { this.handleClickTag("J-Artbook") }}>Artbooks</Menu.Item>
+                                    <Menu.Item key="27" onClick={(event) => { this.handleClickTag("J-Photocard") }}>Photocards</Menu.Item>
+                                    <Menu.Item key="28" onClick={(event) => { this.handleClickTag("J-Postcard") }}>Postcards</Menu.Item>
+                                    <Menu.Item key="29" onClick={(event) => { this.handleClickTag("J-Slogan") }}>Slogans</Menu.Item>
+                                    <Menu.Item key="30" onClick={(event) => { this.handleClickTag("J-Other") }}>Others</Menu.Item>
+                                </Menu.ItemGroup>
                             </SubMenu>
                             <SubMenu
                                 key="sub4"
@@ -218,6 +228,9 @@ class CategoryScreen extends React.Component {
                                             </Breadcrumb.Item>
                                             <Breadcrumb.Item>
                                                 <span>Categories</span>
+                                            </Breadcrumb.Item>
+                                            <Breadcrumb.Item>
+                                                <span>{this.state.currentMarket}</span>
                                             </Breadcrumb.Item>
                                             <Breadcrumb.Item>
                                                 <span>{this.state.currentCategory}</span>
@@ -298,7 +311,7 @@ class CategoryScreen extends React.Component {
 
                             {
                                 this.state.data.map((item, index) => {
-                                    let key = `product${index}` 
+                                    let key = `product${index}`
                                     return (
                                         <Col key={key} xl={{ span: 6 }} md={{ span: 8 }} sm={{ span: 12 }} xs={{ span: 24 }} key={index} style={{ paddingLeft: '2vw', paddingRight: "2vw", paddingBottom: "3vw" }}>
                                             <Card

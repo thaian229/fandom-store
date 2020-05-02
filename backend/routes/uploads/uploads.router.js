@@ -30,7 +30,7 @@ uploadRouter.post("/post/productImg", uploadProductImg.array("image", 4), async 
 
 		try {
 			fs.renameSync(`public/productImg/${file.filename}`, `public/productImg/${fixedName}`);
-			imgUrls.push(`http://localhost:3001/upload/productImg/${fixedName}`)
+			imgUrls.push(`http://localhost:3001/api/uploads/get/productImg/${fixedName}`)
 			const data = await Jimp.read(`public/productImg/${fixedName}`);
 			data.resize(1080, Jimp.AUTO) // resize
 				.quality(100) // set JPEG quality
@@ -87,7 +87,7 @@ uploadRouter.post("/post/avatar", uploadAvatar.single("image"), async (req, res)
 
 		res.status(200).json({
 			success: true,
-			imgUrl: `http://localhost:3001/upload/avatar/${fixedName}`
+			imgUrl: `http://localhost:3001/api/uploads/get/avatar/${fixedName}`
 		});
 	}
 	catch (error) {
@@ -134,7 +134,7 @@ uploadRouter.post("/post/thumbnail", uploadThumbnail.single("image"), async (req
 
 		res.status(200).json({
 			success: true,
-			imgUrl: `http://localhost:3001/upload/thumbnail/${fixedName}`
+			imgUrl: `http://localhost:3001/api/uploads/get/thumbnail/${fixedName}`
 		});
 	}
 	catch (error) {

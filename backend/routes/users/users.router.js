@@ -121,9 +121,29 @@ userRouter.post("/login", async (req, res) => {
             message: err.message,
         });
     }
-    console.log(req.headers.cookie);
+    // console.log(req.headers.cookie);
 
 });
+
+userRouter.post("/restoreSession", async (req, res) => {
+    // get id, email, is_admin
+    const { id, email, is_admin } = req.body;
+    try {
+        req.session.currentUser = {
+            id: id,
+            email: email,
+            is_admin: is_admin,
+        }
+        req.session.cookie.expires = false;
+        res.status(201).json({
+            success: true,
+        })
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+        })
+    }
+})
 
 userRouter.get("/logout", async (req, res) => {
     try {
@@ -142,7 +162,7 @@ userRouter.get("/logout", async (req, res) => {
 
 userRouter.get("/profile", async (req, res) => {
     // check weather login? 
-    console.log(req.session.currentUser)
+    // console.log(req.session.currentUser)
     if (req.session.currentUser && req.session.currentUser.id) {
         const userID = req.session.currentUser.id;
         // get all profile related info: full_name, address, dob, email, created_at
@@ -266,7 +286,7 @@ userRouter.get("/cart", async (req, res) => {
                 WHERE ci.cart_id = $1::uuid
                 `
             const { rows } = await db.query(TEXT, [cart_id]);
-            console.table(rows)
+            // console.table(rows)
             res.status(200).json({
                 success: true,
                 cart_id: cart_id,
@@ -325,6 +345,45 @@ userRouter.post("/removeFromCart", async (req, res) => {
     }
 });
 
+userRouter.post("/clearCart", async (req, res) => {
+    // check authentication
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const userID = req.session.currentUser.id;
+        const { rows } = await db.query(`SELECT id FROM carts WHERE acc_id = $1::uuid`, [userID]);
+        const cart_id = rows[0].id;
+        // update into database
+        try {
+            const TEXT = `
+                DELETE FROM cart_items
+                WHERE cart_id = $1::uuid
+                `
+            await db.query(TEXT, [cart_id])
+            const TEXT_UPDATE_CART_QTY = `
+                UPDATE accounts
+                SET cart_qty = 0
+                WHERE id = $1::uuid
+                RETURNING cart_qty
+            `
+            const cart_qty_return = await db.query(TEXT_UPDATE_CART_QTY, [userID])
+            res.status(201).json({
+                success: true,
+                message: 'Cart Cleared',
+                cart_qty: cart_qty_return.rows[0].cart_qty,
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    } else {
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
+
 userRouter.get("/orderHistory", async (req, res) => {
     // check authentication
     if (req.session.currentUser && req.session.currentUser.id) {
@@ -334,28 +393,42 @@ userRouter.get("/orderHistory", async (req, res) => {
             const TEXT = `
                 SELECT id, created_at FROM orders
                 WHERE acc_id = $1::uuid
+                ORDER BY created_at DESC
                 `
             const results = await db.query(TEXT, [userID]);
             const orderList = results.rows; // .rows is an array of object each object contain id of the orders
+            // console.log(1)
+            // console.log(orderList)
             // take detail of each order
             try {
                 let sendBackData = [];
+                var itemDone = 0;
                 orderList.forEach(async (item) => {
                     const TEXT = `
-                        SELECT prod_id, quantity FROM order_items
-                        WHERE oder_items.order_id = $1::uuid
-                        `
+                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price 
+                        FROM order_items oi JOIN products p ON (oi.prod_id = p.id)
+                        WHERE oi.order_id = $1::uuid
+                        `;
                     const results = await db.query(TEXT, [item.id]);
+                    // console.log(2);
+                    // console.log(results);
                     sendBackData.push({
                         order_id: item.id,
                         created_at: item.created_at,
                         order_detail: results.rows,
                     });
-                })
-                // return data
-                res.status(200).json({
-                    success: true,
-                    data: sendBackData,
+                    itemDone++
+                    // console.log(3);
+                    // console.log(sendBackData);
+                    if (itemDone === orderList.length) {
+                        // return data
+                        // console.log(4)
+                        // console.log(sendBackData)
+                        res.status(200).json({
+                            success: true,
+                            data: sendBackData,
+                        })
+                    }
                 })
             } catch (error) {
                 res.status(500).json({
@@ -386,13 +459,14 @@ userRouter.post("/makeOrder", async (req, res) => {
         const TEXT = `
                 SELECT  ci.prod_id, ci.quantity
                 FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
-                WHERE c.id = $1::uuid
+                WHERE c.acc_id = $1::uuid
                 `
         const { rows } = await db.query(TEXT, [userID]);
         // make new order
         try {
             const order_id_returning = await db.query(`INSERT INTO orders (acc_id) VALUES ($1::uuid) RETURNING id`, [userID])
             const order_id = order_id_returning.rows[0].id;
+            // console.log(order_id)
             // make list of order items
             try {
                 const TEXT_ORDER_ITEM = `
@@ -401,7 +475,12 @@ userRouter.post("/makeOrder", async (req, res) => {
                         ($1::uuid, $2::uuid, $3)
                 `
                 rows.forEach(async (item) => {
-                    await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
+                    try {
+                        // console.log(item)
+                        await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
+                    } catch (e1) {
+                        console.log(e1)
+                    }
                 })
                 res.status(201).json({
                     success: true,
