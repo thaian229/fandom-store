@@ -1,6 +1,7 @@
 import React from "react";
-import { Avatar, Button, Popover, Input, Form, Tooltip, Upload, Modal } from "antd";
-import { QuestionCircleOutlined, PlusOutlined  } from '@ant-design/icons';
+import { Avatar, Button, Popover, Input, Form, Tooltip, Upload, Modal, DatePicker } from "antd";
+import { QuestionCircleOutlined, PlusOutlined, EditOutlined  } from '@ant-design/icons';
+import moment from 'moment';
 
 import './ProfileScreen.css';
 
@@ -12,7 +13,7 @@ class ProfileScreen extends React.Component {
             password: '',
             tel_num: '',
             address: '',
-            dob: undefined,
+            dob: null,
             ava_url: '',
             err: '',
             imageFile: undefined,
@@ -102,6 +103,14 @@ class ProfileScreen extends React.Component {
                 imageSource: '',
             });
         }
+    };
+
+    handleDobChange = (value) => {
+        console.log(this.state.dob);
+        this.setState({
+            dob: value,
+        });
+        console.log(this.state.dob);
     };
 
     showModal = () => {
@@ -200,6 +209,10 @@ class ProfileScreen extends React.Component {
 
     render() {
         const { previewVisible, previewImage, imageFile } = this.state;
+
+        const currentDob = this.state.dob;
+
+        const dateFormat = 'DD-MM-YYYY';
 
         const uploadButton = (
             <div>
@@ -312,7 +325,7 @@ class ProfileScreen extends React.Component {
                                                 <Input onChange={this.handleAddressChange} />
                                         </Form.Item>
                                         )} trigger="click">
-                                            <Button>Change address</Button>
+                                            <Button type="link"><EditOutlined /></Button>
                                         </Popover>
                                     </div>
                                 </div>   
@@ -331,16 +344,30 @@ class ProfileScreen extends React.Component {
                                             </span>
                                             }
                                         >
-                                                <Input onChange={this.handlePhoneChange} />
+                                                <Input onOpenChange={this.handlePhoneChange} />
                                         </Form.Item>
                                         )} trigger="click">
-                                            <Button>Change phone number</Button>
+                                            <Button type="link"><EditOutlined /></Button>
                                         </Popover>
                                     </div>
                                 </div>
                             </div>
 
-                        <div className='changePhone'>
+                            <div className='dob-box'>
+                                <div className='dob'>
+                                    Date of birth: {currentDob} 
+                                </div>
+                                <div className='changePhone'>
+                                        <Popover placement="right" content={(
+                                            <DatePicker onChange={this.handleDobChange} />
+                                        )} trigger="click">
+                                            <Button type="link"><EditOutlined /></Button>
+                                        </Popover>
+                                    </div>
+                            </div>
+                            
+
+                        <div className='changePassword'>
                             <Popover placement="right" content={(
                                 <Form>
                                     <Form.Item
