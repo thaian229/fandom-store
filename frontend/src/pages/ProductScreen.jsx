@@ -293,8 +293,9 @@ class ProductScreen extends React.Component {
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
                     <Col lg={1} span={0}></Col>
-                    <Col lg={12} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
+                    <Col lg={12} span={24} style={{ marginBottom: "1vw", paddingLeft: "2vw", paddingRight: "1vw", width: '33vw' }}>
                         <Carousel
+                            className='prod-carousel prod-slick-slide'
                             autoplay={true}
                             dotPosition={'bottom'}
                             style={{ width: "100%" }}
@@ -302,8 +303,8 @@ class ProductScreen extends React.Component {
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
                                     return (
-                                        <div key={index}>
-                                            <img
+                                        <div key={index} className='prod-slick-slide'>
+                                            <img className='prod-slick-slide'
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
