@@ -298,7 +298,7 @@ class EditItemScreen extends React.Component {
         if (!this.state.thumbnail[0].old) {
             this.getThumbnailUrl(formDataThumbnail, formDataProd, oldItem, finalImgUrls)
         } else {
-            if (oldItem.length === this.state.fileList.length && oldItem.length - 1 === this.state.fileList.length) {
+            if (oldItem.length === this.state.fileList.length + 1) {
                 finalImgUrls = this.state.data.image_url
                 this.updateItem(finalImgUrls)
             } else {
