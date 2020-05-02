@@ -135,7 +135,7 @@ class HomeScreen extends React.Component {
 
     handleScroll = (event) => {
         console.log(document.body.scrollHeight)
-        if (document.body.clientHeight + window.scrollY === (document.body.scrollHeight)) {
+        if (document.body.clientHeight + Math.floor(window.scrollY) === (document.body.scrollHeight) || document.body.clientHeight + Math.ceil(window.scrollY) === (document.body.scrollHeight)) {
             if (this.state.data.length === this.state.pageSize * (this.state.pageNumber))
                 this.dataFetch(this.state.pageSize, this.state.pageNumber)
         }
