@@ -80,7 +80,7 @@ userRouter.post("/login", async (req, res) => {
     // check email existance
     try {
         const TEXT = `
-            SELECT id, email, password, is_admin 
+            SELECT id, email, password, is_admin, ava_url, full_name
             FROM accounts 
             WHERE email = $1::text LIMIT 1
             `
@@ -101,6 +101,8 @@ userRouter.post("/login", async (req, res) => {
                 id: rows[0].id,
                 email: rows[0].email,
                 is_admin: rows[0].is_admin,
+                ava_url: rows[0].ava_url,
+                full_name: rows[0].full_name,
             };
 
             // response
@@ -111,6 +113,8 @@ userRouter.post("/login", async (req, res) => {
                     email: rows[0].email,
                     is_admin: rows[0].is_admin,
                     id: rows[0].id,
+                    ava_url: rows[0].ava_url,
+                    full_name: rows[0].full_name,
                 },
             });
             req.session.cookie.expires = false;
@@ -127,12 +131,14 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.post("/restoreSession", async (req, res) => {
     // get id, email, is_admin
-    const { id, email, is_admin } = req.body;
+    const { id, email, is_admin, ava_url, full_name } = req.body;
     try {
         req.session.currentUser = {
             id: id,
             email: email,
             is_admin: is_admin,
+            ava_url: ava_url,
+            full_name: full_name,
         }
         req.session.cookie.expires = false;
         res.status(201).json({
@@ -200,7 +206,7 @@ userRouter.post("/update", async (req, res) => {
         // save in database
         try {
             const TEXT = `
-                UPDATE users
+                UPDATE accounts
                 SET
                     full_name = $1::text,
                     tel_num = $2::text,
@@ -208,7 +214,7 @@ userRouter.post("/update", async (req, res) => {
                     dob = $4::date,
                     ava_url = $5::text
                 WHERE
-                    acc_id = $6::uuid;
+                    id = $6::uuid;
                 `
             await db.query(TEXT, [full_name, tel_num, address, dob, ava_url, userID])
             res.status(201).json({
@@ -474,12 +480,26 @@ userRouter.post("/makeOrder", async (req, res) => {
                     VALUES
                         ($1::uuid, $2::uuid, $3)
                 `
+                const TEXT_UPDATE_PROD = `
+                    UPDATE products
+                    SET stock = stock - $1,
+                        sold = sold + $1
+                    WHERE id = $2::uuid
+                `
                 rows.forEach(async (item) => {
                     try {
                         // console.log(item)
                         await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
                     } catch (e1) {
                         console.log(e1)
+                    }
+                })
+                rows.forEach(async (item1) => {
+                    try {
+                        // console.log(item)
+                        await db.query(TEXT_UPDATE_PROD, [item1.quantity, item1.prod_id]);
+                    } catch (e2) {
+                        console.log(e2)
                     }
                 })
                 res.status(201).json({

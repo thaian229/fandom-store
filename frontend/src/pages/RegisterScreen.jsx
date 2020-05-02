@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Input, Tooltip, Checkbox, Button, Alert } from "antd";
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
-import './RegisterScreen.css';
+import '../styles/RegisterScreen.css';
 
 class RegisterScreen extends React.Component {
     state = {

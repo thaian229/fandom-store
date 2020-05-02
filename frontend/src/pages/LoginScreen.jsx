@@ -2,14 +2,16 @@ import React from "react";
 import { Form, Input, Button, Alert } from "antd";
 //import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import './LoginScreen.css';
+import '../styles/LoginScreen.css';
 
 class LoginScreen extends React.Component {
     state = {
         localUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true"
+            is_admin: window.sessionStorage.getItem("is_admin") === "true",
+            ava_url: window.sessionStorage.getItem("ava_url"),
+            full_name: window.sessionStorage.getItem("full_name"),
         },
         email: "",
         id: "",
@@ -28,6 +30,8 @@ class LoginScreen extends React.Component {
                     id: this.state.localUser.id,
                     email: this.state.localUser.email,
                     is_admin: this.state.localUser.is_admin,
+                    ava_url: this.state.localUser.ava_url,
+                    full_name: this.state.localUser.full_name,
                 }),
             })
                 .then((res) => {
@@ -86,6 +90,8 @@ class LoginScreen extends React.Component {
                     window.sessionStorage.setItem('email', data.data.email);
                     window.sessionStorage.setItem('is_admin', data.data.is_admin);
                     window.sessionStorage.setItem('id', data.data.id);
+                    window.sessionStorage.setItem('ava_url', data.data.ava_url);
+                    window.sessionStorage.setItem('full_name', data.data.full_name);
                     // redirect user  
                     window.location.href = '/';
                 }
