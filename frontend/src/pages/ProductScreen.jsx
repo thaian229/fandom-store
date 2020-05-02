@@ -36,16 +36,16 @@ const Editor = ({ onChange, onSubmit, submitingComment, commentValue }) => (
 
 const openFailAddToCartNotification = (type, error) => {
     notification[type]({
-      message: 'Fail To Add',
-      description: error,
+        message: 'Fail To Add',
+        description: error,
     });
 };
 
 const openSuccessAddToCartNotification = type => {
     notification[type]({
-      message: 'Add To Cart Successfully',
-      description:
-        'Go check your cart to place order',
+        message: 'Add To Cart Successfully',
+        description:
+            'Go check your cart to place order',
     });
 };
 
@@ -257,7 +257,7 @@ class ProductScreen extends React.Component {
                 return res.json();
             })
             .then((data) => {
-                if(!data.success) {
+                if (!data.success) {
                     this.setState({
                         errMessage: data.message,
                     })
@@ -290,17 +290,19 @@ class ProductScreen extends React.Component {
                             style={{ width: "100%" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
-                                return (
-                                    <div key={index}>
-                                        <img
-                                            src={item}
-                                            alt='cannot load'
-                                            style={{
-                                                width: '100%',
-                                            }}>
-                                        </img>
-                                    </div>
-                                );
+                                if (index !== 0) {
+                                    return (
+                                        <div key={index}>
+                                            <img
+                                                src={item}
+                                                alt='cannot load'
+                                                style={{
+                                                    width: '100%',
+                                                }}>
+                                            </img>
+                                        </div>
+                                    );
+                                }
                             })}
                         </Carousel>
                     </Col>
