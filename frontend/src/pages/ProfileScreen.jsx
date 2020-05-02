@@ -1,32 +1,32 @@
 import React from "react";
 import { Avatar, Button, Popover, Input, Form, Tooltip, Upload, Modal, DatePicker } from "antd";
-import { QuestionCircleOutlined, PlusOutlined, EditOutlined  } from '@ant-design/icons';
+import { QuestionCircleOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-import './ProfileScreen.css';
+import '../styles/ProfileScreen.css';
 
 class ProfileScreen extends React.Component {
     state = {
-            id: window.sessionStorage.getItem('id'),
-            email: window.sessionStorage.getItem('email'),
-            full_name: '',
-            password: '',
-            tel_num: '',
-            address: '',
-            dob: null,
-            ava_url: '',
-            err: '',
-            imageFile: undefined,
-            imageSource: '',
-            visible: false,
+        id: window.sessionStorage.getItem('id'),
+        email: window.sessionStorage.getItem('email'),
+        full_name: '',
+        password: '',
+        tel_num: '',
+        address: '',
+        dob: null,
+        ava_url: '',
+        err: '',
+        imageFile: undefined,
+        imageSource: '',
+        visible: false,
     };
 
     componentDidMount() {
-        if(!this.state.id){
+        if (!this.state.id) {
             window.alert('Access Denied, Please Login')
             window.location.pathname = `/login`
-        } 
-        else{
+        }
+        else {
             fetch(`http://localhost:3001/api/users/profile`, {
                 method: 'GET',
                 credentials: 'include',
@@ -34,29 +34,29 @@ class ProfileScreen extends React.Component {
                     'Content-Type': 'application/json',
                 },
             })
-            .then((res) => {
-                console.log(res)
-                return res.json();
-            })
-            .then((data) => {
-                this.setState({
-                    full_name: data.data.full_name,
-                    tel_num: data.data.tel_num,
-                    address: data.data.address,
-                    dob: data.data.dob,
-                    ava_url: data.data.ava_url,
+                .then((res) => {
+                    console.log(res)
+                    return res.json();
                 })
-                console.log(this.state.full_name);
-        console.log(this.state.tel_num);
-        console.log(this.state.address);
-        console.log(this.state.dob);
-        console.log(this.state.ava_url);
-                console.log('ok');
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        } 
+                .then((data) => {
+                    this.setState({
+                        full_name: data.data.full_name,
+                        tel_num: data.data.tel_num,
+                        address: data.data.address,
+                        dob: data.data.dob,
+                        ava_url: data.data.ava_url,
+                    })
+                    console.log(this.state.full_name);
+                    console.log(this.state.tel_num);
+                    console.log(this.state.address);
+                    console.log(this.state.dob);
+                    console.log(this.state.ava_url);
+                    console.log('ok');
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }
 
     handleNameChange = (event) => {
@@ -69,10 +69,10 @@ class ProfileScreen extends React.Component {
         this.setState({
             password: event.target.value,
         });
-        
+
     };
 
-    handlePhoneChange= (event) => {
+    handlePhoneChange = (event) => {
         this.setState({
             tel_num: event.target.value,
         });
@@ -115,13 +115,13 @@ class ProfileScreen extends React.Component {
 
     showModal = () => {
         this.setState({
-          visible: true,
+            visible: true,
         });
-      };
-    
-      handleOk = (event) => {
+    };
+
+    handleOk = (event) => {
         this.setState({
-          visible: false,
+            visible: false,
         });
         event.preventDefault();
         if (!this.state.imageFile) {
@@ -129,7 +129,7 @@ class ProfileScreen extends React.Component {
                 visible: false,
             });
         } else {
-            
+
             // Upload file and take local path from database
             const formData = new FormData();
             formData.append('image', this.state.imageFile);
@@ -157,14 +157,14 @@ class ProfileScreen extends React.Component {
                     });
                 });
         }
-      };
-    
-      handleCancel = e => {
+    };
+
+    handleCancel = e => {
         console.log(e);
         this.setState({
-          visible: false,
+            visible: false,
         });
-      };
+    };
 
     handleFormSubmit = (event) => {
         console.log(this.state.password);
@@ -184,28 +184,28 @@ class ProfileScreen extends React.Component {
                 ava_url: this.state.ava_url,
             }),
         })
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            if (!data.success) {
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                if (!data.success) {
+                    this.setState({
+                        err: data.message,
+                    });
+                } else {
+                    // redirect user
+                    window.location.href = '/profile';
+                }
+            })
+            .catch((error) => {
+                console.log(error);
                 this.setState({
-                    err: data.message,
+                    err: error.message,
                 });
-            } else {
-                // redirect user
-                window.location.href = '/profile';
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            this.setState({
-                err: error.message,
             });
-        });
     };
 
-    
+
 
     render() {
         const { previewVisible, previewImage, imageFile } = this.state;
@@ -216,8 +216,8 @@ class ProfileScreen extends React.Component {
 
         const uploadButton = (
             <div>
-              <PlusOutlined />
-              <div className="ant-upload-text">Upload</div>
+                <PlusOutlined />
+                <div className="ant-upload-text">Upload</div>
             </div>
         );
 
@@ -225,52 +225,52 @@ class ProfileScreen extends React.Component {
             <div className='pageProfile'>
                 <div className='profile'>
                     <div className='avatar'>
-                    <Popover placement="bottom" content={(
-                        <div>
-                            <Button type="primary" onClick={this.showModal}>
-                                Change avatar
+                        <Popover placement="bottom" content={(
+                            <div>
+                                <Button type="primary" onClick={this.showModal}>
+                                    Change avatar
                             </Button>
-                            <Modal
-                            title="Choose new avatar"
-                            visible={this.state.visible}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                            >
-                                <div className="col-8">
-                                    <div className="form-group">
-                                        <label htmlFor='file' className="btn">Select Image</label>
-                                        <input
-                                            id='file'
-                                            type='file'
-                                            accept="image/*"
-                                            className='form-control'
-                                            style={{
-                                                color: `transparent`,
-                                                margin: `0 auto`,
-                                                textIndent: `-999em`,
-                                            }}
-                                            onChange={this.handleImageChange}
-                                        />
-                                        {this.state.imageSource ? (
-                                            <div style={{ textAlign: `center`, }}>
-                                                <img
-                                                    src={this.state.imageSource}
-                                                    alt='preview image'
-                                                    style={{
-                                                        height: `400px`,
-                                                        width: `auto`,
-                                                    }}
-                                                />
-                                            </div>
-                                        ) : null}
+                                <Modal
+                                    title="Choose new avatar"
+                                    visible={this.state.visible}
+                                    onOk={this.handleOk}
+                                    onCancel={this.handleCancel}
+                                >
+                                    <div className="col-8">
+                                        <div className="form-group">
+                                            <label htmlFor='file' className="btn">Select Image</label>
+                                            <input
+                                                id='file'
+                                                type='file'
+                                                accept="image/*"
+                                                className='form-control'
+                                                style={{
+                                                    color: `transparent`,
+                                                    margin: `0 auto`,
+                                                    textIndent: `-999em`,
+                                                }}
+                                                onChange={this.handleImageChange}
+                                            />
+                                            {this.state.imageSource ? (
+                                                <div style={{ textAlign: `center`, }}>
+                                                    <img
+                                                        src={this.state.imageSource}
+                                                        alt='preview image'
+                                                        style={{
+                                                            height: `400px`,
+                                                            width: `auto`,
+                                                        }}
+                                                    />
+                                                </div>
+                                            ) : null}
+                                        </div>
                                     </div>
-                                </div>
-                            </Modal>
-                      </div>
-                    )}>
-                        <Avatar shape="square" size={300} src={this.state.ava_url} />
-                    </Popover>,
-                        
+                                </Modal>
+                            </div>
+                        )}>
+                            <Avatar shape="square" size={300} src={this.state.ava_url} />
+                        </Popover>,
+
                     </div>
                     <div className='info'>
                         <Form
@@ -279,25 +279,25 @@ class ProfileScreen extends React.Component {
                         >
                             <div>
 
-                            <div className='fullname-box'>
+                                <div className='fullname-box'>
                                     <div className='fullName'>
                                         {this.state.full_name}
                                     </div>
                                     <div className='changeName'>
                                         <Popover placement="right" content={(
                                             <Form.Item
-                                            name="full-name"
-                                            label={
-                                            <span>
-                                                New name&nbsp;
+                                                name="full-name"
+                                                label={
+                                                    <span>
+                                                        New name&nbsp;
                                                 <Tooltip title="What do you want others to call you?">
-                                                    <QuestionCircleOutlined />
-                                                </Tooltip>
-                                            </span>
-                                            }
-                                        >
+                                                            <QuestionCircleOutlined />
+                                                        </Tooltip>
+                                                    </span>
+                                                }
+                                            >
                                                 <Input onChange={this.handleNameChange} />
-                                        </Form.Item>
+                                            </Form.Item>
                                         )} trigger="click">
                                             <Button size='small'>Change name</Button>
                                         </Popover>
@@ -307,7 +307,7 @@ class ProfileScreen extends React.Component {
                                 <div className='email'>
                                     Email: {this.state.email}
                                 </div>
-                                
+
                                 <div className='address-box'>
                                     <div className='address'>
                                         Address: {this.state.address}
@@ -315,20 +315,20 @@ class ProfileScreen extends React.Component {
                                     <div className='changeAddress'>
                                         <Popover placement="right" content={(
                                             <Form.Item
-                                            name="telNum"
-                                            label={
-                                            <span>
-                                                New Address&nbsp;
+                                                name="telNum"
+                                                label={
+                                                    <span>
+                                                        New Address&nbsp;
                                             </span>
-                                            }
-                                        >
+                                                }
+                                            >
                                                 <Input onChange={this.handleAddressChange} />
-                                        </Form.Item>
+                                            </Form.Item>
                                         )} trigger="click">
                                             <Button type="link"><EditOutlined /></Button>
                                         </Popover>
                                     </div>
-                                </div>   
+                                </div>
 
                                 <div className='phone-box'>
                                     <div className='phone'>
@@ -337,15 +337,15 @@ class ProfileScreen extends React.Component {
                                     <div className='changePhone'>
                                         <Popover placement="right" content={(
                                             <Form.Item
-                                            name="telNum"
-                                            label={
-                                            <span>
-                                                New phone number&nbsp;
+                                                name="telNum"
+                                                label={
+                                                    <span>
+                                                        New phone number&nbsp;
                                             </span>
-                                            }
-                                        >
+                                                }
+                                            >
                                                 <Input onOpenChange={this.handlePhoneChange} />
-                                        </Form.Item>
+                                            </Form.Item>
                                         )} trigger="click">
                                             <Button type="link"><EditOutlined /></Button>
                                         </Popover>
@@ -355,70 +355,70 @@ class ProfileScreen extends React.Component {
 
                             <div className='dob-box'>
                                 <div className='dob'>
-                                    Date of birth: {currentDob} 
+                                    Date of birth: {currentDob}
                                 </div>
                                 <div className='changePhone'>
-                                        <Popover placement="right" content={(
-                                            <DatePicker onChange={this.handleDobChange} />
-                                        )} trigger="click">
-                                            <Button type="link"><EditOutlined /></Button>
-                                        </Popover>
-                                    </div>
+                                    <Popover placement="right" content={(
+                                        <DatePicker onChange={this.handleDobChange} />
+                                    )} trigger="click">
+                                        <Button type="link"><EditOutlined /></Button>
+                                    </Popover>
+                                </div>
                             </div>
-                            
 
-                        <div className='changePassword'>
-                            <Popover placement="right" content={(
-                                <Form>
-                                    <Form.Item
-                                        name="password"
-                                        label="New password"
-                                        hasFeedback
-                                    >
-                                        <Input.Password 
-                                            placeholder="Password must be at least 6 characters"
-                                            onChange={this.handlePasswordChange}
-                                        />
-                                    </Form.Item>
 
-                                    <Form.Item
-                                        name="confirm"
-                                        label="Confirm Password"
-                                        dependencies={['password']}
-                                        hasFeedback
-                                        rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please confirm your password!',
-                                        },
-                                        ({ getFieldValue }) => ({
-                                            validator(rule, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject('The two passwords that you entered do not match!');
-                                            },
-                                        }),
-                                        ]}
-                                    >
-                                        <Input.Password />
-                                    </Form.Item>
-                                </Form>
+                            <div className='changePassword'>
+                                <Popover placement="right" content={(
+                                    <Form>
+                                        <Form.Item
+                                            name="password"
+                                            label="New password"
+                                            hasFeedback
+                                        >
+                                            <Input.Password
+                                                placeholder="Password must be at least 6 characters"
+                                                onChange={this.handlePasswordChange}
+                                            />
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            name="confirm"
+                                            label="Confirm Password"
+                                            dependencies={['password']}
+                                            hasFeedback
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please confirm your password!',
+                                                },
+                                                ({ getFieldValue }) => ({
+                                                    validator(rule, value) {
+                                                        if (!value || getFieldValue('password') === value) {
+                                                            return Promise.resolve();
+                                                        }
+                                                        return Promise.reject('The two passwords that you entered do not match!');
+                                                    },
+                                                }),
+                                            ]}
+                                        >
+                                            <Input.Password />
+                                        </Form.Item>
+                                    </Form>
                                 )} trigger="click">
                                     <Button>Change password</Button>
                                 </Popover>
-                            </div>       
+                            </div>
 
                             <Form.Item>
                                 <Button type="primary" htmlType="submit">
-                                Update profile
+                                    Update profile
                                 </Button>
                             </Form.Item>
                         </Form>
                     </div>
                 </div>
             </div>
-            
+
         )
     }
 }
