@@ -10,9 +10,18 @@ const { Meta } = Card;
 const CommentList = ({ cmt_data }) => (
     <List
         dataSource={cmt_data}
-        header={`${cmt_data.length} ${cmt_data.length > 1 ? "replies" : "reply"}`}
+        header={`${cmt_data.length} ${cmt_data.length > 1 ? "comments" : "comment"}`}
         itemLayout="horizontal"
-        renderItem={props => <Comment style={{ width: "100%" }} {...props} />}
+        // renderItem={props => <Comment style={{ width: "100%" }} {...props} />}
+        renderItem={(items) => (
+            <List.Item>
+                <List.Item.Meta
+                    avatar={<Avatar src={items.ava_url} />}
+                    title={<Text> {items.full_name}</Text>}
+                    description={items.content}
+                />
+            </List.Item>
+        )}
     />
 );
 
@@ -55,7 +64,9 @@ class ProductScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === 'true'
+            is_admin: window.sessionStorage.getItem("is_admin") === 'true',
+            ava_url: window.sessionStorage.getItem("ava_url"),
+            full_name: window.sessionStorage.getItem("full_name")
         },
         prod_id: undefined,
         prod_data: {
@@ -67,9 +78,6 @@ class ProductScreen extends React.Component {
         recommend_data: [],
         quantity: 1,
         errMessage: '',
-        currentUser: {
-            is_admin: false,
-        },
     };
 
     componentDidMount() {
@@ -222,6 +230,7 @@ class ProductScreen extends React.Component {
                 console.log(data);
                 this.setState({
                     submitingComment: false,
+                    commentValue: '',
                 })
                 this.componentDidMount();
             })
@@ -284,7 +293,7 @@ class ProductScreen extends React.Component {
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
                     <Col lg={1} span={0}></Col>
-                    <Col lg={12} span={14} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
+                    <Col lg={12} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
@@ -308,7 +317,7 @@ class ProductScreen extends React.Component {
                         </Carousel>
                     </Col>
                     <Col lg={1} span={0}></Col>
-                    <Col lg={8} span={10} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingRight: "2vw", paddingLeft: "1vw" }}>
+                    <Col lg={8} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingRight: "2vw", paddingLeft: "1vw" }}>
                         <Title level={3} style={{ color: 'green' }} >Price: ${this.state.prod_data.price}</Title>
                         <Title level={4}><EyeOutlined /> Views: {this.state.prod_data.views}</Title>
                         <Title level={4}><ShoppingCartOutlined /> Sold: {this.state.prod_data.sold}</Title>
@@ -327,30 +336,29 @@ class ProductScreen extends React.Component {
                                     </Col>
                                 </Row>
                             </div>
-                        ) : (
-                                <div>
-                                    <Form
-                                        layout={'inline'}
-                                        onFinish={this.handleAddToCart}
-                                    >
-                                        <Form.Item label="Qty">
-                                            <InputNumber
-                                                placeholder='1'
-                                                min={1}
-                                                max={this.state.prod_data.stock}
-                                                onChange={this.handleQuantityChange}
-                                                value={this.state.quantity}
-                                            />
-                                        </Form.Item>
-                                        <Form.Item>
-                                            <Button type="primary" htmlType="submit">
-                                                Add To Cart <ShoppingCartOutlined />
-                                            </Button>
+                        ) : null}
+                        <div>
+                            <Form
+                                layout={'inline'}
+                                onFinish={this.handleAddToCart}
+                            >
+                                <Form.Item label="Qty">
+                                    <InputNumber
+                                        placeholder='1'
+                                        min={1}
+                                        max={this.state.prod_data.stock}
+                                        onChange={this.handleQuantityChange}
+                                        value={this.state.quantity}
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit">
+                                        Add To Cart <ShoppingCartOutlined />
+                                    </Button>
 
-                                        </Form.Item>
-                                    </Form>
-                                </div>
-                            )}
+                                </Form.Item>
+                            </Form>
+                        </div>
                     </Col>
                     <Col lg={2} span={0}></Col>
                     <Col span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
@@ -367,12 +375,11 @@ class ProductScreen extends React.Component {
                     </Col>
                     <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
-                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                         <Comment
                             avatar={
                                 <Avatar
-                                    src={this.state.currentUser.avaUrl}
-                                    alt={this.state.currentUser.fullName}
+                                    src={this.state.currentUser.ava_url}
+                                    alt={this.state.currentUser.full_name}
                                 />
                             }
                             content={
@@ -384,6 +391,7 @@ class ProductScreen extends React.Component {
                                 />
                             }
                         />
+                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                     </Col>
                     <Col lg={4} span={0}></Col>
                     <Col span={24}>

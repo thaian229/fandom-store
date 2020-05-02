@@ -80,7 +80,7 @@ userRouter.post("/login", async (req, res) => {
     // check email existance
     try {
         const TEXT = `
-            SELECT id, email, password, is_admin 
+            SELECT id, email, password, is_admin, ava_url, full_name
             FROM accounts 
             WHERE email = $1::text LIMIT 1
             `
@@ -101,6 +101,8 @@ userRouter.post("/login", async (req, res) => {
                 id: rows[0].id,
                 email: rows[0].email,
                 is_admin: rows[0].is_admin,
+                ava_url: rows[0].ava_url,
+                full_name: rows[0].full_name,
             };
 
             // response
@@ -111,6 +113,8 @@ userRouter.post("/login", async (req, res) => {
                     email: rows[0].email,
                     is_admin: rows[0].is_admin,
                     id: rows[0].id,
+                    ava_url: rows[0].ava_url,
+                    full_name: rows[0].full_name,
                 },
             });
             req.session.cookie.expires = false;
@@ -127,12 +131,14 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.post("/restoreSession", async (req, res) => {
     // get id, email, is_admin
-    const { id, email, is_admin } = req.body;
+    const { id, email, is_admin, ava_url, full_name } = req.body;
     try {
         req.session.currentUser = {
             id: id,
             email: email,
             is_admin: is_admin,
+            ava_url: ava_url,
+            full_name: full_name,
         }
         req.session.cookie.expires = false;
         res.status(201).json({
