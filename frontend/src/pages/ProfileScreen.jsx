@@ -3,7 +3,7 @@ import { Avatar, Button, Popover, Input, Form, Tooltip, Upload, Modal, DatePicke
 import { QuestionCircleOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-import './ProfileScreen.css';
+import '../styles/ProfileScreen.css';
 
 class ProfileScreen extends React.Component {
     state = {
