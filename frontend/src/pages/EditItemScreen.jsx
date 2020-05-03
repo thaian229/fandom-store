@@ -54,7 +54,7 @@ class EditItemScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true"
+            is_admin: false
         },
         prod_id: window.location.href.split("/")[window.location.href.split("/").length - 1],
         data: {
@@ -74,6 +74,31 @@ class EditItemScreen extends React.Component {
         previewImageT: '',
         previewTitleT: '',
         finalImgUrls: [],
+    }
+
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                    if (!data.data.is_admin) {
+                        window.location.pathname = "/"
+                    }
+                })
+        } else {
+            window.location.pathname = "/login"
+        }
     }
 
     getItem = () => {
@@ -130,11 +155,7 @@ class EditItemScreen extends React.Component {
     }
 
     componentWillMount() {
-        if (!this.state.currentUser.email || !this.state.currentUser.id) {
-            window.location.pathname = "/login"
-        } else if (!this.state.currentUser.is_admin) {
-            window.location.pathname = "/"
-        }
+        this.adminCheck()
         this.getItem()
     }
 
@@ -373,7 +394,7 @@ class EditItemScreen extends React.Component {
 
         return (
             <Row align="middle" justify="space-around" style={{ paddingTop: "50px" }}>
-                {this.state.data.prod_name
+                {this.state.data.prod_name && this.state.currentUser.is_admin
                     ? (
                         <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
                             <Form

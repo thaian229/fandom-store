@@ -8,11 +8,36 @@ class OrderHistoryScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === 'true'
+            is_admin: false
         },
         orderList: [],
         orderItems: [],
         emptyHistory: false,
+    }
+
+    
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                })
+        }
+    }
+
+    componentWillMount() {
+        this.adminCheck()
     }
 
     componentDidMount() {

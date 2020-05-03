@@ -536,4 +536,24 @@ userRouter.get("/test", async (req, res) => {
     })
 });
 
+userRouter.get("/checkAdmin", async (req, res) => {
+    // check weather login? 
+    console.log(req.session)
+    if (req.session.currentUser.email && req.session.currentUser.id) {
+        try {
+            res.status(201).json({
+                success: true,
+                data: {
+                    is_admin: req.session.currentUser.is_admin
+                },    
+            })
+        } catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    }  
+});
+
 module.exports = userRouter;
