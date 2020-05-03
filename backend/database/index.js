@@ -14,7 +14,7 @@ const pool = new Pool({
   user: "postgres",
   host: "localhost",
   database: "fandom_store",
-  password: "",
+  password: " ",
   port: 5432
 });
 
