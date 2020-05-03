@@ -138,9 +138,7 @@ class CartScreen extends React.Component {
                     if (!data.success) {
                         window.alert(data.message)
                     } else {
-                        this.setState({
-                            placedOrderSuccess: true,
-                        })
+                        
                         fetch(`http://localhost:3001/api/users/clearCart`, {
                             method: 'POST',
                             credentials: 'include',
@@ -154,6 +152,10 @@ class CartScreen extends React.Component {
                             .then((data2) => {
                                 if (!data2.success) {
                                     console.log(data2.message)
+                                } else {
+                                    this.setState({
+                                        placedOrderSuccess: true,
+                                    })
                                 }
                             })
                             .catch((e) => {
