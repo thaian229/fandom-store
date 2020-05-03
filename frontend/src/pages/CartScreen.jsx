@@ -128,7 +128,7 @@ class CartScreen extends React.Component {
                                 return resp.json()
                             })
                             .then((data2) => {
-                                if(!data2.success) {
+                                if (!data2.success) {
                                     console.log(data2.message)
                                 }
                             })
@@ -211,7 +211,9 @@ class CartScreen extends React.Component {
                                 })}
                                 <Divider></Divider>
                                 <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
-                                <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                {(this.state.numItem === 0) ? null : (
+                                    <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                )}
                             </Col>
                             <Col span={5}></Col>
                         </Row>
