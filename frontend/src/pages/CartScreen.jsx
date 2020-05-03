@@ -138,7 +138,7 @@ class CartScreen extends React.Component {
                     if (!data.success) {
                         window.alert(data.message)
                     } else {
-                        
+
                         fetch(`http://localhost:3001/api/users/clearCart`, {
                             method: 'POST',
                             credentials: 'include',
@@ -237,9 +237,11 @@ class CartScreen extends React.Component {
                                     )
                                 })}
                                 <Divider></Divider>
-                                <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
                                 {(this.state.numItem === 0) ? null : (
-                                    <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                    <>
+                                        <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
+                                        <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                    </>
                                 )}
                             </Col>
                             <Col span={5}></Col>
