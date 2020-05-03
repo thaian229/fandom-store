@@ -106,13 +106,13 @@ class LoginScreen extends React.Component {
                 span: 7,
             },
             wrapperCol: {
-                span: 16,
+                span: 20,
             },
         };
         const tailLayout = {
             wrapperCol: {
-                offset: 8,
-                span: 16,
+                offset: 7,
+                span: 20,
             },
         };
         //const onFinish = values => {
@@ -127,7 +127,7 @@ class LoginScreen extends React.Component {
             <div className='pageLogin'>
                 <div className="loginBox">
                     <div className='greeting'>
-                        Wellcome
+                        Logo here
                 </div>
                     <div className='inputLogin'>
                         <Form
@@ -192,8 +192,8 @@ class LoginScreen extends React.Component {
                   </Button>
                             </Form.Item>
 
-                            <Form.Item {...tailLayout}>
-                                Don't have account? <a href="/register">Register here</a>
+                            <Form.Item {...tailLayout} > 
+                                Don't have an account? <a href="/register">Register here</a>
                             </Form.Item>
 
                         </Form>

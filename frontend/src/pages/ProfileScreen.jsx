@@ -210,7 +210,7 @@ class ProfileScreen extends React.Component {
     render() {
         const { previewVisible, previewImage, imageFile } = this.state;
 
-        const currentDob = this.state.dob;
+        const currentDob = moment(this.state.dob).format('L');
 
         const dateFormat = 'DD-MM-YYYY';
 
@@ -227,7 +227,7 @@ class ProfileScreen extends React.Component {
                     <div className='avatar'>
                         <Popover placement="bottom" content={(
                             <div>
-                                <Button type="primary" onClick={this.showModal}>
+                                <Button shape="round" type="primary" onClick={this.showModal}>
                                     Change avatar
                             </Button>
                                 <Modal
@@ -268,7 +268,7 @@ class ProfileScreen extends React.Component {
                                 </Modal>
                             </div>
                         )}>
-                            <Avatar shape="square" size={300} src={this.state.ava_url} />
+                            <Avatar shape="square" size={290} src={this.state.ava_url} />
                         </Popover>,
 
                     </div>
@@ -299,7 +299,7 @@ class ProfileScreen extends React.Component {
                                                 <Input onChange={this.handleNameChange} />
                                             </Form.Item>
                                         )} trigger="click">
-                                            <Button size='small'>Change name</Button>
+                                            <Button shape="round" size='small'>Change name</Button>
                                         </Popover>
                                     </div>
                                 </div>
@@ -357,7 +357,7 @@ class ProfileScreen extends React.Component {
                                 <div className='dob'>
                                     Date of birth: {currentDob}
                                 </div>
-                                <div className='changePhone'>
+                                <div className='changeDob'>
                                     <Popover placement="right" content={(
                                         <DatePicker onChange={this.handleDobChange} />
                                     )} trigger="click">
@@ -367,7 +367,26 @@ class ProfileScreen extends React.Component {
                             </div>
 
 
-                            <div className='changePassword'>
+                            
+
+                            <Form.Item>
+                                <Button className='updateButon' shape="round" type="primary" htmlType="submit">
+                                    Update profile
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </div>
+            </div>
+
+        )
+    }
+}
+
+export default ProfileScreen;
+
+/*
+<div className='changePassword'>
                                 <Popover placement="right" content={(
                                     <Form>
                                         <Form.Item
@@ -408,19 +427,5 @@ class ProfileScreen extends React.Component {
                                     <Button>Change password</Button>
                                 </Popover>
                             </div>
-
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Update profile
-                                </Button>
-                            </Form.Item>
-                        </Form>
-                    </div>
-                </div>
-            </div>
-
-        )
-    }
-}
-
-export default ProfileScreen;
+*/
+                
