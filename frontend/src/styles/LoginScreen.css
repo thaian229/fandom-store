@@ -1,5 +1,4 @@
 .loginBox {
-    
     margin-right: 5%;
     margin-left: 70%;
     border: solid #65ccf1;
@@ -14,6 +13,7 @@
 .greeting {
     margin-bottom: 30px;
     font-size: 50px;
+    height: 30vh;
     text-align: center;
 }
 
@@ -22,8 +22,8 @@
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100vh - 65px);
-    padding-top: 15%;
-    padding-bottom: 15%;
+    padding-top: 13vh;
+    padding-bottom: 10vh;
 }
 .errorLogin {
     margin-top: 0 auto;
@@ -31,3 +31,4 @@
     margin-right: 5%;
     margin-bottom: 7%;
 }
+

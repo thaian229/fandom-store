@@ -13,8 +13,8 @@ const { Pool } = require("pg");
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "fandom_store",
-  password: "22114455",
+  database: "fandom_store_test",
+  password: "ben10154111999",
   port: 5432
 });
 
