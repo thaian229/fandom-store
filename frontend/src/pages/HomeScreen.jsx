@@ -182,11 +182,11 @@ class HomeScreen extends React.Component {
                 console.log(data.message)
                 window.sessionStorage.clear();
                 window.localStorage.clear();
+                window.location.pathname = '/login'
             })
             .catch(e => {
                 console.log(e)
             })
-        window.location.pathname = '/login'
     }
 
     render() {
