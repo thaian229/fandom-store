@@ -54,7 +54,7 @@ class AddItemScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true"
+            is_admin: false
         },
         data: {
             prod_name: '',
@@ -75,12 +75,33 @@ class AddItemScreen extends React.Component {
         finalImgUrls: [],
     }
 
-    componentWillMount() {
-        if (!this.state.currentUser.email || !this.state.currentUser.id) {
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                    if (!data.data.is_admin) {
+                        window.location.pathname = "/"
+                    }
+                })
+        } else {
             window.location.pathname = "/login"
-        } else if (!this.state.currentUser.is_admin) {
-            window.location.pathname = "/"
         }
+    }
+
+    componentWillMount() {
+        this.adminCheck()
     }
 
     handleCancelImg = () => this.setState({ previewVisible: false });
@@ -280,89 +301,92 @@ class AddItemScreen extends React.Component {
         );
 
         return (
+
             <Row align="middle" justify="space-around" style={{ paddingTop: "50px" }}>
-                <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
-                    {/* <Button onClick={this.getImageUrls}>TEST</Button> */}
-                    <Form {...layout} name="nest-messages" onFinish={event => { this.onFinish() }} validateMessages={validateMessages} style={{ margin: "10px", paddingRight: "20px" }}>
-                        <Row align="middle" justify="space-around">
-                            <Col>
-                                <h1>
-                                    ADD NEW PRODUCT
+                {this.state.currentUser.is_admin ? (
+                    <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
+                        {/* <Button onClick={this.getImageUrls}>TEST</Button> */}
+                        <Form {...layout} name="nest-messages" onFinish={event => { this.onFinish() }} validateMessages={validateMessages} style={{ margin: "10px", paddingRight: "20px" }}>
+                            <Row align="middle" justify="space-around">
+                                <Col>
+                                    <h1>
+                                        ADD NEW PRODUCT
                             </h1>
-                            </Col>
-                        </Row>
-                        <Form.Item name={['product', 'prod_name']} label="Product Name" rules={[{ required: true }]}>
-                            <Input style={{ maxWidth: "700px" }} onChange={this.handleProdNameChange} />
-                        </Form.Item>
-                        <FormItem label="Product Image" name={['product', 'prodImgs']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
-                            <Upload
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                listType="picture-card"
-                                fileList={fileList}
-                                onPreview={this.handlePreviewImg}
-                                onChange={this.handleChangeImg}
+                                </Col>
+                            </Row>
+                            <Form.Item name={['product', 'prod_name']} label="Product Name" rules={[{ required: true }]}>
+                                <Input style={{ maxWidth: "700px" }} onChange={this.handleProdNameChange} />
+                            </Form.Item>
+                            <FormItem label="Product Image" name={['product', 'prodImgs']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
+                                <Upload
+                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    listType="picture-card"
+                                    fileList={fileList}
+                                    onPreview={this.handlePreviewImg}
+                                    onChange={this.handleChangeImg}
+                                >
+                                    {fileList.length >= 4 ? null : uploadButton}
+                                </Upload>
+                            </FormItem>
+                            <Modal
+                                visible={previewVisible}
+                                title={previewTitle}
+                                footer={null}
+                                onCancel={this.handleCancelImg}
                             >
-                                {fileList.length >= 4 ? null : uploadButton}
-                            </Upload>
-                        </FormItem>
-                        <Modal
-                            visible={previewVisible}
-                            title={previewTitle}
-                            footer={null}
-                            onCancel={this.handleCancelImg}
-                        >
-                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                        </Modal>
-                        <FormItem label="Thumbnail" name={['product', 'thumbnail']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
-                            <Upload
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                listType="picture-card"
-                                fileList={thumbnail}
-                                onPreview={this.handlePreviewImgT}
-                                onChange={this.handleChangeImgT}
+                                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                            </Modal>
+                            <FormItem label="Thumbnail" name={['product', 'thumbnail']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
+                                <Upload
+                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    listType="picture-card"
+                                    fileList={thumbnail}
+                                    onPreview={this.handlePreviewImgT}
+                                    onChange={this.handleChangeImgT}
+                                >
+                                    {thumbnail.length >= 1 ? null : uploadButton}
+                                </Upload>
+                            </FormItem>
+                            <Modal
+                                visible={previewVisibleT}
+                                title={previewTitleT}
+                                footer={null}
+                                onCancel={this.handleCancelImgT}
                             >
-                                {thumbnail.length >= 1 ? null : uploadButton}
-                            </Upload>
-                        </FormItem>
-                        <Modal
-                            visible={previewVisibleT}
-                            title={previewTitleT}
-                            footer={null}
-                            onCancel={this.handleCancelImgT}
-                        >
-                            <img alt="example" style={{ width: '100%' }} src={previewImageT} />
-                        </Modal>
-                        <Form.Item name={['product', 'price']} label="Price (USD)" rules={[{ type: 'number', min: 0, required: true }]}>
-                            <InputNumber
-                                defaultValue={0}
-                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                onChange={this.handlePriceChange} />
-                        </Form.Item>
-                        <Form.Item name={['product', 'stock']} label="Stock" rules={[{ type: 'number', min: 0, required: true }]}>
-                            <InputNumber
-                                defaultValue={0}
-                                onChange={this.handleStockChange} />
-                        </Form.Item>
-                        <Form.Item name={['product', 'tags']} label="Category" rules={[{ required: true }]}>
-                            <Select
-                                mode="single"
-                                style={{ width: "100%", maxWidth: "700px" }}
-                                placeholder="Please select"
-                                onChange={this.handleChangeCategories}
-                            >
-                                {children}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name={['product', 'description']} label="Description" rules={[{ required: true }]}>
-                            <Input.TextArea style={{ maxWidth: "700px" }} onChange={this.handleDescriptionChange} />
-                        </Form.Item>
-                        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
-                    </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
+                                <img alt="example" style={{ width: '100%' }} src={previewImageT} />
+                            </Modal>
+                            <Form.Item name={['product', 'price']} label="Price (USD)" rules={[{ type: 'number', min: 0, required: true }]}>
+                                <InputNumber
+                                    defaultValue={0}
+                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    onChange={this.handlePriceChange} />
+                            </Form.Item>
+                            <Form.Item name={['product', 'stock']} label="Stock" rules={[{ type: 'number', min: 0, required: true }]}>
+                                <InputNumber
+                                    defaultValue={0}
+                                    onChange={this.handleStockChange} />
+                            </Form.Item>
+                            <Form.Item name={['product', 'tags']} label="Category" rules={[{ required: true }]}>
+                                <Select
+                                    mode="single"
+                                    style={{ width: "100%", maxWidth: "700px" }}
+                                    placeholder="Please select"
+                                    onChange={this.handleChangeCategories}
+                                >
+                                    {children}
+                                </Select>
+                            </Form.Item>
+                            <Form.Item name={['product', 'description']} label="Description" rules={[{ required: true }]}>
+                                <Input.TextArea style={{ maxWidth: "700px" }} onChange={this.handleDescriptionChange} />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+                                <Button type="primary" htmlType="submit">
+                                    Submit
+                            </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                ) : null}
             </Row>
         )
     }

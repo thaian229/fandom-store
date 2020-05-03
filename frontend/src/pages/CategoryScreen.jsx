@@ -13,7 +13,7 @@ class CategoryScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true"
+            is_admin: false
         },
         currentMarket: window.location.href.split("/")[window.location.href.split("/").length - 1].split('-')[0] + "-Market",
         currentCategory: window.location.href.split("/")[window.location.href.split("/").length - 1].split('-')[1],
@@ -22,6 +22,31 @@ class CategoryScreen extends React.Component {
         pageSize: 16,
         pageNumber: 0
     }
+
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                })
+        }
+    }
+
+    componentWillMount() {
+        this.adminCheck()
+    }
+
 
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
