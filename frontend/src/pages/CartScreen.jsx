@@ -153,6 +153,7 @@ class CartScreen extends React.Component {
                                 if (!data2.success) {
                                     console.log(data2.message)
                                 } else {
+                                    this.componentDidMount()
                                     this.setState({
                                         placedOrderSuccess: true,
                                     })
