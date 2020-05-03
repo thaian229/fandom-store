@@ -1,17 +1,22 @@
 .loginBox {
     margin-right: 5%;
     margin-left: 70%;
-    border: solid #65ccf1;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 2vh;
     border-radius: 30px;
     background: rgba(222, 255, 254, 0.7);
 }
 
 .inputLogin{
-    padding-right: 15% ;
+    padding-right: 5%;
+    padding-left: 5%;
 }
 
 .greeting {
-    margin-bottom: 30px;
+    border: solid;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
     font-size: 50px;
     height: 30vh;
     text-align: center;
@@ -22,7 +27,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100vh - 65px);
-    padding-top: 13vh;
+    padding-top: 11vh;
     padding-bottom: 10vh;
 }
 .errorLogin {
@@ -32,3 +37,21 @@
     margin-bottom: 7%;
 }
 
+.loginButton {
+    
+    background-color: rgb(101, 204, 241)!important;
+}
+
+.loginButton:hover {
+    
+    background-color: rgb(217, 245, 255)!important;
+}
+
+.inputForm {
+    width: 18.5vw;
+}
+
+.dontHaveAccount {
+    text-align: center;
+    padding-bottom: 2vh;
+}
