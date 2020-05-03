@@ -3,7 +3,6 @@ import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
-
 import HomeScreen from './pages/HomeScreen';
 import CartScreen from './pages/CartScreen';
 import EditItemScreen from './pages/EditItemScreen';
@@ -13,11 +12,12 @@ import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import ProductScreen from './pages/ProductScreen';
 import OrderHistoryScreen from './pages/OrderHistoryScreen';
-
+import NavBar from './pages/NavBar';
 import './App.css';
 import CategoryScreen from './pages/CategoryScreen';
+import SearchScreen from './pages/SearchScreen';
 
-const { Header } = Layout;
+const { Header, Content, Footer } = Layout;
 
 class App extends React.Component {
 
@@ -25,9 +25,9 @@ class App extends React.Component {
         return (
             <div>
                 <Layout style={{ marginBottom: `65px`, backgroundColor: "black" }}>
-                    <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                        <div className="logo" />
-                    </Header>
+                        <Router>
+                            <Route path='/' component={NavBar} />
+                        </Router>
                 </Layout>
                 <Router>
                     <Route path='/' exact={true} component={HomeScreen} />
@@ -40,6 +40,7 @@ class App extends React.Component {
                     <Route path='/addItem' component={AddItemScreen} />
                     <Route path='/edit/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
+                    <Route path='/search/:keyword' component={SearchScreen}/>
                 </Router>
             </div >
         );

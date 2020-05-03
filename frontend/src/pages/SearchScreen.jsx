@@ -1,14 +1,13 @@
 import React from "react";
-import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel } from "antd";
-import '../styles/HomeScreen.css';
+import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined, HomeOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel, Breadcrumb, Empty } from "antd";
 
 const { Meta } = Card;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 
 
-class HomeScreen extends React.Component {
+class SearchScreen extends React.Component {
 
     state = {
         currentUser: {
@@ -19,7 +18,8 @@ class HomeScreen extends React.Component {
         data: [],
         loading: true,
         pageSize: 16,
-        pageNumber: 0
+        pageNumber: 0,
+        searchValue: window.location.href.split("/")[window.location.href.split("/").length - 1]
     }
 
     adminCheck = () => {
@@ -60,7 +60,7 @@ class HomeScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
-        fetch(`http://localhost:3001/api/posts/getPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}`, {
+        fetch(`http://localhost:3001/api/posts/searchPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&searchValue=${this.state.searchValue}`, {
             credentials: "include",
             method: "GET"
         })
@@ -170,7 +170,7 @@ class HomeScreen extends React.Component {
         }
     }
 
-    
+
 
     render() {
         return (
@@ -249,7 +249,16 @@ class HomeScreen extends React.Component {
                                 <PageHeader
                                     className="site-page-header"
                                     // onBack={() => null}
-                                    title="Fandom Paradise"
+                                    title={
+                                        <Breadcrumb>
+                                            <Breadcrumb.Item href="http://localhost:3000">
+                                                <HomeOutlined style={{ marginBottom: "1px" }} />
+                                            </Breadcrumb.Item>
+                                            <Breadcrumb.Item>
+                                                <span>Search</span>
+                                            </Breadcrumb.Item>
+                                        </Breadcrumb>
+                                    }
                                     style={{ paddingLeft: "2vw" }}
                                     extra={
                                         this.state.currentUser.is_admin ? (
@@ -261,8 +270,8 @@ class HomeScreen extends React.Component {
                                                     event.preventDefault();
                                                     this.addItem()
                                                 }
-                                                }>
-                                                New Item</Button>
+                                                }>New Item</Button>
+
                                         ) : null
                                     }
                                 >
@@ -322,7 +331,7 @@ class HomeScreen extends React.Component {
                                 </Carousel>
                             </Col>
 
-                            {
+                            {(this.state.data.length > 0) ? (
                                 this.state.data.map((item, index) => {
                                     let key = `product${index}`
                                     return (
@@ -374,6 +383,11 @@ class HomeScreen extends React.Component {
                                         </Col>
                                     )
                                 })
+                            ) : (
+                                    <Col span={24}>
+                                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                    </Col>
+                                )
                             }
                         </Row>
                     </Col>
@@ -383,4 +397,4 @@ class HomeScreen extends React.Component {
     }
 }
 
-export default HomeScreen;
+export default SearchScreen;
