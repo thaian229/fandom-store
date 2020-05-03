@@ -9,45 +9,43 @@ class LoginScreen extends React.Component {
         localUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true",
             ava_url: window.sessionStorage.getItem("ava_url"),
             full_name: window.sessionStorage.getItem("full_name"),
         },
         email: "",
         id: "",
-        is_admin: false
     };
 
     componentWillMount() {
-        if (this.state.localUser.email && this.state.localUser.id) {
-            fetch(`http://localhost:3001/api/users/restoreSession`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: this.state.localUser.id,
-                    email: this.state.localUser.email,
-                    is_admin: this.state.localUser.is_admin,
-                    ava_url: this.state.localUser.ava_url,
-                    full_name: this.state.localUser.full_name,
-                }),
-            })
-                .then((res) => {
-                    return res.json();
-                })
-                .then((data) => {
-                    if(!data.success) {
-                        console.log('false to restore session')
-                    } else {
-                        window.location.href = '/';
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                });
-        }
+        // if (this.state.localUser.email && this.state.localUser.id) {
+        //     fetch(`http://localhost:3001/api/users/restoreSession`, {
+        //         method: 'POST',
+        //         credentials: 'include',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({
+        //             id: this.state.localUser.id,
+        //             email: this.state.localUser.email,
+        //             is_admin: this.state.localUser.is_admin,
+        //             ava_url: this.state.localUser.ava_url,
+        //             full_name: this.state.localUser.full_name,
+        //         }),
+        //     })
+        //         .then((res) => {
+        //             return res.json();
+        //         })
+        //         .then((data) => {
+        //             if(!data.success) {
+        //                 console.log('false to restore session')
+        //             } else {
+        //                 window.location.href = '/';
+        //             }
+        //         })
+        //         .catch((err) => {
+        //             console.log(err)
+        //         });
+        // }
     }
 
     handleEmailChange = (event) => {
@@ -88,7 +86,6 @@ class LoginScreen extends React.Component {
                 } else {
                     // save current user to session storage
                     window.sessionStorage.setItem('email', data.data.email);
-                    window.sessionStorage.setItem('is_admin', data.data.is_admin);
                     window.sessionStorage.setItem('id', data.data.id);
                     window.sessionStorage.setItem('ava_url', data.data.ava_url);
                     window.sessionStorage.setItem('full_name', data.data.full_name);
@@ -109,13 +106,13 @@ class LoginScreen extends React.Component {
                 span: 7,
             },
             wrapperCol: {
-                span: 16,
+                span: 20,
             },
         };
         const tailLayout = {
             wrapperCol: {
-                offset: 8,
-                span: 16,
+                offset: 7,
+                span: 20,
             },
         };
         //const onFinish = values => {
@@ -130,7 +127,7 @@ class LoginScreen extends React.Component {
             <div className='pageLogin'>
                 <div className="loginBox">
                     <div className='greeting'>
-                        Wellcome
+                        Logo here
                 </div>
                     <div className='inputLogin'>
                         <Form
@@ -195,8 +192,8 @@ class LoginScreen extends React.Component {
                   </Button>
                             </Form.Item>
 
-                            <Form.Item {...tailLayout}>
-                                Don't have account? <a href="/register">Register here</a>
+                            <Form.Item {...tailLayout} > 
+                                Don't have an account? <a href="/register">Register here</a>
                             </Form.Item>
 
                         </Form>

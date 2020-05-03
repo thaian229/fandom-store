@@ -1,22 +1,14 @@
 .info{
-    
-    display: inline-block;
-    margin: 2vh;
-    width: 100vh;   
+    display: block;
+    margin-left: 330px;
+    width: auto;
 }
 
 .fullName{
-  
-    width: 50vh;
-    font-size: 36px;
-}
-
-.changeName{
- 
+    font-size: 40px;
 }
 
 .address{
-
     display: inline-block;
     width: 50vh;
 }
@@ -37,12 +29,20 @@
     display: inline-block;
 }
 
-.avatar{
-    
+.dob{
     display: inline-block;
-    margin: 2vh;
+    width: 50vh;
+}
+
+.changeDob{
+    display: inline-block;
+}
+
+.avatar{
     height: 300px;
     width: 300px;
+    float: left;
+    border: solid;
 }
 
 .address-box{
@@ -57,25 +57,32 @@
     font-size: 16px;
 }
 
-.email{
-    
-    width: 50vh;
-    display: inline-block;
+.dob-box{
     margin-top: 1vh;
     margin-bottom: 1vh;
     font-size: 16px;
 }
 
-.profile{
-   
-    height: 500px;
-    padding: 10px;
+.email{
+    
+    width: 50vh;
+    display: inline-block;
+    margin-top: 3vh;
+    margin-bottom: 1vh;
+    font-size: 16px;
+}
+
+.profile{   
+    padding: 2vh;
 }
 
 .pageProfile{
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100vh - 65px);
-    padding: 5%
+    padding: 10vh
 }
 
+.updateButon {
+    margin-top: 2vh;
+}

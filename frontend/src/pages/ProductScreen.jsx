@@ -65,7 +65,7 @@ class ProductScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === 'true',
+            is_admin: false,
             ava_url: window.sessionStorage.getItem("ava_url"),
             full_name: window.sessionStorage.getItem("full_name")
         },
@@ -81,7 +81,37 @@ class ProductScreen extends React.Component {
         errMessage: '',
     };
 
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                })
+        }
+    }
+
+    componentWillMount() {
+        this.adminCheck()
+    }
+
     componentDidMount() {
+        const divs = document.querySelectorAll(".ant-carousel .slick-slide")
+
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.height = "30vw"
+        }
+
         // take params
         const { prod_id } = this.props.match.params;
         this.setState({
@@ -250,7 +280,7 @@ class ProductScreen extends React.Component {
     };
 
     handleEdit = (event) => {
-        window.location.pathname = `/editItem/${this.state.prod_id}`
+        window.location.pathname = `/edit/${this.state.prod_id}`
     }
 
     handleDelete = (event) => {
@@ -298,7 +328,7 @@ class ProductScreen extends React.Component {
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
-                            style={{ width: "100%" }}
+                            style={{ width: "100%", height: "30vw" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
@@ -308,7 +338,13 @@ class ProductScreen extends React.Component {
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
-                                                    width: '100%',
+                                                    maxHeight: '30vw',
+                                                    marginTop: "auto",
+                                                    marginBottom: "auto",
+                                                    marginLeft: "auto",
+                                                    marginRight: "auto",
+                                                    verticalAlign: "middle",
+                                                    maxWidth: "100%"
                                                 }}>
                                             </img>
                                         </div>

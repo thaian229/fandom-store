@@ -14,7 +14,7 @@ class HomeScreen extends React.Component {
         currentUser: {
             email: window.sessionStorage.getItem("email"),
             id: window.sessionStorage.getItem("id"),
-            is_admin: window.sessionStorage.getItem("is_admin") === "true"
+            is_admin: false,
         },
         data: [],
         loading: true,
@@ -22,9 +22,37 @@ class HomeScreen extends React.Component {
         pageNumber: 0
     }
 
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
+                    })
+                })
+        }
+    }
+
+    componentWillMount() {
+        this.adminCheck()
+    }
+
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
         window.addEventListener('scroll', this.handleScroll);
+        const divs = document.querySelectorAll(".ant-carousel .slick-slide")
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.height = "20vw"
+        }
     }
 
     handleClick = e => {
