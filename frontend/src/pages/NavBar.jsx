@@ -90,6 +90,10 @@ class NavBar extends React.Component {
         window.location.pathname = "/login"
     }
 
+    handleHistory = () => {
+        window.location.pathname = "/history"
+    }
+
     handleRegister = () => {
         window.location.pathname = "/register"
     }
@@ -143,19 +147,32 @@ class NavBar extends React.Component {
                                         padding: "10px",
                                         borderRadius: "10px"
                                     }}>
-                                        <Menu.Item style={{
+                                        <Menu.Item 
+                                        align="right"
+                                        style={{
+                                            borderRadius: "10px"
+                                        }}>
+                                            <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleHistory()}>
+                                                Order History
+                                            </a>
+                                        </Menu.Item>
+                                        <Menu.Item 
+                                        align="right"
+                                        style={{
                                             borderRadius: "10px"
                                         }}>
                                             <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
                                                 Profile
-                                    </a>
+                                            </a>
                                         </Menu.Item>
-                                        <Menu.Item style={{
+                                        <Menu.Item 
+                                        align="right"
+                                        style={{
                                             borderRadius: "10px"
                                         }}>
                                             <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleLogout()}>
                                                 Logout
-                                    </a>
+                                            </a>
                                         </Menu.Item>
                                     </Menu>
                                 } placement="bottomRight">
