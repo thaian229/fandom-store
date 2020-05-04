@@ -138,9 +138,7 @@ class CartScreen extends React.Component {
                     if (!data.success) {
                         window.alert(data.message)
                     } else {
-                        this.setState({
-                            placedOrderSuccess: true,
-                        })
+
                         fetch(`http://localhost:3001/api/users/clearCart`, {
                             method: 'POST',
                             credentials: 'include',
@@ -154,6 +152,11 @@ class CartScreen extends React.Component {
                             .then((data2) => {
                                 if (!data2.success) {
                                     console.log(data2.message)
+                                } else {
+                                    this.componentDidMount()
+                                    this.setState({
+                                        placedOrderSuccess: true,
+                                    })
                                 }
                             })
                             .catch((e) => {
@@ -234,8 +237,12 @@ class CartScreen extends React.Component {
                                     )
                                 })}
                                 <Divider></Divider>
-                                <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
-                                <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                {(this.state.numItem === 0) ? null : (
+                                    <>
+                                        <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
+                                        <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                    </>
+                                )}
                             </Col>
                             <Col span={5}></Col>
                         </Row>

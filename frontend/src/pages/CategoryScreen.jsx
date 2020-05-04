@@ -1,6 +1,6 @@
 import React from "react";
 import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, HomeOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel, Breadcrumb } from "antd";
+import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel, Breadcrumb, Empty } from "antd";
 
 const { Meta } = Card;
 const { confirm } = Modal;
@@ -51,7 +51,11 @@ class CategoryScreen extends React.Component {
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
         window.addEventListener('scroll', this.handleScroll);
-        console.log(window.location.href.split("/")[window.location.href.split("/").length - 1])
+        console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
+        const divs = document.querySelectorAll(".ant-carousel .slick-slide")
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.height = "20vw"
+        }
     }
 
     handleClick = e => {
@@ -334,7 +338,7 @@ class CategoryScreen extends React.Component {
                                 </Carousel>
                             </Col>
 
-                            {
+                            {(this.state.data.length > 0) ? (
                                 this.state.data.map((item, index) => {
                                     let key = `product${index}`
                                     return (
@@ -386,6 +390,11 @@ class CategoryScreen extends React.Component {
                                         </Col>
                                     )
                                 })
+                            ) : (
+                                    <Col span={24}>
+                                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                    </Col>
+                                )
                             }
                         </Row>
                     </Col>

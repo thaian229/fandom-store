@@ -412,22 +412,24 @@ class ProductScreen extends React.Component {
                     </Col>
                     <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
-                        <Comment
-                            avatar={
-                                <Avatar
-                                    src={this.state.currentUser.ava_url}
-                                    alt={this.state.currentUser.full_name}
-                                />
-                            }
-                            content={
-                                <Editor
-                                    onChange={this.handleCommentChange}
-                                    onSubmit={this.handleCommentSubmit}
-                                    submitingComment={this.state.submitingComment}
-                                    commentValue={this.state.commentValue}
-                                />
-                            }
-                        />
+                        {(this.state.currentUser.id) ? (
+                            <Comment
+                                avatar={
+                                    <Avatar
+                                        src={this.state.currentUser.ava_url}
+                                        alt={this.state.currentUser.full_name}
+                                    />
+                                }
+                                content={
+                                    <Editor
+                                        onChange={this.handleCommentChange}
+                                        onSubmit={this.handleCommentSubmit}
+                                        submitingComment={this.state.submitingComment}
+                                        commentValue={this.state.commentValue}
+                                    />
+                                }
+                            />
+                        ) : null}
                         {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                     </Col>
                     <Col lg={4} span={0}></Col>
