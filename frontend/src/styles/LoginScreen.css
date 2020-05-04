@@ -32,18 +32,14 @@
 }
 .errorLogin {
     margin-top: 0 auto;
-    margin-left: 15%;
-    margin-right: 5%;
-    margin-bottom: 7%;
+    margin-bottom: 3vh;
 }
 
 .loginButton {
-    
     background-color: rgb(101, 204, 241)!important;
 }
 
 .loginButton:hover {
-    
     background-color: rgb(217, 245, 255)!important;
 }
 
