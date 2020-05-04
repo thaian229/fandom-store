@@ -73,7 +73,7 @@ class RegisterScreen extends React.Component {
     };
 
     render() {
-        const layout = {
+        /*const layout = {
             labelCol: {
                 span: 7,
             },
@@ -86,7 +86,7 @@ class RegisterScreen extends React.Component {
                 offset: 8,
                 span: 16,
             },
-        };
+        };*/
 
         //const [form] = Form.useForm();
         const onFinish = values => {
@@ -100,17 +100,17 @@ class RegisterScreen extends React.Component {
                         <div className='register'>
                             Register
                    </div>
-                        <Form
-                            {...layout}
+                        <Form className='registerForm'
+                            //{...layout}
                             //form={form}
                             name="register"
                             onFinish={() => this.handleFormSubmit()}
                             scrollToFirstError
                         >
                             <div className='inputRegister'>
-                                <Form.Item
+                                <Form.Item 
                                     name="email"
-                                    label="E-mail"
+                                    //label="E-mail"
                                     rules={[
                                         {
                                             type: 'email',
@@ -123,14 +123,14 @@ class RegisterScreen extends React.Component {
                                     ]}
                                 >
                                     <Input
-                                        placeholder="This email will be used for login!"
+                                        placeholder="Email"
                                         onChange={this.handleEmailChange}
                                     />
                                 </Form.Item>
 
                                 <Form.Item
                                     name="password"
-                                    label="Password"
+                                    //label="Password"
                                     rules={[
                                         {
                                             required: true,
@@ -140,14 +140,14 @@ class RegisterScreen extends React.Component {
                                     hasFeedback
                                 >
                                     <Input.Password
-                                        placeholder="Password must be at least 6 characters"
+                                        placeholder="Password (6 or more characters)"
                                         onChange={this.handlePasswordChange}
                                     />
                                 </Form.Item>
 
                                 <Form.Item
                                     name="confirm"
-                                    label="Confirm Password"
+                                    //label="Confirm Password"
                                     dependencies={['password']}
                                     hasFeedback
                                     rules={[
@@ -165,33 +165,34 @@ class RegisterScreen extends React.Component {
                                         }),
                                     ]}
                                 >
-                                    <Input.Password />
+                                    <Input.Password placeholder="Confirm password"/>
                                 </Form.Item>
 
                                 <Form.Item
                                     name="fullName"
-                                    label={
+                                    /*label={
                                         <span>
                                             Nickname&nbsp;
                             <Tooltip title="What do you want others to call you?">
                                                 <QuestionCircleOutlined />
                                             </Tooltip>
                                         </span>
-                                    }
+                                    }*/
                                     rules={[{ required: true, message: 'Please input your fullname!', whitespace: true }]}
                                 >
                                     <Input
+                                        placeholder="Fullname"
                                         onChange={this.handleNameChange}
                                     />
                                 </Form.Item>
 
                                 <Form.Item
                                     name="phone"
-                                    label="Phone Number"
+                                    //label="Phone Number"
                                     rules={[{ required: true, message: 'Please input your phone number!' }]}
                                 >
                                     <Input
-                                        placeholder="We will contact to you through this phone number!"
+                                        placeholder="Phone Number"
                                         onChange={this.handlePhoneNumChange}
                                     />
                                 </Form.Item>
@@ -203,7 +204,7 @@ class RegisterScreen extends React.Component {
                                 rules={[
                                     { validator: (_, value) => value ? Promise.resolve() : Promise.reject('Should accept agreement') },
                                 ]}
-                                {...tailLayout}
+                                //{...tailLayout}
                             >
                                 <Checkbox>
                                     I have read the <a href="">agreement</a>
@@ -221,15 +222,15 @@ class RegisterScreen extends React.Component {
                             </div>
 
                             <Form.Item
-                                {...tailLayout}
+                                //{...tailLayout}
                             >
-                                <Button type="primary" htmlType="submit">
+                                <Button className='registerButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
                                     Register
                         </Button>
                             </Form.Item>
 
-                            <Form.Item
-                                {...tailLayout}
+                            <Form.Item className='haveAccount'
+                                //{...tailLayout}
                             >
                                 Already had an account? <a href="\login">Login here</a>
                             </Form.Item>

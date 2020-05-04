@@ -101,7 +101,7 @@ class LoginScreen extends React.Component {
             });
     };
     render() {
-        const layout = {
+        /*const layout = {
             labelCol: {
                 span: 7,
             },
@@ -109,12 +109,13 @@ class LoginScreen extends React.Component {
                 span: 20,
             },
         };
+        
         const tailLayout = {
             wrapperCol: {
                 offset: 7,
                 span: 20,
             },
-        };
+        };*/
         //const onFinish = values => {
         //console.log('Success:', values);
         //};
@@ -130,9 +131,9 @@ class LoginScreen extends React.Component {
                         Logo here
                 </div>
                     <div className='inputLogin'>
-                        <Form
+                        <Form className='inputForm'
                             onFinish={this.handleFormSubmit}
-                            {...layout}
+                            //{...layout}
                             name="basic"
                             initialValues={{
                                 remember: true,
@@ -141,7 +142,8 @@ class LoginScreen extends React.Component {
                             onFinishFailed={onFinishFailed}
                         >
                             <Form.Item
-                                label="E-mail"
+                                
+                                //label="E-mail"
                                 name="email"
                                 rules={[
                                     {
@@ -154,14 +156,14 @@ class LoginScreen extends React.Component {
                                     },
                                 ]}
                             >
-                                <Input
+                                <Input size='large'
                                     placeholder="Email"
                                     onChange={this.handleEmailChange}
                                 />
                             </Form.Item>
 
                             <Form.Item
-                                label="Password"
+                                //label="Password"
                                 name="password"
                                 rules={[
                                     {
@@ -170,7 +172,8 @@ class LoginScreen extends React.Component {
                                     },
                                 ]}
                             >
-                                <Input.Password
+                                <Input.Password 
+                                    size='large' 
                                     placeholder="Password"
                                     onChange={this.handlePasswordChange}
                                 />
@@ -186,13 +189,16 @@ class LoginScreen extends React.Component {
                                 ) : null}
                             </div>
 
-                            <Form.Item {...tailLayout}>
-                                <Button type="primary" htmlType="submit">
+                            <Form.Item //{...tailLayout}
+                            >
+                                <Button className='loginButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
                                     Login
                   </Button>
                             </Form.Item>
 
-                            <Form.Item {...tailLayout} > 
+                            <Form.Item //{...tailLayout} 
+                            className='dontHaveAccount'
+                            > 
                                 Don't have an account? <a href="/register">Register here</a>
                             </Form.Item>
 
