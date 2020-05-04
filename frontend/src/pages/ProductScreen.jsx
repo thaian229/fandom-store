@@ -214,7 +214,7 @@ class ProductScreen extends React.Component {
                 return res.json()
             })
             .then((data) => {
-                if (!data.success) {
+                if (data.success == "false") {
                     this.setState({
                         errMessage: data.message,
                     })
@@ -298,7 +298,7 @@ class ProductScreen extends React.Component {
                 return res.json();
             })
             .then((data) => {
-                if (!data.success) {
+                if (data.success == "false") {
                     this.setState({
                         errMessage: data.message,
                     })
