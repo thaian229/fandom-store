@@ -153,7 +153,7 @@ userRouter.post("/restoreSession", async (req, res) => {
 
 userRouter.get("/logout", async (req, res) => {
     try {
-        await req.session.destroy;
+        await req.session.destroy();
         res.status(200).json({
             success: true,
             message: 'Logout successfully',

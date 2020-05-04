@@ -75,7 +75,7 @@ class NavBar extends React.Component {
                 console.log(data.message)
                 window.sessionStorage.clear();
                 window.localStorage.clear();
-                window.location.pathname = '/login'
+                window.location.pathname = '/'
             })
             .catch(e => {
                 console.log(e)

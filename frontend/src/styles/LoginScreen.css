@@ -1,17 +1,22 @@
 .loginBox {
     margin-right: 5%;
     margin-left: 70%;
-    border: solid #65ccf1;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 2vh;
     border-radius: 30px;
     background: rgba(222, 255, 254, 0.7);
 }
 
 .inputLogin{
-    padding-right: 15% ;
+    padding-right: 5%;
+    padding-left: 5%;
 }
 
 .greeting {
-    margin-bottom: 30px;
+    border: solid;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
     font-size: 50px;
     height: 30vh;
     text-align: center;
@@ -21,14 +26,28 @@
     background-image: url("https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    height: calc(100vh - 65px);
-    padding-top: 13vh;
+    height: calc(100vh - 64px);
+    padding-top: 11vh;
     padding-bottom: 10vh;
 }
 .errorLogin {
     margin-top: 0 auto;
-    margin-left: 15%;
-    margin-right: 5%;
-    margin-bottom: 7%;
+    margin-bottom: 3vh;
 }
 
+.loginButton {
+    background-color: rgb(101, 204, 241)!important;
+}
+
+.loginButton:hover {
+    background-color: rgb(217, 245, 255)!important;
+}
+
+.inputForm {
+    width: 18.5vw;
+}
+
+.dontHaveAccount {
+    text-align: center;
+    padding-bottom: 2vh;
+}

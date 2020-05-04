@@ -3,30 +3,45 @@
     background-image: url("https://img.freepik.com/free-vector/abstract-colorful-flow-shapes-background_23-2148258092.jpg?size=626&ext=jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    height: calc(100vh - 65px);
-    padding-top: 5%;
-    padding-bottom: 5%;
+    height: calc(100vh - 64px);
+    padding-top: 11vh;
+    padding-bottom: 5vh;
 }
 
 .errorRegister {
-    margin-top: 3%;
-    margin-left: 15%;
-    margin-right: 5%;
-    margin-bottom: 3%;
+    margin-top: 0 auto;
+    margin-bottom: 3vh;
 }
 
 .registerBox {
-    margin-top: 2%;
     margin-right: 5%;
     margin-left: 60%;
-    border: solid #65ccf1;
     border-radius: 30px;
     background: rgba(222, 255, 254, 0.7);
-    padding-top: 1%;
+    padding-top: 2vh;
+    padding-left: 2vw;
+    padding-right: 2vw;
 }
 
 .register {
     font-size: 30px;
     text-align: center;
     margin-bottom: 1%;
+}
+
+.registerButton {
+    background-color: rgb(101, 204, 241)!important;
+}
+
+.registerButton:hover {
+    background-color: rgb(217, 245, 255)!important;
+}
+
+.haveAccount {
+    text-align: center;
+    padding-bottom: 2vh;
+}
+
+.registerForm{
+    width: 31vw;
 }
