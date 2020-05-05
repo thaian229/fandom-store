@@ -1,6 +1,6 @@
 import React from "react";
-import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel } from "antd";
+import { EditOutlined, DeleteOutlined, ShoppingCartOutlined, EyeOutlined, ExclamationCircleOutlined, InfoCircleOutlined, HomeOutlined } from '@ant-design/icons';
+import { Card, Row, Col, Modal, Button, Statistic, Menu, PageHeader, Carousel, Breadcrumb } from "antd";
 import '../styles/HomeScreen.css';
 
 const { Meta } = Card;
@@ -170,7 +170,7 @@ class HomeScreen extends React.Component {
         }
     }
 
-    
+
 
     render() {
         return (
@@ -180,7 +180,7 @@ class HomeScreen extends React.Component {
                     <Col span={4}>
                         <Menu
                             onClick={this.handleClick}
-                            style={{ width: "100%", borderRight: "none" }}
+                            style={{ width: "100%", borderRight: "none", marginTop: "10px" }}
                             defaultSelectedKeys={['1']}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
@@ -215,18 +215,18 @@ class HomeScreen extends React.Component {
                                     </span>
                                 }
                             >
-                                <Menu.ItemGroup key="g1" title="Official Releases">
-                                    <Menu.Item key="22" onClick={(event) => { this.handleClickTag("J-Album") }}>Albums</Menu.Item>
-                                    <Menu.Item key="23" onClick={(event) => { this.handleClickTag("J-Merchandise") }}>Merchandises</Menu.Item>
-                                    <Menu.Item key="24" onClick={(event) => { this.handleClickTag("J-Concert") }}>Concerts</Menu.Item>
+                                <Menu.ItemGroup key="g1" title="Physicals">
+                                    <Menu.Item key="22" onClick={(event) => { this.handleClickTag("J-Photobook") }}>Photobooks</Menu.Item>
+                                    <Menu.Item key="23" onClick={(event) => { this.handleClickTag("J-Illustration") }}>Illustrations</Menu.Item>
+                                    <Menu.Item key="24" onClick={(event) => { this.handleClickTag("J-NovelAndManga") }}>J-Novels {"&"} Mangas</Menu.Item>
+                                    <Menu.Item key="25" onClick={(event) => { this.handleClickTag("J-Fashion") }}>Fashions</Menu.Item>
+                                    <Menu.Item key="26" onClick={(event) => { this.handleClickTag("J-Figure") }}>Figures</Menu.Item>
+                                    <Menu.Item key="27" onClick={(event) => { this.handleClickTag("J-Other") }}>Others</Menu.Item>
                                 </Menu.ItemGroup>
-                                <Menu.ItemGroup key="g2" title="Fansite Goods">
-                                    <Menu.Item key="25" onClick={(event) => { this.handleClickTag("J-Keyring") }}>Keyrings</Menu.Item>
-                                    <Menu.Item key="26" onClick={(event) => { this.handleClickTag("J-Artbook") }}>Artbooks</Menu.Item>
-                                    <Menu.Item key="27" onClick={(event) => { this.handleClickTag("J-Photocard") }}>Photocards</Menu.Item>
-                                    <Menu.Item key="28" onClick={(event) => { this.handleClickTag("J-Postcard") }}>Postcards</Menu.Item>
-                                    <Menu.Item key="29" onClick={(event) => { this.handleClickTag("J-Slogan") }}>Slogans</Menu.Item>
-                                    <Menu.Item key="30" onClick={(event) => { this.handleClickTag("J-Other") }}>Others</Menu.Item>
+                                <Menu.ItemGroup key="g2" title="Digitals">
+                                    <Menu.Item key="28" onClick={(event) => { this.handleClickTag("J-Audio") }}>Audios</Menu.Item>
+                                    <Menu.Item key="29" onClick={(event) => { this.handleClickTag("J-Game") }}>Games</Menu.Item>
+                                    <Menu.Item key="30" onClick={(event) => { this.handleClickTag("J-Video") }}>Videos</Menu.Item>
                                 </Menu.ItemGroup>
                             </SubMenu>
                             <SubMenu
@@ -249,7 +249,13 @@ class HomeScreen extends React.Component {
                                 <PageHeader
                                     className="site-page-header"
                                     // onBack={() => null}
-                                    title="Fandom Paradise"
+                                    title={
+                                        <Breadcrumb>
+                                            <Breadcrumb.Item href="http://localhost:3000">
+                                                <HomeOutlined style={{ marginBottom: "1px", marginLeft: "6px", fontSize: "20px" }} />
+                                            </Breadcrumb.Item>
+                                        </Breadcrumb>
+                                    }
                                     style={{ paddingLeft: "2vw" }}
                                     extra={
                                         this.state.currentUser.is_admin ? (
@@ -266,7 +272,6 @@ class HomeScreen extends React.Component {
                                         ) : null
                                     }
                                 >
-
                                 </PageHeader>
                             </Col>
                             <Col span={12} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>

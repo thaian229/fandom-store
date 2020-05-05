@@ -104,7 +104,7 @@ class NavBar extends React.Component {
 
     render() {
         return (
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', paddingLeft: "20px", paddingRight: "2vw" }}>
+            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', paddingLeft: "25px", paddingRight: "2vw", height: "70px" }}>
                 <Row align="middle">
                     <Col span={4}>
                         <a className="logo" href="http://localhost:3000" />

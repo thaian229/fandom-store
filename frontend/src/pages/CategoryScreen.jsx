@@ -181,7 +181,7 @@ class CategoryScreen extends React.Component {
                     <Col span={4}>
                         <Menu
                             onClick={this.handleClick}
-                            style={{ width: "100%", borderRight: "none" }}
+                            style={{ width: "100%", borderRight: "none", marginTop: "10px" }}
                             defaultSelectedKeys={['1']}
                             defaultOpenKeys={['sub1']}
                             mode="inline"
@@ -216,18 +216,18 @@ class CategoryScreen extends React.Component {
                                     </span>
                                 }
                             >
-                                <Menu.ItemGroup key="g1" title="Official Releases">
-                                    <Menu.Item key="22" onClick={(event) => { this.handleClickTag("J-Album") }}>Albums</Menu.Item>
-                                    <Menu.Item key="23" onClick={(event) => { this.handleClickTag("J-Merchandise") }}>Merchandises</Menu.Item>
-                                    <Menu.Item key="24" onClick={(event) => { this.handleClickTag("J-Concert") }}>Concerts</Menu.Item>
+                                <Menu.ItemGroup key="g1" title="Physicals">
+                                    <Menu.Item key="22" onClick={(event) => { this.handleClickTag("J-Photobook") }}>Photobooks</Menu.Item>
+                                    <Menu.Item key="23" onClick={(event) => { this.handleClickTag("J-Illustration") }}>Illustrations</Menu.Item>
+                                    <Menu.Item key="24" onClick={(event) => { this.handleClickTag("J-NovelAndManga") }}>J-Novels {"&"} Mangas</Menu.Item>
+                                    <Menu.Item key="25" onClick={(event) => { this.handleClickTag("J-Fashion") }}>Fashions</Menu.Item>
+                                    <Menu.Item key="26" onClick={(event) => { this.handleClickTag("J-Figure") }}>Figures</Menu.Item>
+                                    <Menu.Item key="27" onClick={(event) => { this.handleClickTag("J-Other") }}>Others</Menu.Item>
                                 </Menu.ItemGroup>
-                                <Menu.ItemGroup key="g2" title="Fansite Goods">
-                                    <Menu.Item key="25" onClick={(event) => { this.handleClickTag("J-Keyring") }}>Keyrings</Menu.Item>
-                                    <Menu.Item key="26" onClick={(event) => { this.handleClickTag("J-Artbook") }}>Artbooks</Menu.Item>
-                                    <Menu.Item key="27" onClick={(event) => { this.handleClickTag("J-Photocard") }}>Photocards</Menu.Item>
-                                    <Menu.Item key="28" onClick={(event) => { this.handleClickTag("J-Postcard") }}>Postcards</Menu.Item>
-                                    <Menu.Item key="29" onClick={(event) => { this.handleClickTag("J-Slogan") }}>Slogans</Menu.Item>
-                                    <Menu.Item key="30" onClick={(event) => { this.handleClickTag("J-Other") }}>Others</Menu.Item>
+                                <Menu.ItemGroup key="g2" title="Digitals">
+                                    <Menu.Item key="28" onClick={(event) => { this.handleClickTag("J-Audio") }}>Audios</Menu.Item>
+                                    <Menu.Item key="29" onClick={(event) => { this.handleClickTag("J-Game") }}>Games</Menu.Item>
+                                    <Menu.Item key="30" onClick={(event) => { this.handleClickTag("J-Video") }}>Videos</Menu.Item>
                                 </Menu.ItemGroup>
                             </SubMenu>
                             <SubMenu

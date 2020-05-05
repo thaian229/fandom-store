@@ -1,8 +1,10 @@
 import React from "react";
-import { Form, Input, Button, Alert } from "antd";
-//import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Alert, Row, Col } from "antd";
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import '../styles/LoginScreen.css';
+const logo = '../styles/LOGOsquare.png';
+
 
 class LoginScreen extends React.Component {
     state = {
@@ -16,37 +18,25 @@ class LoginScreen extends React.Component {
         id: "",
     };
 
-    componentWillMount() {
-        // if (this.state.localUser.email && this.state.localUser.id) {
-        //     fetch(`http://localhost:3001/api/users/restoreSession`, {
-        //         method: 'POST',
-        //         credentials: 'include',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             id: this.state.localUser.id,
-        //             email: this.state.localUser.email,
-        //             is_admin: this.state.localUser.is_admin,
-        //             ava_url: this.state.localUser.ava_url,
-        //             full_name: this.state.localUser.full_name,
-        //         }),
-        //     })
-        //         .then((res) => {
-        //             return res.json();
-        //         })
-        //         .then((data) => {
-        //             if(!data.success) {
-        //                 console.log('false to restore session')
-        //             } else {
-        //                 window.location.href = '/';
-        //             }
-        //         })
-        //         .catch((err) => {
-        //             console.log(err)
-        //         });
-        // }
+    componentDidMount() {
+        const divs = document.querySelectorAll("span")
+        for (let i = 0; i < divs.length; i++) {
+            divs[i].style.background = "transparent";
+            divs[i].style.opacity = 1;
+            divs[i].style.border = "none";
+            divs[i].style.outline = "none";
+        }
+        const formInput = document.querySelectorAll(".loginBox .ant-input");
+        console.log(formInput)
+        for (let i = 0; i < formInput.length; i++) {
+            formInput[i].style.background = "rgba(0, 0, 0, 0)";
+            formInput[i].style.opacity = 1;
+            formInput[i].style.border = "none";
+            formInput[i].style.outline = "none";
+        }
+        const placeholder = document.querySelectorAll(".loginBox .ant-input");
     }
+
 
     handleEmailChange = (event) => {
         this.setState({
@@ -101,24 +91,6 @@ class LoginScreen extends React.Component {
             });
     };
     render() {
-        /*const layout = {
-            labelCol: {
-                span: 7,
-            },
-            wrapperCol: {
-                span: 20,
-            },
-        };
-        
-        const tailLayout = {
-            wrapperCol: {
-                offset: 7,
-                span: 20,
-            },
-        };*/
-        //const onFinish = values => {
-        //console.log('Success:', values);
-        //};
 
         const onFinishFailed = errorInfo => {
             //console.log('Failed:', errorInfo);
@@ -126,85 +98,104 @@ class LoginScreen extends React.Component {
 
         return (
             <div className='pageLogin'>
-                <div className="loginBox">
-                    <div className='greeting'>
-                        Logo here
-                </div>
-                    <div className='inputLogin'>
-                        <Form className='inputForm'
-                            onFinish={this.handleFormSubmit}
-                            //{...layout}
-                            name="basic"
-                            initialValues={{
-                                remember: true,
-                            }}
-                            //onFinish={onFinish}
-                            onFinishFailed={onFinishFailed}
-                        >
-                            <Form.Item
-                                
-                                //label="E-mail"
-                                name="email"
-                                rules={[
-                                    {
-                                        type: 'email',
-                                        message: 'The input is not valid E-mail!',
-                                    },
-                                    {
-                                        required: true,
-                                        message: 'Please input your email!',
-                                    },
-                                ]}
-                            >
-                                <Input size='large'
-                                    placeholder="Email"
-                                    onChange={this.handleEmailChange}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                //label="Password"
-                                name="password"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your password!',
-                                    },
-                                ]}
-                            >
-                                <Input.Password 
-                                    size='large' 
-                                    placeholder="Password"
-                                    onChange={this.handlePasswordChange}
-                                />
-                            </Form.Item>
-
-                            <div className='errorLogin'>
-                                {this.state.err ? (
-                                    <Alert
-                                        message={this.state.err}
-                                        type="error"
-                                        showIcon
-                                    />
-                                ) : null}
+                <Row align="center">
+                    <Col xs={18} xl={8} align="center">
+                        <div className="loginBox">
+                            <div className='greeting'>
+                                {/* <img src={logo}/> */}
                             </div>
+                            <div className='inputLogin'>
+                                <Form className='inputForm'
+                                    style={{
+                                        width: "80%",
+                                    }}
+                                    //label="E-mail"
+                                    onFinish={this.handleFormSubmit}
+                                    //{...layout}
+                                    name="basic"
+                                    initialValues={{
+                                        remember: true,
+                                    }}
+                                    //onFinish={onFinish}
+                                    onFinishFailed={onFinishFailed}
+                                >
+                                    <Form.Item
 
-                            <Form.Item //{...tailLayout}
-                            >
-                                <Button className='loginButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
-                                    Login
-                  </Button>
-                            </Form.Item>
+                                        name="email"
+                                        rules={[
+                                            {
+                                                type: 'email',
+                                                message: 'The input is not valid E-mail!',
+                                            },
+                                            {
+                                                required: true,
+                                                message: 'Please input your email!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input size='large'
 
-                            <Form.Item //{...tailLayout} 
-                            className='dontHaveAccount'
-                            > 
-                                Don't have an account? <a href="/register">Register here</a>
-                            </Form.Item>
+                                            prefix={
+                                                <UserOutlined
+                                                    style={{
+                                                        marginRight: "5px"
+                                                    }}
+                                                />}
+                                            placeholder="Email"
+                                            onChange={this.handleEmailChange}
+                                        />
+                                    </Form.Item>
 
-                        </Form>
-                    </div>
-                </div>
+                                    <Form.Item
+                                        //label="Password"
+                                        name="password"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please input your password!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input.Password
+                                            prefix={
+                                                <LockOutlined
+                                                    style={{
+                                                        marginRight: "5px"
+                                                    }} />}
+                                            size='large'
+                                            placeholder="Password"
+                                            onChange={this.handlePasswordChange}
+                                        />
+                                    </Form.Item>
+
+                                    <div className='errorLogin'>
+                                        {this.state.err ? (
+                                            <Alert
+                                                message={this.state.err}
+                                                type="error"
+                                                showIcon
+                                            />
+                                        ) : null}
+                                    </div>
+
+                                    <Form.Item //{...tailLayout}
+                                    >
+                                        <Button className='loginButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
+                                            Login
+                                    </Button>
+                                    </Form.Item>
+
+                                    <Form.Item //{...tailLayout} 
+                                        className='dontHaveAccount'
+                                    >
+                                        Don't have an account? <a href="/register">Register here</a>
+                                    </Form.Item>
+
+                                </Form>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
             </div>
         );
     }
