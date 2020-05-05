@@ -112,7 +112,10 @@ postRouter.post("/editItem", async (req, res) => {
 postRouter.post("/removeItem", async (req, res) => {
     if (req.session.currentUser && req.session.currentUser.id && req.session.currentUser.is_admin) {
 
-        const deleteTEXT = `DELETE FROM products WHERE id=$1::uuid`;
+        const deleteTEXT = `
+            DELETE FROM products CASCADE
+            WHERE id=$1::uuid
+            `;
         const { id } = req.body;
 
         try {
@@ -125,7 +128,7 @@ postRouter.post("/removeItem", async (req, res) => {
         catch (e) {
             res.status(500).json({
                 success: false,
-                message: e
+                message: e.message
             })
         }
 
