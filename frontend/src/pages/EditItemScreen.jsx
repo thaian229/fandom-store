@@ -24,14 +24,15 @@ const children = [];
     children.push(<Option key="K-Photocard">K-Photocard</Option>);
     children.push(<Option key="K-Slogan">K-Slogan</Option>);
     children.push(<Option key="K-Other">K-Other</Option>);
-    children.push(<Option key="J-Album">J-Album</Option>);
-    children.push(<Option key="J-Merchandise">J-Merchandise</Option>);
-    children.push(<Option key="J-Concert">J-Concert</Option>);
-    children.push(<Option key="J-Keyring">J-Keyring</Option>);
-    children.push(<Option key="J-Artbook">J-Artbook</Option>);
-    children.push(<Option key="J-Photocard">J-Photocard</Option>);
-    children.push(<Option key="J-Slogan">J-Slogan</Option>);
+    children.push(<Option key="J-Photobook">J-Photobook</Option>);
+    children.push(<Option key="J-Illustration">J-Illustration</Option>);
+    children.push(<Option key={"J-NovelAndManga"}>J-Novel{"&"}Manga</Option>);
+    children.push(<Option key="J-Fashion">J-Fashion</Option>);
+    children.push(<Option key="J-Figure">J-Figure</Option>);
     children.push(<Option key="J-Other">J-Other</Option>);
+    children.push(<Option key="J-Audio">J-Audio</Option>);
+    children.push(<Option key="J-Video">J-Video</Option>);
+    children.push(<Option key="J-Game">J-Game</Option>);
 }
 
 const layout = {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Tooltip, Checkbox, Button, Alert } from "antd";
+import { Form, Input, Tooltip, Checkbox, Button, Alert, Col, Row } from "antd";
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
 import '../styles/RegisterScreen.css';
@@ -12,6 +12,9 @@ class RegisterScreen extends React.Component {
         tel_num: '',
         err: '',
     };
+
+    componentDidMount() {
+    }
 
     handleEmailChange = (event) => {
         this.setState({
@@ -73,42 +76,37 @@ class RegisterScreen extends React.Component {
     };
 
     render() {
-        /*const layout = {
-            labelCol: {
-                span: 7,
-            },
-            wrapperCol: {
-                span: 16,
-            },
-        };
-        const tailLayout = {
-            wrapperCol: {
-                offset: 8,
-                span: 16,
-            },
-        };*/
-
-        //const [form] = Form.useForm();
         const onFinish = values => {
             console.log('Received values of form: ', values);
         };
 
         return (
             <div className='pageRegister'>
-                <div className='registerBox'>
-                    <div>
-                        <div className='register'>
-                            Register
-                   </div>
-                        <Form className='registerForm'
-                            //{...layout}
-                            //form={form}
-                            name="register"
-                            onFinish={() => this.handleFormSubmit()}
-                            scrollToFirstError
-                        >
-                            <div className='inputRegister'>
-                                <Form.Item 
+                <Row 
+                align="center"
+                style={{
+                    margin: "auto"
+                }}
+                >
+                    <Col xs={18} xl={8} align="center">
+                        <div className='registerBox'>
+                            <div className='register' >
+                                REGISTER
+                            </div>
+
+                            <Form className='registerForm'
+                                //{...layout}
+                                //form={form}
+                                align="center"
+                                style={{
+                                    marginTop: "30px",
+                                    width: "80%"
+                                }}
+                                name="register"
+                                onFinish={() => this.handleFormSubmit()}
+                                scrollToFirstError
+                            >
+                                <Form.Item
                                     name="email"
                                     //label="E-mail"
                                     rules={[
@@ -123,6 +121,10 @@ class RegisterScreen extends React.Component {
                                     ]}
                                 >
                                     <Input
+                                        style={{
+                                            borderRadius: "15px"
+                                        }}
+                                        type="large"
                                         placeholder="Email"
                                         onChange={this.handleEmailChange}
                                     />
@@ -140,6 +142,9 @@ class RegisterScreen extends React.Component {
                                     hasFeedback
                                 >
                                     <Input.Password
+                                        style={{
+                                            borderRadius: "15px"
+                                        }}
                                         placeholder="Password (6 or more characters)"
                                         onChange={this.handlePasswordChange}
                                     />
@@ -165,22 +170,19 @@ class RegisterScreen extends React.Component {
                                         }),
                                     ]}
                                 >
-                                    <Input.Password placeholder="Confirm password"/>
+                                    <Input.Password style={{
+                                        borderRadius: "15px"
+                                    }} placeholder="Confirm password" />
                                 </Form.Item>
 
                                 <Form.Item
                                     name="fullName"
-                                    /*label={
-                                        <span>
-                                            Nickname&nbsp;
-                            <Tooltip title="What do you want others to call you?">
-                                                <QuestionCircleOutlined />
-                                            </Tooltip>
-                                        </span>
-                                    }*/
                                     rules={[{ required: true, message: 'Please input your fullname!', whitespace: true }]}
                                 >
                                     <Input
+                                        style={{
+                                            borderRadius: "15px"
+                                        }}
                                         placeholder="Fullname"
                                         onChange={this.handleNameChange}
                                     />
@@ -192,51 +194,50 @@ class RegisterScreen extends React.Component {
                                     rules={[{ required: true, message: 'Please input your phone number!' }]}
                                 >
                                     <Input
+                                        style={{
+                                            borderRadius: "15px"
+                                        }}
                                         placeholder="Phone Number"
                                         onChange={this.handlePhoneNumChange}
                                     />
                                 </Form.Item>
-                            </div>
+                                <Form.Item
+                                    name="agreement"
+                                    valuePropName="checked"
+                                    rules={[
+                                        { validator: (_, value) => value ? Promise.resolve() : Promise.reject('Should accept agreement') },
+                                    ]}
+                                >
+                                    <Checkbox>
+                                        I have read the <a href="">agreement</a>
+                                    </Checkbox>
+                                </Form.Item>
 
-                            <Form.Item
-                                name="agreement"
-                                valuePropName="checked"
-                                rules={[
-                                    { validator: (_, value) => value ? Promise.resolve() : Promise.reject('Should accept agreement') },
-                                ]}
-                                //{...tailLayout}
-                            >
-                                <Checkbox>
-                                    I have read the <a href="">agreement</a>
-                                </Checkbox>
-                            </Form.Item>
+                                <div className='errorRegister'>
+                                    {this.state.err ? (
+                                        <Alert
+                                            message={this.state.err}
+                                            type="error"
+                                            showIcon
+                                        />
+                                    ) : null}
+                                </div>
 
-                            <div className='errorRegister'>
-                                {this.state.err ? (
-                                    <Alert
-                                        message={this.state.err}
-                                        type="error"
-                                        showIcon
-                                    />
-                                ) : null}
-                            </div>
+                                <Form.Item
+                                >
+                                    <Button className='registerButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
+                                        Register
+                                    </Button>
+                                </Form.Item>
 
-                            <Form.Item
-                                //{...tailLayout}
-                            >
-                                <Button className='registerButton' type="link" shape='round' htmlType="submit" block ghost size='large'>
-                                    Register
-                        </Button>
-                            </Form.Item>
-
-                            <Form.Item className='haveAccount'
-                                //{...tailLayout}
-                            >
-                                Already had an account? <a href="\login">Login here</a>
-                            </Form.Item>
-                        </Form>
-                    </div>
-                </div>
+                                <Form.Item className='haveAccount'
+                                >
+                                    Already had an account? <a href="\login">Login here</a>
+                                </Form.Item>
+                            </Form>
+                        </div>
+                    </Col>
+                </Row>
             </div >
         )
     }

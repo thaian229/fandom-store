@@ -1,11 +1,12 @@
 
 .pageRegister {
-    background-image: url("https://img.freepik.com/free-vector/abstract-colorful-flow-shapes-background_23-2148258092.jpg?size=626&ext=jpg");
+    background-image: url("https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px);
     padding-top: 11vh;
     padding-bottom: 5vh;
+    background-position: center;
 }
 
 .errorRegister {
@@ -14,8 +15,6 @@
 }
 
 .registerBox {
-    margin-right: 5%;
-    margin-left: 60%;
     border-radius: 30px;
     background: rgba(222, 255, 254, 0.7);
     padding-top: 2vh;
@@ -24,9 +23,10 @@
 }
 
 .register {
+    margin: 0;
+    color: #f7f7f7;
     font-size: 30px;
-    text-align: center;
-    margin-bottom: 1%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .registerButton {
@@ -43,5 +43,5 @@
 }
 
 .registerForm{
-    width: 31vw;
+    margin:0;
 }
