@@ -107,9 +107,28 @@ class ProductScreen extends React.Component {
 
     componentDidMount() {
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
-
         for (let i = 0; i < divs.length; i++) {
-            divs[i].style.height = "30vw"
+            divs[i].style.height = "500px"
+        }
+
+        const divs2 = document.querySelectorAll(".ant-carousel .slick-list")
+        for (let i = 0; i < divs2.length; i++) {
+            divs2[i].style.height = "500px"
+        }
+
+        const divs3 = document.querySelectorAll(".ant-carousel .slick-track")
+        for (let i = 0; i < divs3.length; i++) {
+            divs3[i].style.height = "500px"
+        }
+
+        const divs4 = document.querySelectorAll(".ant-layout-header")
+        for (let i = 0; i < divs4.length; i++) {
+            divs4[i].style.position = "static";
+        }
+
+        const divs5 = document.querySelectorAll(".ant-layout")
+        for (let i = 0; i < divs5.length; i++) {
+            divs5[i].style.margin = 0;
         }
 
         // take params
@@ -318,18 +337,19 @@ class ProductScreen extends React.Component {
 
     render() {
         return (
-            <>
-                <Row align='top'>
-                    <Col span={24}>
-                        <Title style={{ paddingLeft: '4vw' }}>{this.state.prod_data.prod_name}</Title>
-                        <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
-                    </Col>
-                    <Col lg={1} span={0}></Col>
-                    <Col lg={12} span={24} style={{ marginBottom: "1vw", paddingLeft: "2vw", paddingRight: "1vw", width: '33vw' }}>
+            <div style={{
+                // backgroundImage: "url('https://wallpaperaccess.com/full/250472.jpg')",
+                // backgroundColor: "#001529"
+                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)",
+                paddingBottom: "70px"
+            }}>
+                <Row align='top' justify="space-around" style={{ margin: "0 9vw", backgroundColor: "white", boxShadow: "12px 12px 3px #e0e0e0, 24px 24px 5px #bcbcbc" }}>
+                    <Col span={24} style={{ height: "70px" }}></Col>
+                    <Col lg={14} md={23} style={{}}>
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
-                            style={{ width: "100%", height: "30vw" }}
+                            style={{ width: "100%", height: "504px", border: "solid 2px black" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
@@ -339,7 +359,7 @@ class ProductScreen extends React.Component {
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
-                                                    maxHeight: '30vw',
+                                                    height: '500px',
                                                     marginTop: "auto",
                                                     marginBottom: "auto",
                                                     marginLeft: "auto",
@@ -354,12 +374,59 @@ class ProductScreen extends React.Component {
                             })}
                         </Carousel>
                     </Col>
-                    <Col lg={1} span={0}></Col>
-                    <Col lg={8} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingRight: "2vw", paddingLeft: "1vw" }}>
-                        <Title level={3} style={{ color: 'green' }} >Price: ${this.state.prod_data.price}</Title>
-                        <Title level={4}><EyeOutlined /> Views: {this.state.prod_data.views}</Title>
-                        <Title level={4}><ShoppingCartOutlined /> Sold: {this.state.prod_data.sold}</Title>
-                        <Title level={4}>Stock: {this.state.prod_data.stock}</Title>
+                    <Col lg={8} md={23} style={{}}>
+                        <Card
+                            title={
+                                <div style={{ paddingTop: "10px", marginBottom: "10px" }}>
+                                    <Text style={{ fontSize: "22px" }}>{this.state.prod_data.prod_name}</Text>
+                                    <br />
+                                    <Text level={3} style={{ color: 'green' }} >$ {this.state.prod_data.price}.00</Text>
+                                </div>
+                            }
+                            style={{ width: "100%", borderRadius: "25px 25px 0 0", backgroundColor: "#fcfcfc" }}>
+                            <Text level={4}><EyeOutlined /> Views: {this.state.prod_data.views} Sold: {this.state.prod_data.sold}</Text>
+                        </Card>
+                        <Card
+                            style={{ width: "100%", backgroundColor: "#001529", opacity: 0.9, borderRadius: "0 0 25px 25px" }}
+                        >
+                            <Form
+                                layout={'inline'}
+                                onFinish={this.handleAddToCart}
+                            >
+                                <Row style={{ width: "100%" }}>
+                                    <Col span={8}>
+                                        <Form.Item >
+                                            <InputNumber
+                                                placeholder='1'
+                                                min={1}
+                                                max={this.state.prod_data.stock}
+                                                onChange={this.handleQuantityChange}
+                                                value={this.state.quantity}
+                                            />
+                                            <br />
+                                            <Text level={4} style={{ color: 'white', marginTop: "10px" }}>Stock: {this.state.prod_data.stock}</Text>
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={16} align="right" style={{ paddingTop: "30px" }}>
+                                        <Text style={{ color: 'white', fontWeight: "bold" }}>TOTAL</Text>
+                                        <br />
+                                        <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}.00</Text>
+                                    </Col>
+                                    <Divider orientation="center" style={{ color: 'white', fontWeight: 'normal', width: "100%" }}></Divider>
+                                    <Col span={24} align="middle">
+                                        <Form.Item style={{ width: "100%" }}>
+                                            <Button
+                                                htmlType="submit"
+                                                style={{ color: '#fcfcfc', fontWeight: 'bold', fontSize: "27px", width: "100%", height: "60px", backgroundColor: "#fca541", border: "none", borderRadius: "13px" }}
+                                            >
+                                                Add To Cart
+                                            </Button>
+
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
                         {this.state.errMessage ? (
                             <Text type='danger'> {this.state.errMessage}</Text>
                         ) : null}
@@ -376,42 +443,19 @@ class ProductScreen extends React.Component {
                             </div>
                         ) : null}
                         <div>
-                            <Form
-                                layout={'inline'}
-                                onFinish={this.handleAddToCart}
-                            >
-                                <Form.Item label="Qty">
-                                    <InputNumber
-                                        placeholder='1'
-                                        min={1}
-                                        max={this.state.prod_data.stock}
-                                        onChange={this.handleQuantityChange}
-                                        value={this.state.quantity}
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">
-                                        Add To Cart <ShoppingCartOutlined />
-                                    </Button>
 
-                                </Form.Item>
-                            </Form>
                         </div>
                     </Col>
-                    <Col lg={2} span={0}></Col>
-                    <Col span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
+                    <Col span={23} style={{}}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
-                        <div>
-                            <Collapse>
-                                <Panel header="See Full Desciption" key="1">
-                                    <p>{this.state.prod_data.description}</p>
-                                </Panel>
-                            </Collapse>
-                        </div>
+                        <Collapse >
+                            <Panel header="See Full Desciption" key="1">
+                                <p>{this.state.prod_data.description}</p>
+                            </Panel>
+                        </Collapse>
 
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
-                    <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
                         {(this.state.currentUser.id) ? (
                             <Comment
@@ -433,7 +477,6 @@ class ProductScreen extends React.Component {
                         ) : null}
                         {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                     </Col>
-                    <Col lg={4} span={0}></Col>
                     <Col span={24}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                         <Title style={{ marginLeft: '4vw' }}>Related Products</Title>
@@ -482,7 +525,7 @@ class ProductScreen extends React.Component {
                     })
                     }
                 </Row>
-            </>
+            </div>
         )
     }
 }
