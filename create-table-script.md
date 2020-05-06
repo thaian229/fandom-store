@@ -34,7 +34,7 @@ CREATE TABLE carts (
 	acc_id uuid NOT NULL,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT carts_pkey PRIMARY KEY (id),
-	CONSTRAINT carts_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id)
+	CONSTRAINT carts_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE cart_items (
@@ -44,8 +44,8 @@ CREATE TABLE cart_items (
 	cart_id uuid NOT NULL,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT cart_items_pkey PRIMARY KEY (id),
-	CONSTRAINT cart_items_fk1 FOREIGN KEY (prod_id) REFERENCES products (id),
-	CONSTRAINT cart_items_fk2 FOREIGN KEY (cart_id) REFERENCES carts (id)
+	CONSTRAINT cart_items_fk1 FOREIGN KEY (prod_id) REFERENCES products (id) ON DELETE CASCADE,
+	CONSTRAINT cart_items_fk2 FOREIGN KEY (cart_id) REFERENCES carts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (
@@ -53,7 +53,7 @@ CREATE TABLE orders (
 	acc_id uuid NOT NULL,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT orders_pkey PRIMARY KEY (id),
-	CONSTRAINT orders_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id)
+	CONSTRAINT orders_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
 
 CREATE TABLE order_items (
@@ -63,8 +63,8 @@ CREATE TABLE order_items (
 	quantity INT NOT NULL DEFAULT 1,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT order_items_pkey PRIMARY KEY (id),
-	CONSTRAINT order_items_fk1 FOREIGN KEY (order_id) REFERENCES orders (id),
-	CONSTRAINT order_items_fk2 FOREIGN KEY (prod_id) REFERENCES products (id)
+	CONSTRAINT order_items_fk1 FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+	CONSTRAINT order_items_fk2 FOREIGN KEY (prod_id) REFERENCES products (id) ON DELETE CASCADE
 );
 
 CREATE TABLE comments (
@@ -74,6 +74,6 @@ CREATE TABLE comments (
 	content TEXT NOT NULL,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT comments_pkey PRIMARY KEY (id),
-	CONSTRAINT comments_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id),
-	CONSTRAINT comments_fk2 FOREIGN KEY (prod_id) REFERENCES products (id)
+	CONSTRAINT comments_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id) ON DELETE CASCADE,
+	CONSTRAINT comments_fk2 FOREIGN KEY (prod_id) REFERENCES products (id) ON DELETE CASCADE
 );
