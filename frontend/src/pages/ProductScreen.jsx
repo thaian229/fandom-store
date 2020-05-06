@@ -1,11 +1,12 @@
 import React from "react";
 import { ShoppingCartOutlined, EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification } from "antd";
+import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification, Tabs } from "antd";
 import '../styles/ProductScreen.css';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 const { TextArea } = Input;
 const { Meta } = Card;
+const { TabPane } = Tabs;
 
 
 const CommentList = ({ cmt_data }) => (
@@ -107,9 +108,28 @@ class ProductScreen extends React.Component {
 
     componentDidMount() {
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
-
         for (let i = 0; i < divs.length; i++) {
-            divs[i].style.height = "30vw"
+            divs[i].style.height = "468px"
+        }
+
+        const divs2 = document.querySelectorAll(".ant-carousel .slick-list")
+        for (let i = 0; i < divs2.length; i++) {
+            divs2[i].style.height = "468px"
+        }
+
+        const divs3 = document.querySelectorAll(".ant-carousel .slick-track")
+        for (let i = 0; i < divs3.length; i++) {
+            divs3[i].style.height = "468px"
+        }
+
+        const divs4 = document.querySelectorAll(".ant-layout-header")
+        for (let i = 0; i < divs4.length; i++) {
+            divs4[i].style.position = "static";
+        }
+
+        const divs5 = document.querySelectorAll(".ant-layout")
+        for (let i = 0; i < divs5.length; i++) {
+            divs5[i].style.margin = 0;
         }
 
         // take params
@@ -318,18 +338,19 @@ class ProductScreen extends React.Component {
 
     render() {
         return (
-            <>
-                <Row align='top'>
-                    <Col span={24}>
-                        <Title style={{ paddingLeft: '4vw' }}>{this.state.prod_data.prod_name}</Title>
-                        <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
-                    </Col>
-                    <Col lg={1} span={0}></Col>
-                    <Col lg={12} span={24} style={{ marginBottom: "1vw", paddingLeft: "2vw", paddingRight: "1vw", width: '33vw' }}>
+            <div style={{
+                // backgroundImage: "url('https://wallpaperaccess.com/full/250472.jpg')",
+                // backgroundColor: "#001529"
+                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)",
+                paddingBottom: "70px"
+            }}>
+                <Row align='top' justify="space-around" style={{ margin: "0 9vw", backgroundColor: "white", boxShadow: "12px 12px 3px #e0e0e0, 24px 24px 5px #bcbcbc" }}>
+                    <Col span={24} style={{ height: "60px" }}></Col>
+                    <Col lg={14} md={22} style={{}}>
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
-                            style={{ width: "100%", height: "30vw" }}
+                            style={{ width: "100%", height: "472px", border: "solid 2px black" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
@@ -339,7 +360,7 @@ class ProductScreen extends React.Component {
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
-                                                    maxHeight: '30vw',
+                                                    height: '468px',
                                                     marginTop: "auto",
                                                     marginBottom: "auto",
                                                     marginLeft: "auto",
@@ -354,12 +375,68 @@ class ProductScreen extends React.Component {
                             })}
                         </Carousel>
                     </Col>
-                    <Col lg={1} span={0}></Col>
-                    <Col lg={8} span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingRight: "2vw", paddingLeft: "1vw" }}>
-                        <Title level={3} style={{ color: 'green' }} >Price: ${this.state.prod_data.price}</Title>
-                        <Title level={4}><EyeOutlined /> Views: {this.state.prod_data.views}</Title>
-                        <Title level={4}><ShoppingCartOutlined /> Sold: {this.state.prod_data.sold}</Title>
-                        <Title level={4}>Stock: {this.state.prod_data.stock}</Title>
+                    <Col lg={0} md={24} style={{ height: "30px" }}></Col>
+                    <Col lg={8} md={23} style={{ boxShadow: "0 5px 15px rgba(0,0,0,0.3)", borderRadius: "25px" }}>
+                        <Card
+                            title={
+                                <div style={{ paddingTop: "10px", marginBottom: "10px", border: "none" }}>
+                                    <Text style={{ fontSize: "22px" }}>{this.state.prod_data.prod_name}</Text>
+                                    <br />
+                                    <Text level={3} style={{}} >$ {this.state.prod_data.price}.00</Text>
+                                </div>
+                            }
+                            style={{ width: "100%", borderRadius: "25px 25px 0 0", backgroundColor: "#fcfcfc" }}>
+                            <Text level={4}><EyeOutlined /> Views: {this.state.prod_data.views} Sold: {this.state.prod_data.sold}</Text>
+                        </Card>
+                        <Card
+                            style={{
+                                width: "100%", backgroundColor: "#001529", opacity: 0.9, borderRadius: "0 0 25px 25px", border: "none"
+                            }}
+                        >
+                            {this.state.prod_data.stock ? (
+                                <Form
+                                    layout={'inline'}
+                                    onFinish={this.handleAddToCart}
+                                >
+                                    <Row style={{ width: "100%" }}>
+                                        <Col span={8}>
+                                            <Form.Item >
+                                                <InputNumber
+                                                    style={{
+                                                        marginBottom: "10px"
+                                                    }}
+                                                    placeholder='1'
+                                                    min={1}
+                                                    max={this.state.prod_data.stock}
+                                                    onChange={this.handleQuantityChange}
+                                                    value={this.state.quantity}
+                                                />
+                                                <br />
+                                                <Text level={4} style={{ color: 'white', marginTop: "10px", fontSize: "17px" }}>Stock: {this.state.prod_data.stock}</Text>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={16} align="right" style={{ paddingTop: "40px" }}>
+                                            <Text style={{ color: 'white', fontWeight: "bold", fontSize: "17px" }}>TOTAL</Text>
+                                            <br />
+                                            <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}.00</Text>
+                                        </Col>
+                                        <Divider orientation="center" style={{ color: 'white', fontWeight: 'normal', width: "100%" }}></Divider>
+                                        <Col span={24} align="middle">
+                                            <Form.Item style={{ width: "100%" }}>
+                                                <Button
+                                                    htmlType="submit"
+                                                    style={{ color: '#fcfcfc', fontWeight: 'bold', fontSize: "27px", width: "100%", height: "60px", backgroundColor: "#fca541", border: "none", borderRadius: "13px" }}
+                                                >
+                                                    <ShoppingCartOutlined />Add To Cart
+                                            </Button>
+
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            ) : (<Text style={{ color: "white" }}>OUT OF STOCK</Text>)}
+
+                        </Card>
                         {this.state.errMessage ? (
                             <Text type='danger'> {this.state.errMessage}</Text>
                         ) : null}
@@ -376,42 +453,156 @@ class ProductScreen extends React.Component {
                             </div>
                         ) : null}
                         <div>
-                            <Form
-                                layout={'inline'}
-                                onFinish={this.handleAddToCart}
-                            >
-                                <Form.Item label="Qty">
-                                    <InputNumber
-                                        placeholder='1'
-                                        min={1}
-                                        max={this.state.prod_data.stock}
-                                        onChange={this.handleQuantityChange}
-                                        value={this.state.quantity}
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit">
-                                        Add To Cart <ShoppingCartOutlined />
-                                    </Button>
 
-                                </Form.Item>
-                            </Form>
                         </div>
                     </Col>
-                    <Col lg={2} span={0}></Col>
-                    <Col span={24} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
-                        <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
-                        <div>
-                            <Collapse>
-                                <Panel header="See Full Desciption" key="1">
-                                    <p>{this.state.prod_data.description}</p>
-                                </Panel>
-                            </Collapse>
-                        </div>
+                    <Col span={23} style={{ marginTop: "30px" }}>
+                        <Tabs defaultActiveKey="1" style={{ width: "100%" }}>
+                            <TabPane tab="Product Details" key="1">
+                                <Row style={{ paddingLeft: "2vw", paddingRight: "2vw" }}>
+                                    <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>{this.state.prod_data.description}</p>
+
+                                    <Col align="middle" span={24}>
+                                        {this.state.prod_data.image_url.map((item, index) => {
+                                            if (index !== 0) {
+                                                return (
+                                                    <div key={"des" + index} >
+                                                        <img
+                                                            src={item}
+                                                            alt='cannot load'
+                                                            style={{
+                                                                width: "60%",
+                                                                marginTop: "20px",
+                                                                marginBottom: "20px",
+                                                                marginLeft: "auto",
+                                                                marginRight: "auto",
+                                                                verticalAlign: "middle",
+                                                                maxWidth: "100%"
+                                                            }}>
+                                                        </img>
+                                                    </div>
+                                                );
+                                            }
+                                        })}
+                                    </Col>
+                                </Row>
+                            </TabPane>
+                            <TabPane tab="Shipping" key="2">
+                                <Row style={{ paddingLeft: "2vw", paddingRight: "2vw" }}>
+                                    <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                                        [Shipping] <br />
+                                    Shipping Method : EMS <br />
+                                    Shipping Area : Worldwide (EMS destinations excluding Japan, China, Macao, and Hong Kong) <br />
+                                    Shipping Cost : International Shipping Fee <br />
+                                    Shipping Time : 5 - 10 days <br />
+                                    - All other orders will be dispatched on the following day. <br />
+                                        <br />
+                                    Additional shipping surcharges may apply for rural addresses. <br />
+                                        <br />
+                                    - Shipment delays may occur due to internal warehouse issues. <br />
+                                    - We will contact you separately in the case of foreseeable shipping delays and/or sold-out items.<br />
+                                        <br />
+                                    - For items with designated sales period, cancellation is available only during the said period.<br />
+                                        <br />
+                                        <br />
+                                    Customs and Duties<br />
+                                        <br />
+                                    - International shipments may be subject to customs duties and taxes, which are levied once
+                                    the shipment reaches the recipient’s country. Additional charges for customs clearance must be
+                                    fulfilled by the recipient.<br />
+                                        <br />
+                                    - Fansfere has no control over customs charges. Customs policies vary widely by country.
+                                    Please contact your local customs office for more information.<br />
+                                        <br />
+                                    Orders that are returned due to the recipient’s refusal to pay customs duties will not be shipped again.
+                                    All charges that occur during the process are the customer’s responsibility.<br />
+                                    </p>
+                                </Row>
+                            </TabPane>
+                            <TabPane tab={"Returns " + "&" + " Exchanges"} key="3">
+                                <Row style={{ paddingLeft: "2vw", paddingRight: "2vw" }}>
+                                    <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
+                                        [Returns & Exchanges]<br/>
+                                        <br/>
+                                        [Note Before Exchange/Return]<br/>
+                                        <br/>
+                                        ・The color of the actual product may vary from image depending on your monitor’s
+                                        resolution settings. The color and placement of the product label may also vary from image.<br/>
+                                        <br/>
+                                        ・Order Cancellation<br/>
+                                        <br/>
+                                        - You can only cancel orders that are in [Payment Confirmed] or [Pending Shipment] status.<br/>
+                                        <br/>
+                                        - Please contact our CS center via cscenter_en@fansfere.com in order to request for cancellation.<br/>
+                                        <br/>
+                                        ・Exchanges and Returns<br/>
+                                        <br/>
+                                        1. Change of Mind<br/>
+                                        We unfortunately do not accept exchanges and returns due to change of mind.<br/>
+                                        <br/>
+                                        2. Wrong, Damaged, or Defective Items<br/>
+                                        If you received a wrong, damaged, or defective item, attach photo evidence (photos of the
+                                        whole item as well as damaged part) and submit a Private Inquiry or email us at
+                                        cscenter_en@fansfere.comwithin 7 days of delivery.<br/>
+                                        <br/>
+                                        <br/>
+                                        [Items Eligible for Exchange/Return]<br/>
+                                        <br/>
+                                        - Wrong, damaged, or defective item(s)<br/>
+                                        <br/>
+                                        <br/>
+                                        [Not Eligible for Exchange/Return]<br/>
+                                        <br/>
+                                        - Simple change of mind<br/>
+                                        - Wrong, damaged, or defective items that show signs of post-delivery usage or mishandling<br/>
+                                        - Made-to-order items, promotional items, and music albums for which a No Return/Exchange
+                                        policy is stated on the product page<br/>
+                                        - Differences in color due to the customer’s monitor resolution and/or photo shoot settings<br/>
+                                        - Product prints/patterns that differ from product image<br/>
+                                        - Return packages that do not include the promotional gifts in initial shipment<br/>
+                                        - Items purchased online from Fansfere may not be
+                                        exchanged or returned at our offline stores.<br/>
+                                        - Items purchased from our offline stores may not be exchanged
+                                        or returned at Fansfere (online).<br/>
+                                        <br/>
+                                        - Included gift(s) must be returned along with the purchased item(s).<br/>
+                                        - Exchange/Return policies may vary by item. Please refer to the product pages for details.<br/>
+                                        <br/>
+                                        <br/>
+                                        [How to Return Items]<br/>
+                                        <br/>
+                                        If you wish to return/exchange your item, please submit a Private Inquiry or email us at
+                                        cscenter_en@fansfere.com first. You can refer to the return process below.<br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        1. Within 7 days of delivery, attach photo evidence of your defective product
+                                        (containing both the whole item as well as damaged part) and include your order number,
+                                        product number of wrong/defective item, and reasons for return in your
+                                        Private Inquiry or email to cscenter_en@fansfere.com<br/>
+                                        <br/>
+                                        2. We will contact you once we process your return request.<br/>
+                                        <br/>
+                                        3. Please include your order number, name, and ID on a slip of paper in your return package.<br/>
+                                        <br/>
+                                        * Items returned without prior request and confirmation are not eligible for refund.<br/>
+                                        * Return Shipping Fees<br/>
+                                        - Refunds/exchanges are not offered for change of mind.<br/>
+                                        - For wrong or defective items, the store is responsible for return shipping fees.<br/>
+                                        * Cash on delivery is not available for EMS shipments. If you send us a copy of your return
+                                        shipment receipt, we will refund the shipping fee after confirmation.<br/>
+                                        <br/>
+                                        ・Exchange/Return Shipping Fees<br/>
+                                        <br/>
+                                        - Change of Mind: Returns are not accepted.<br/>
+                                        - Wrong, Damaged, or Defective Items: The store is responsible for return shipping fees.<br/>
+                                    </p>
+                                </Row>
+                            </TabPane>
+                        </Tabs>
 
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
-                    <Col lg={4} span={0}></Col>
                     <Col lg={16} span={24} style={{ padding: "30px" }}>
                         {(this.state.currentUser.id) ? (
                             <Comment
@@ -433,7 +624,6 @@ class ProductScreen extends React.Component {
                         ) : null}
                         {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                     </Col>
-                    <Col lg={4} span={0}></Col>
                     <Col span={24}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                         <Title style={{ marginLeft: '4vw' }}>Related Products</Title>
@@ -482,7 +672,7 @@ class ProductScreen extends React.Component {
                     })
                     }
                 </Row>
-            </>
+            </div >
         )
     }
 }
