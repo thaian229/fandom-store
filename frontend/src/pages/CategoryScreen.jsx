@@ -54,7 +54,17 @@ class CategoryScreen extends React.Component {
         console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
-            divs[i].style.height = "20vw"
+            divs[i].style.height = "18vw"
+        }
+
+        const divs2 = document.querySelectorAll(".ant-carousel .slick-list")
+        for (let i = 0; i < divs2.length; i++) {
+            divs2[i].style.height = "18vw"
+        }
+
+        const divs3 = document.querySelectorAll(".ant-carousel .slick-track")
+        for (let i = 0; i < divs3.length; i++) {
+            divs3[i].style.height = "18vw"
         }
     }
 
@@ -175,10 +185,22 @@ class CategoryScreen extends React.Component {
 
     render() {
         return (
-            <div style={{ marginTop: `65px` }}>
-
-                <Row align="top">
-                    <Col span={4}>
+            <div
+                style={{
+                    backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)",
+                    padding: "0 4vw 70px 4vw",
+                    minHeight: "100vh"
+                }}>
+                <Row align="top"
+                    style={{
+                        backgroundColor: "white",
+                        borderRadius: "10px"
+                    }}>
+                    <Col span={4}
+                        style={{
+                            borderRadius: "10px"
+                        }}
+                    >
                         <Menu
                             onClick={this.handleClick}
                             style={{ width: "100%", borderRight: "none", marginTop: "10px" }}
@@ -246,6 +268,8 @@ class CategoryScreen extends React.Component {
                     </Col>
                     <Col span={20} style={{ borderLeftWidth: "2px", borderLeftStyle: "solid", borderColor: "#f2f2f2" }}>
                         <Row>
+                            <Col span={24} style={{ height: "10px" }}></Col>
+
                             <Col span={24} >
                                 <PageHeader
                                     className="site-page-header"
@@ -285,6 +309,8 @@ class CategoryScreen extends React.Component {
 
                                 </PageHeader>
                             </Col>
+                            <Col span={24} style={{ height: "8px" }}></Col>
+
                             <Col span={12} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingLeft: "2vw", paddingRight: "1vw" }}>
                                 <Carousel
                                     autoplay={true}
@@ -391,7 +417,7 @@ class CategoryScreen extends React.Component {
                                     )
                                 })
                             ) : (
-                                    <Col span={24}>
+                                    <Col span={24} align="middle" style={{paddingTop: "50px", paddingBottom: "150px"}}>
                                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                                     </Col>
                                 )

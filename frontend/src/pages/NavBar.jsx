@@ -104,12 +104,15 @@ class NavBar extends React.Component {
 
     render() {
         return (
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%', paddingLeft: "25px", paddingRight: "2vw", height: "70px" }}>
+            <Header style={{zIndex: 1, width: '100%', paddingLeft: "2vw", paddingRight: "2vw", height: "70px"}}>
                 <Row align="middle">
                     <Col span={4}>
                         <a className="logo" href="http://localhost:3000" />
                     </Col>
-                    <Col span={14}>
+                    <Col span={14}
+                        style={{
+                            paddingTop: "2px"
+                        }}>
                         <Input
                             prefix={
                                 <SearchOutlined
@@ -134,7 +137,7 @@ class NavBar extends React.Component {
                                     ghost={true}
                                     type="link"
                                     icon={
-                                        <img src={ShoppingCart} style={{ width: "80%", opacity: 0.9 }} />
+                                        <img src={ShoppingCart} style={{ width: "80%", opacity: 0.9, marginBottom: "2px" }} />
                                     }
                                     size={'medium'}
                                 />
@@ -143,40 +146,40 @@ class NavBar extends React.Component {
                                 style={{ marginLeft: "2vw", position: 'fixed' }}
                                 overlay={
                                     <Menu style={{
-                                        marginTop: "20px",
+                                        marginTop: "5px",
                                         padding: "10px",
                                         borderRadius: "10px"
                                     }}>
-                                        <Menu.Item 
-                                        align="right"
-                                        style={{
-                                            borderRadius: "10px"
-                                        }}>
+                                        <Menu.Item
+                                            align="right"
+                                            style={{
+                                                borderRadius: "10px"
+                                            }}>
                                             <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleHistory()}>
                                                 Order History
                                             </a>
                                         </Menu.Item>
-                                        <Menu.Item 
-                                        align="right"
-                                        style={{
-                                            borderRadius: "10px"
-                                        }}>
+                                        <Menu.Item
+                                            align="right"
+                                            style={{
+                                                borderRadius: "10px"
+                                            }}>
                                             <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
                                                 Profile
                                             </a>
                                         </Menu.Item>
-                                        <Menu.Item 
-                                        align="right"
-                                        style={{
-                                            borderRadius: "10px"
-                                        }}>
+                                        <Menu.Item
+                                            align="right"
+                                            style={{
+                                                borderRadius: "10px"
+                                            }}>
                                             <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleLogout()}>
                                                 Logout
                                             </a>
                                         </Menu.Item>
                                     </Menu>
                                 } placement="bottomRight">
-                                <Avatar shape="square" src={this.state.currentUser.ava_url} style={{ marginLeft: "2vw" }} />
+                                <Avatar shape="circle" src={this.state.currentUser.ava_url} style={{ marginLeft: "30px", marginBottom: "0px", width: "41px", height: "41px" }} />
                             </Dropdown>
                         </Col>
 

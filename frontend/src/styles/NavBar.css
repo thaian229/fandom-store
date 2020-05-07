@@ -1,8 +1,8 @@
 .logo {
-    width: 120px;
-    height: 40px;
+    width: 140px;
+    height: 46px;
     background-image: url('./LOGO2.png');
-    margin: 16px calc(100vw/6 - 142px) 16px 0;
+    margin: 4px calc(100vw/6 - 142px) 0px 0;
     float: left;
     background-size: cover;
     background-position: center;
