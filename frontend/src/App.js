@@ -24,7 +24,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <Layout style={{ marginBottom: `64px`, backgroundColor: "black" }}>
+                <Layout style={{ backgroundColor: "black" }}>
                         <Router>
                             <Route path='/' component={NavBar} />
                         </Router>

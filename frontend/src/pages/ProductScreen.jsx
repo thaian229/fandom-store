@@ -1,6 +1,6 @@
 import React from "react";
-import { ShoppingCartOutlined, EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification, Tabs } from "antd";
+import { ShoppingCartOutlined, EyeOutlined, EditOutlined, DeleteOutlined, HomeOutlined } from '@ant-design/icons';
+import { Avatar, Collapse, Carousel, Typography, Divider, Row, Col, Form, InputNumber, Button, List, Comment, Input, Card, Statistic, notification, Tabs, Breadcrumb, PageHeader } from "antd";
 import '../styles/ProductScreen.css';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -12,17 +12,17 @@ const { TabPane } = Tabs;
 const CommentList = ({ cmt_data }) => (
     <List
         dataSource={cmt_data}
-        header={`${cmt_data.length} ${cmt_data.length > 1 ? "comments" : "comment"}`}
+        header={cmt_data.length > 1 ? <Text style={{ fontSize: "15px" }}>{cmt_data.length} comments</Text> : <Text>{cmt_data.length} comment</Text>}
         itemLayout="horizontal"
         // renderItem={props => <Comment style={{ width: "100%" }} {...props} />}
         renderItem={(items) => (
-            <List.Item>
-                <List.Item.Meta
+            <li style={{ paddingTop: "10px", marginLeft: "30px" }}>
+                <Comment
                     avatar={<Avatar src={items.ava_url} />}
-                    title={<Text> {items.full_name}</Text>}
-                    description={items.content}
+                    author={<Text> {items.full_name}</Text>}
+                    content={items.content}
                 />
-            </List.Item>
+            </li>
         )}
     />
 );
@@ -74,6 +74,8 @@ class ProductScreen extends React.Component {
         prod_data: {
             image_url: [],
         },
+        currentMarket: "",
+        currentCategory: "",
         cmt_data: [],
         submitingComment: false,
         commentValue: '',
@@ -109,27 +111,29 @@ class ProductScreen extends React.Component {
     componentDidMount() {
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
-            divs[i].style.height = "468px"
+            divs[i].style.height = "464px"
         }
 
         const divs2 = document.querySelectorAll(".ant-carousel .slick-list")
         for (let i = 0; i < divs2.length; i++) {
-            divs2[i].style.height = "468px"
+            divs2[i].style.height = "464px"
         }
 
         const divs3 = document.querySelectorAll(".ant-carousel .slick-track")
         for (let i = 0; i < divs3.length; i++) {
-            divs3[i].style.height = "468px"
+            divs3[i].style.height = "464px"
         }
 
         const divs4 = document.querySelectorAll(".ant-layout-header")
         for (let i = 0; i < divs4.length; i++) {
             divs4[i].style.position = "static";
+            divs4[i].style.boxShadow = "none";
         }
 
         const divs5 = document.querySelectorAll(".ant-layout")
         for (let i = 0; i < divs5.length; i++) {
             divs5[i].style.margin = 0;
+            divs5[i].style.paddingBottom = 0;
         }
 
         // take params
@@ -166,6 +170,8 @@ class ProductScreen extends React.Component {
             .then((data) => {
                 this.setState({
                     prod_data: data.data,
+                    currentMarket: data.data.tags.split('-')[0] + "-Market",
+                    currentCategory: data.data.tags.split('-')[1],
                 });
                 // fetch comment of product
                 fetch(`http://localhost:3001/api/posts/getAllComment/${prod_id}`, {
@@ -339,18 +345,57 @@ class ProductScreen extends React.Component {
     render() {
         return (
             <div style={{
-                // backgroundImage: "url('https://wallpaperaccess.com/full/250472.jpg')",
-                // backgroundColor: "#001529"
                 backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)",
-                paddingBottom: "70px"
+                paddingBottom: "70px",
+                minHeight: "100vh"
             }}>
+                <Row style={{ height: "30px" }}></Row>
                 <Row align='top' justify="space-around" style={{ margin: "0 9vw", backgroundColor: "white", boxShadow: "12px 12px 3px #e0e0e0, 24px 24px 5px #bcbcbc" }}>
-                    <Col span={24} style={{ height: "60px" }}></Col>
+                    <Col span={24} style={{ height: "10px" }}></Col>
+                    <Col span={23} >
+                        <PageHeader
+                            className="site-page-header"
+                            // onBack={() => null}
+                            title={
+                                <Breadcrumb>
+                                    <Breadcrumb.Item href="http://localhost:3000">
+                                        <HomeOutlined style={{ marginBottom: "1px" }} />
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item>
+                                        <span>Categories</span>
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item>
+                                        <span>{this.state.currentMarket}</span>
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item href={"http://localhost:3000/category/" + this.state.prod_data.tags}>
+                                        <span>{this.state.currentCategory}</span>
+                                    </Breadcrumb.Item>
+                                </Breadcrumb>
+                            }
+                            extra={
+                                this.state.currentUser.is_admin ? (
+                                    <div>
+                                        <Row>
+                                            <Col span={12}>
+                                                <Button type='primary' onClick={this.handleEdit}><EditOutlined /> Edit</Button>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Button danger onClick={this.handleDelete}><DeleteOutlined /> Delete</Button>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                ) : null
+                            }
+                        >
+                        </PageHeader>
+                        <Col span={24} style={{ height: "10px" }}></Col>
+
+                    </Col>
                     <Col lg={14} md={22} style={{}}>
                         <Carousel
                             autoplay={true}
                             dotPosition={'bottom'}
-                            style={{ width: "100%", height: "472px", border: "solid 2px black" }}
+                            style={{ width: "100%", height: "468px", border: "solid 2px black" }}
                         >
                             {this.state.prod_data.image_url.map((item, index) => {
                                 if (index !== 0) {
@@ -360,13 +405,12 @@ class ProductScreen extends React.Component {
                                                 src={item}
                                                 alt='cannot load'
                                                 style={{
-                                                    height: '468px',
+                                                    height: '464px',
                                                     marginTop: "auto",
                                                     marginBottom: "auto",
                                                     marginLeft: "auto",
                                                     marginRight: "auto",
                                                     verticalAlign: "middle",
-                                                    maxWidth: "100%"
                                                 }}>
                                             </img>
                                         </div>
@@ -440,21 +484,6 @@ class ProductScreen extends React.Component {
                         {this.state.errMessage ? (
                             <Text type='danger'> {this.state.errMessage}</Text>
                         ) : null}
-                        {this.state.currentUser.is_admin ? (
-                            <div>
-                                <Row>
-                                    <Col span={6}>
-                                        <Button type='primary' onClick={this.handleEdit}><EditOutlined /> Edit</Button>
-                                    </Col>
-                                    <Col span={18}>
-                                        <Button danger onClick={this.handleDelete}><DeleteOutlined /> Delete</Button>
-                                    </Col>
-                                </Row>
-                            </div>
-                        ) : null}
-                        <div>
-
-                        </div>
                     </Col>
                     <Col span={23} style={{ marginTop: "30px" }}>
                         <Tabs defaultActiveKey="1" style={{ width: "100%" }}>
@@ -522,88 +551,88 @@ class ProductScreen extends React.Component {
                             <TabPane tab={"Returns " + "&" + " Exchanges"} key="3">
                                 <Row style={{ paddingLeft: "2vw", paddingRight: "2vw" }}>
                                     <p style={{ wordWrap: "break-word", whiteSpace: "pre-wrap" }}>
-                                        [Returns & Exchanges]<br/>
-                                        <br/>
-                                        [Note Before Exchange/Return]<br/>
-                                        <br/>
+                                        [Returns & Exchanges]<br />
+                                        <br />
+                                        [Note Before Exchange/Return]<br />
+                                        <br />
                                         ・The color of the actual product may vary from image depending on your monitor’s
-                                        resolution settings. The color and placement of the product label may also vary from image.<br/>
-                                        <br/>
-                                        ・Order Cancellation<br/>
-                                        <br/>
-                                        - You can only cancel orders that are in [Payment Confirmed] or [Pending Shipment] status.<br/>
-                                        <br/>
-                                        - Please contact our CS center via cscenter_en@fansfere.com in order to request for cancellation.<br/>
-                                        <br/>
-                                        ・Exchanges and Returns<br/>
-                                        <br/>
-                                        1. Change of Mind<br/>
-                                        We unfortunately do not accept exchanges and returns due to change of mind.<br/>
-                                        <br/>
-                                        2. Wrong, Damaged, or Defective Items<br/>
+                                        resolution settings. The color and placement of the product label may also vary from image.<br />
+                                        <br />
+                                        ・Order Cancellation<br />
+                                        <br />
+                                        - You can only cancel orders that are in [Payment Confirmed] or [Pending Shipment] status.<br />
+                                        <br />
+                                        - Please contact our CS center via cscenter_en@fansfere.com in order to request for cancellation.<br />
+                                        <br />
+                                        ・Exchanges and Returns<br />
+                                        <br />
+                                        1. Change of Mind<br />
+                                        We unfortunately do not accept exchanges and returns due to change of mind.<br />
+                                        <br />
+                                        2. Wrong, Damaged, or Defective Items<br />
                                         If you received a wrong, damaged, or defective item, attach photo evidence (photos of the
                                         whole item as well as damaged part) and submit a Private Inquiry or email us at
-                                        cscenter_en@fansfere.comwithin 7 days of delivery.<br/>
-                                        <br/>
-                                        <br/>
-                                        [Items Eligible for Exchange/Return]<br/>
-                                        <br/>
-                                        - Wrong, damaged, or defective item(s)<br/>
-                                        <br/>
-                                        <br/>
-                                        [Not Eligible for Exchange/Return]<br/>
-                                        <br/>
-                                        - Simple change of mind<br/>
-                                        - Wrong, damaged, or defective items that show signs of post-delivery usage or mishandling<br/>
+                                        cscenter_en@fansfere.comwithin 7 days of delivery.<br />
+                                        <br />
+                                        <br />
+                                        [Items Eligible for Exchange/Return]<br />
+                                        <br />
+                                        - Wrong, damaged, or defective item(s)<br />
+                                        <br />
+                                        <br />
+                                        [Not Eligible for Exchange/Return]<br />
+                                        <br />
+                                        - Simple change of mind<br />
+                                        - Wrong, damaged, or defective items that show signs of post-delivery usage or mishandling<br />
                                         - Made-to-order items, promotional items, and music albums for which a No Return/Exchange
-                                        policy is stated on the product page<br/>
-                                        - Differences in color due to the customer’s monitor resolution and/or photo shoot settings<br/>
-                                        - Product prints/patterns that differ from product image<br/>
-                                        - Return packages that do not include the promotional gifts in initial shipment<br/>
+                                        policy is stated on the product page<br />
+                                        - Differences in color due to the customer’s monitor resolution and/or photo shoot settings<br />
+                                        - Product prints/patterns that differ from product image<br />
+                                        - Return packages that do not include the promotional gifts in initial shipment<br />
                                         - Items purchased online from Fansfere may not be
-                                        exchanged or returned at our offline stores.<br/>
+                                        exchanged or returned at our offline stores.<br />
                                         - Items purchased from our offline stores may not be exchanged
-                                        or returned at Fansfere (online).<br/>
-                                        <br/>
-                                        - Included gift(s) must be returned along with the purchased item(s).<br/>
-                                        - Exchange/Return policies may vary by item. Please refer to the product pages for details.<br/>
-                                        <br/>
-                                        <br/>
-                                        [How to Return Items]<br/>
-                                        <br/>
+                                        or returned at Fansfere (online).<br />
+                                        <br />
+                                        - Included gift(s) must be returned along with the purchased item(s).<br />
+                                        - Exchange/Return policies may vary by item. Please refer to the product pages for details.<br />
+                                        <br />
+                                        <br />
+                                        [How to Return Items]<br />
+                                        <br />
                                         If you wish to return/exchange your item, please submit a Private Inquiry or email us at
-                                        cscenter_en@fansfere.com first. You can refer to the return process below.<br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
+                                        cscenter_en@fansfere.com first. You can refer to the return process below.<br />
+                                        <br />
+                                        <br />
+                                        <br />
                                         1. Within 7 days of delivery, attach photo evidence of your defective product
                                         (containing both the whole item as well as damaged part) and include your order number,
                                         product number of wrong/defective item, and reasons for return in your
-                                        Private Inquiry or email to cscenter_en@fansfere.com<br/>
-                                        <br/>
-                                        2. We will contact you once we process your return request.<br/>
-                                        <br/>
-                                        3. Please include your order number, name, and ID on a slip of paper in your return package.<br/>
-                                        <br/>
-                                        * Items returned without prior request and confirmation are not eligible for refund.<br/>
-                                        * Return Shipping Fees<br/>
-                                        - Refunds/exchanges are not offered for change of mind.<br/>
-                                        - For wrong or defective items, the store is responsible for return shipping fees.<br/>
+                                        Private Inquiry or email to cscenter_en@fansfere.com<br />
+                                        <br />
+                                        2. We will contact you once we process your return request.<br />
+                                        <br />
+                                        3. Please include your order number, name, and ID on a slip of paper in your return package.<br />
+                                        <br />
+                                        * Items returned without prior request and confirmation are not eligible for refund.<br />
+                                        * Return Shipping Fees<br />
+                                        - Refunds/exchanges are not offered for change of mind.<br />
+                                        - For wrong or defective items, the store is responsible for return shipping fees.<br />
                                         * Cash on delivery is not available for EMS shipments. If you send us a copy of your return
-                                        shipment receipt, we will refund the shipping fee after confirmation.<br/>
-                                        <br/>
-                                        ・Exchange/Return Shipping Fees<br/>
-                                        <br/>
-                                        - Change of Mind: Returns are not accepted.<br/>
-                                        - Wrong, Damaged, or Defective Items: The store is responsible for return shipping fees.<br/>
+                                        shipment receipt, we will refund the shipping fee after confirmation.<br />
+                                        <br />
+                                        ・Exchange/Return Shipping Fees<br />
+                                        <br />
+                                        - Change of Mind: Returns are not accepted.<br />
+                                        - Wrong, Damaged, or Defective Items: The store is responsible for return shipping fees.<br />
                                     </p>
                                 </Row>
                             </TabPane>
                         </Tabs>
 
-                        <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                     </Col>
-                    <Col lg={16} span={24} style={{ padding: "30px" }}>
+                    <Col span={23} align="left" style={{ marginTop: "50px" }}>
+                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                         {(this.state.currentUser.id) ? (
                             <Comment
                                 avatar={
@@ -622,11 +651,10 @@ class ProductScreen extends React.Component {
                                 }
                             />
                         ) : null}
-                        {this.state.cmt_data.length > 0 && <CommentList cmt_data={this.state.cmt_data} />}
                     </Col>
-                    <Col span={24}>
+                    <Col span={23} style={{marginBottom: "30px"}}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
-                        <Title style={{ marginLeft: '4vw' }}>Related Products</Title>
+                        <Text style={{ fontSize: "20px" }}>Related Products</Text>
                     </Col>
                     {this.state.recommend_data.map((item, index) => {
                         return (
