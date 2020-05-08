@@ -195,6 +195,7 @@ class ProfileScreen extends React.Component {
                 } else {
                     // redirect user
                     window.location.href = '/profile';
+                    sessionStorage.setItem('ava_url', this.state.ava_url)
                 }
             })
             .catch((error) => {
@@ -238,27 +239,30 @@ class ProfileScreen extends React.Component {
                                 >
                                     <div className="col-8">
                                         <div className="form-group">
-                                            <label htmlFor='file' className="btn">Select Image</label>
+                                        <button><label htmlFor='file' className="btn" >Select Image</label></button>
                                             <input
                                                 id='file'
                                                 type='file'
                                                 accept="image/*"
                                                 className='form-control'
                                                 style={{
-                                                    color: `transparent`,
+                                                    backgroundColor: `transparent`,
                                                     margin: `0 auto`,
                                                     textIndent: `-999em`,
                                                 }}
                                                 onChange={this.handleImageChange}
-                                            />
+                                            >
+                                            </input>
+                                            <div style={{ marginBottom: '2vh' }}></div>
                                             {this.state.imageSource ? (
-                                                <div style={{ textAlign: `center`, }}>
+                                                <div style={{ textAlign: `center`, width: '100%' }}>
                                                     <img
                                                         src={this.state.imageSource}
                                                         alt='preview image'
                                                         style={{
-                                                            height: `400px`,
-                                                            width: `auto`,
+                                                            // height: `400px`,
+                                                            height: `auto`,
+                                                            width: '100%'
                                                         }}
                                                     />
                                                 </div>
@@ -268,8 +272,8 @@ class ProfileScreen extends React.Component {
                                 </Modal>
                             </div>
                         )}>
-                            <Avatar shape="square" size={290} src={this.state.ava_url} />
-                        </Popover>,
+                            <Avatar shape="circle" size={297} src={this.state.ava_url} />
+                        </Popover>
 
                     </div>
                     <div className='info'>
