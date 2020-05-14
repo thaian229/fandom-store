@@ -390,6 +390,88 @@ userRouter.post("/clearCart", async (req, res) => {
     }
 });
 
+userRouter.post("/updateProcess", async (req, res) => {
+    if (req.session.currentUser && req.session.currentUser.id) {
+        const { id, processed } = req.body;
+        const TEXT = `
+                        UPDATE orders
+                        SET processed = $1
+                        WHERE id = $2::uuid;
+                        `
+        try{
+            await db.query(TEXT, [processed ,id]);
+            res.status(201).json({
+                success: true,
+                message: 'Update successfully',
+            })
+        }
+        catch(error){
+            res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+    else{
+        res.status(403).json({
+            success: false,
+            message: 'Unauthenticated, access denied',
+        });
+    }
+});
+
+userRouter.get("/allOders", async (req, res) => {
+    if (req.session.currentUser && req.session.currentUser.id) {
+        try {
+            const TEXT = `
+                SELECT *
+                FROM orders 
+                ORDER BY created_at DESC 
+                `
+            const results = await db.query(TEXT);
+            const orderList = results.rows;
+            try{
+                let sendBackData = []
+                var itemDone = 0;
+                orderList.forEach(async (item) => {
+                    const TEXT = `
+                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price 
+                        FROM order_items oi JOIN products p ON (oi.prod_id = p.id)
+                        WHERE oi.order_id = $1::uuid
+                        `;
+                    const results = await db.query(TEXT, [item.id]);
+                    sendBackData.push({
+                        order_id: item.id,
+                        acc_id: item.acc_id,
+                        created_at: item.created_at,
+                        order_detail: results.rows,
+                        processed: item.processed
+                    });
+                    itemDone++
+                    if (itemDone === orderList.length) {
+                        res.status(200).json({
+                            success: true,
+                            data: sendBackData,
+                        })
+                    }
+                })
+            }
+            catch(error){
+                res.status(500).json({
+                    success: false,
+                    message: error.message,
+                });
+            }
+        }
+        catch (err) {
+            res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    }
+});
+
 userRouter.get("/orderHistory", async (req, res) => {
     // check authentication
     if (req.session.currentUser && req.session.currentUser.id) {
@@ -397,7 +479,7 @@ userRouter.get("/orderHistory", async (req, res) => {
         // retrieve list of orders 
         try {
             const TEXT = `
-                SELECT id, created_at FROM orders
+                SELECT id, created_at, processed FROM orders
                 WHERE acc_id = $1::uuid
                 ORDER BY created_at DESC
                 `
@@ -422,6 +504,7 @@ userRouter.get("/orderHistory", async (req, res) => {
                         order_id: item.id,
                         created_at: item.created_at,
                         order_detail: results.rows,
+                        processed: item.processed
                     });
                     itemDone++
                     // console.log(3);

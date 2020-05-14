@@ -12,6 +12,7 @@ import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import ProductScreen from './pages/ProductScreen';
 import OrderHistoryScreen from './pages/OrderHistoryScreen';
+import AllOrderScreen from './pages/AllOrderScreen';
 import NavBar from './pages/NavBar';
 import './App.css';
 import CategoryScreen from './pages/CategoryScreen';
@@ -40,6 +41,7 @@ class App extends React.Component {
                     <Route path='/addItem' component={AddItemScreen} />
                     <Route path='/edit/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
+                    <Route path='/allorders' component={AllOrderScreen} />
                     <Route path='/search/:keyword' component={SearchScreen}/>
                 </Router>
             </div >
