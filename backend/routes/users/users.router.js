@@ -499,7 +499,7 @@ userRouter.get("/orderHistory", async (req, res) => {
                 var itemDone = 0;
                 orderList.forEach(async (item) => {
                     const TEXT = `
-                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price 
+                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price, p.image_url 
                         FROM order_items oi JOIN products p ON (oi.prod_id = p.id)
                         WHERE oi.order_id = $1::uuid
                         `;
