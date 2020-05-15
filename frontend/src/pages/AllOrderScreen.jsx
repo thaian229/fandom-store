@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Typography, Button, Checkbox, Modal } from "antd";
+import { Col, Row, Typography, Button, Checkbox, Modal, Avatar } from "antd";
 import { Link } from "react-router-dom";
 const { Title, Text } = Typography;
 
@@ -15,8 +15,14 @@ class AllOrderScreen extends React.Component {
         orderItems: [],
         visible_order: false,
         visible_acc: false,
-        curOderId: "",
-        curAccId: "",
+        curOderId: '',
+        curAccId: '',
+        email: '',
+        fullname: '',
+        address: '',
+        dob: null,
+        ava_url: '',
+        tel_num: '',
     }
 
     adminCheck = () => {
@@ -83,13 +89,34 @@ class AllOrderScreen extends React.Component {
     }
 
     showModalOrder = (order_id) => {
-        this.setState({
-            visible_order: true,
-            curOderId: order_id,
-        });
+        this.state.orderList.map((element) => {
+            if (element.order_id == order_id) {
+                this.setState({
+                    visible_order: true,
+                    curOderId: order_id,
+                    orderItems: element.order_detail,
+                });
+            }
+        })
     };
 
     showModalAccount = (acc_id) => {
+        this.state.orderList.map((element) => {
+            console.log(element)
+            if (element.acc_id == acc_id) {
+                console.log(element);
+                this.setState({
+                    visible_acc: true,
+                    curAccId: acc_id,
+                    email: element.email,
+                    fullname: element.fullname,
+                    address: element.address,
+                    dob: element.dob,
+                    ava_url: element.ava_url,
+                    tel_num: element.tel_num,
+                });
+            }
+        })
         this.setState({
             visible_acc: true,
             curAccId: acc_id,
@@ -105,13 +132,16 @@ class AllOrderScreen extends React.Component {
     };
 
     render() {
+
+
+
         return (
             <div style={{ margin: '5vw' }}>
                 {this.state.currentUser.is_admin ? (
                     <Row align='center'>
 
                         <Col span={20}>
-                            <Title level={2} style={{ textAlign: 'center' }} >Pending orders</Title>
+                            <Title level={2} style={{ textAlign: 'center' }} >Customer's orders</Title>
                         </Col>
 
 
@@ -137,26 +167,30 @@ class AllOrderScreen extends React.Component {
                                             <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }}>
-                                                        <Button type='link' onClick={this.showModalOrder(item.order_id)}>
+                                                        <Button type='link'
+                                                            onClick={event => this.showModalOrder(item.order_id)}
+                                                        >
                                                             <Text>{item.order_id}</Text>
                                                         </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Button type='link' onClick={this.showModalAccount(item.acc_id)}>
+                                                        <Button type='link'
+                                                            onClick={event => this.showModalAccount(item.acc_id)}
+                                                        >
                                                             <Text>{item.acc_id}</Text>
                                                         </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={4}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.created_at}</Text>
+                                                        <Text>{item.created_at.split('T')[0]}</Text>
                                                     </div>
                                                 </Col>
                                                 <Col span={4}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Checkbox defaultChecked={false} onChange={(event) => {
+                                                        <Button ghost style={{ width: '100px' }} onClick={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
                                                                 if (index === i) {
                                                                     return {
@@ -200,7 +234,7 @@ class AllOrderScreen extends React.Component {
                                                         }}
                                                         >
                                                             <Text style={{ color: "#ff0000" }} >Pending</Text>
-                                                        </Checkbox>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -209,31 +243,90 @@ class AllOrderScreen extends React.Component {
                                 )
                             })}
                             <Modal
-                                title="Basic Modal"
+                                title="Order Info"
                                 visible={this.state.visible_order}
                                 onOk={this.handleOk}
+                                onCancel={this.handleOk}
+                                footer={[
+                                    <Button key="submit" type="primary" onClick={this.handleOk}>
+                                        Ok
+                                    </Button>
+                                ]}
                             >
-                                <p>{this.state.curOderId}</p>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
+                                {this.state.orderItems.map((element, index) => {
+                                    return (
+                                        <Row>
+                                            <Col span={4}></Col>
+                                            <Col span={12}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text> Product Name </Text>
+                                                </div>
+                                            </Col>
+                                            <Col span={8}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text> Quantity </Text>
+                                                </div>
+                                            </Col>
+
+                                            <Col span={4}>
+                                                <Avatar shape="square" src={element.image_url[0]} size={"100%"} />
+                                            </Col>
+                                            <Col span={12} align="middle">
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
+                                                        <Text style={{ color: 'blue' }}>{element.prod_name}</Text>
+                                                    </a>
+                                                </div>
+                                            </Col>
+                                            <Col span={8}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text>{element.quantity}</Text>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    )
+                                })}
                             </Modal>
+
                             <Modal
-                                title="Basic Modal"
+                                title="User Info"
                                 visible={this.state.visible_acc}
                                 onOk={this.handleOk}
+                                onCancel={this.handleOk}
+                                footer={[
+                                    <Button key="submit" type="primary" onClick={this.handleOk}>
+                                        Ok
+                                    </Button>
+                                ]}
                             >
-                                <p>{this.state.curAccId}</p>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
+                                <Row>
+                                    <Col span={6} style={{ align: 'center' }}>
+                                        <Avatar shape="circle" size={100} src={this.state.ava_url} />
+                                    </Col>
+                                    <Col span={18}>
+                                        <div>
+                                            <Text>Full Name: {this.state.fullname}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Email: {this.state.email}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Address: {this.state.address}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Phone Number: {this.state.tel_num}</Text>
+                                        </div>
+                                    </Col>
+                                </Row>
                             </Modal>
                         </Col>
 
-                        <Col span={20}>
+                        {/* <Col span={20}>
                             <Title level={2} style={{ textAlign: 'center' }} >Finish orders</Title>
-                        </Col>
+                        </Col> */}
 
                         <Col span={20}>
-                            <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
+                            {/* <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
                                 <Col span={8}>
                                     <Title level={4} style={{ textAlign: 'center' }} > Order ID </Title>
                                 </Col>
@@ -246,7 +339,7 @@ class AllOrderScreen extends React.Component {
                                 <Col span={4}>
                                     <Title level={4} style={{ textAlign: 'center' }} >  </Title>
                                 </Col>
-                            </Row>
+                            </Row> */}
                             {this.state.orderList.map((item, index) => {
                                 return (
                                     <div>
@@ -254,22 +347,30 @@ class AllOrderScreen extends React.Component {
                                             <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }}>
-                                                        <Text>{item.order_id}</Text>
+                                                        <Button type='link'
+                                                            onClick={event => this.showModalOrder(item.order_id)}
+                                                        >
+                                                            <Text>{item.order_id}</Text>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.acc_id}</Text>
+                                                        <Button type='link'
+                                                            onClick={event => this.showModalAccount(item.acc_id)}
+                                                        >
+                                                            <Text>{item.acc_id}</Text>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={4}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.created_at}</Text>
+                                                        <Text>{item.created_at.split('T')[0]}</Text>
                                                     </div>
                                                 </Col>
                                                 <Col span={4}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Checkbox defaultChecked onChange={(event) => {
+                                                        <Button ghost style={{ width: '100px' }} onClick={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
                                                                 if (index === i) {
                                                                     return {
@@ -313,7 +414,7 @@ class AllOrderScreen extends React.Component {
                                                         }}
                                                         >
                                                             <Text style={{ color: "#00ba10" }} >Complete</Text>
-                                                        </Checkbox>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -321,6 +422,83 @@ class AllOrderScreen extends React.Component {
                                     </div>
                                 )
                             })}
+                            <Modal
+                                title="Order Info"
+                                visible={this.state.visible_order}
+                                onOk={this.handleOk}
+                                onCancel={this.handleOk}
+                                footer={[
+                                    <Button key="submit" type="primary" onClick={this.handleOk}>
+                                        Ok
+                                    </Button>
+                                ]}
+                            >
+                                {this.state.orderItems.map((element, index) => {
+                                    return (
+                                        <Row>
+                                            <Col span={4}></Col>
+                                            <Col span={12}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text> Product Name </Text>
+                                                </div>
+                                            </Col>
+                                            <Col span={8}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text> Quantity </Text>
+                                                </div>
+                                            </Col>
+
+                                            <Col span={4}>
+                                                <Avatar shape="square" src={element.image_url[0]} size={"100%"} />
+                                            </Col>
+                                            <Col span={12} align="middle">
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
+                                                        <Text style={{ color: 'blue' }}>{element.prod_name}</Text>
+                                                    </a>
+                                                </div>
+                                            </Col>
+                                            <Col span={8}>
+                                                <div style={{ textAlign: 'center' }} >
+                                                    <Text>{element.quantity}</Text>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    )
+                                })}
+                            </Modal>
+
+                            <Modal
+                                title="User Info"
+                                visible={this.state.visible_acc}
+                                onOk={this.handleOk}
+                                onCancel={this.handleOk}
+                                footer={[
+                                    <Button key="submit" type="primary" onClick={this.handleOk}>
+                                        Ok
+                                    </Button>
+                                ]}
+                            >
+                                <Row>
+                                    <Col span={6} style={{ align: 'center' }}>
+                                        <Avatar shape="circle" size={100} src={this.state.ava_url} />
+                                    </Col>
+                                    <Col span={18}>
+                                        <div>
+                                            <Text>Full Name: {this.state.fullname}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Email: {this.state.email}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Address: {this.state.address}</Text>
+                                        </div>
+                                        <div>
+                                            <Text>Phone Number: {this.state.tel_num}</Text>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Modal>
                         </Col>
                     </Row>
 

@@ -424,9 +424,9 @@ userRouter.get("/allOders", async (req, res) => {
     if (req.session.currentUser && req.session.currentUser.id) {
         try {
             const TEXT = `
-                SELECT *
-                FROM orders 
-                ORDER BY created_at DESC 
+            SELECT o.*, a.email, a.full_name, a.address, a.dob, a. ava_url, a.tel_num
+            FROM orders o JOIN accounts a ON (o.acc_id = a.id)
+            ORDER BY o.created_at 
                 `
             const results = await db.query(TEXT);
             const orderList = results.rows;
@@ -435,7 +435,7 @@ userRouter.get("/allOders", async (req, res) => {
                 var itemDone = 0;
                 orderList.forEach(async (item) => {
                     const TEXT = `
-                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price 
+                        SELECT oi.prod_id, oi.quantity, p.prod_name, p.price, p.image_url 
                         FROM order_items oi JOIN products p ON (oi.prod_id = p.id)
                         WHERE oi.order_id = $1::uuid
                         `;
@@ -445,7 +445,13 @@ userRouter.get("/allOders", async (req, res) => {
                         acc_id: item.acc_id,
                         created_at: item.created_at,
                         order_detail: results.rows,
-                        processed: item.processed
+                        processed: item.processed,
+                        email: item.email,
+                        fullname: item.full_name,
+                        address: item.address,
+                        dob: item.dob,
+                        ava_url: item.ava_url,
+                        tel_num: item.tel_num,
                     });
                     itemDone++
                     if (itemDone === orderList.length) {

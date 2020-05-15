@@ -185,7 +185,7 @@ class NavBar extends React.Component {
                                             style={{
                                                 borderRadius: "10px"
                                             }}>
-                                            <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/allorders">
+                                            <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
                                                 All Orders
                                             </a>
                                         </Menu.Item>
