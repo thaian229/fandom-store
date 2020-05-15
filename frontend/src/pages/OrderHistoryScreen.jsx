@@ -93,11 +93,14 @@ class OrderHistoryScreen extends React.Component {
                     <Col span={4}></Col>
                     <Col span={16}>
                         <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
-                            <Col span={14}>
+                            <Col span={10}>
                                 <Title level={4} style={{ textAlign: 'center' }} > OrderID </Title>
                             </Col>
                             <Col span={10}>
                                 <Title level={4} style={{ textAlign: 'center' }} > Created At </Title>
+                            </Col>
+                            <Col span={4}>
+                                <Title level={4} style={{ textAlign: 'center' }} > Status </Title>
                             </Col>
                         </Row>
                         {(this.state.emptyHistory) ? (
@@ -113,7 +116,7 @@ class OrderHistoryScreen extends React.Component {
                             return (
                                 <>
                                     <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
-                                        <Col span={14}>
+                                        <Col span={10}>
                                             <div style={{ textAlign: 'center' }}>
                                                 <Text>{item.order_id}</Text>
                                             </div>
@@ -121,6 +124,11 @@ class OrderHistoryScreen extends React.Component {
                                         <Col span={10}>
                                             <div style={{ textAlign: 'center' }} >
                                                 <Text>{item.created_at}</Text>
+                                            </div>
+                                        </Col>
+                                        <Col span={4}>
+                                            <div style={{ textAlign: 'center' }} >
+                                                <Text>{(item.processed) ? <Text style={{ color: "#00ba10" }} >Done</Text> : <Text style={{ color: "#ff0000" }} >Pending</Text>}</Text>
                                             </div>
                                         </Col>
                                         <Col span={24}>

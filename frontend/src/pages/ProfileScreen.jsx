@@ -228,7 +228,7 @@ class ProfileScreen extends React.Component {
                     <div className='avatar'>
                         <Popover placement="bottom" content={(
                             <div>
-                                <Button shape="round" type="primary" onClick={this.showModal}>
+                                <Button shape="round" type="primary" onClick={event => this.showModal}>
                                     Change avatar
                             </Button>
                                 <Modal

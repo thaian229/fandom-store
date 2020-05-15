@@ -27,8 +27,28 @@ class NavBar extends React.Component {
         itemsInCart: false,
     }
 
-    componentWillMount() {
+    adminCheck = () => {
+        if (this.state.currentUser.email) {
+                fetch("http://localhost:3001/api/users/checkAdmin", {
+                    credentials: "include",
+                    method: "GET"
+                })
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data => {
+                        this.setState({
+                            currentUser: {
+                                ...this.state.currentUser,
+                                is_admin: data.data.is_admin
+                            }
+                        })
+                    })
+            } 
+    }
 
+    componentWillMount() {
+        this.adminCheck()
     }
 
     componentDidMount() {
@@ -159,6 +179,17 @@ class NavBar extends React.Component {
                                                 Order History
                                             </a>
                                         </Menu.Item>
+                                        {this.state.currentUser.is_admin ? (
+                                            <Menu.Item
+                                            align="right"
+                                            style={{
+                                                borderRadius: "10px"
+                                            }}>
+                                            <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
+                                                All Orders
+                                            </a>
+                                        </Menu.Item>
+                                        ) : null}
                                         <Menu.Item
                                             align="right"
                                             style={{
