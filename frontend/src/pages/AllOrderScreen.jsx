@@ -1,5 +1,6 @@
 import React from "react";
-import { Col, Row, Typography, Button, Checkbox  } from "antd";
+import { Col, Row, Typography, Button, Checkbox, Modal } from "antd";
+import { Link } from "react-router-dom";
 const { Title, Text } = Typography;
 
 
@@ -12,6 +13,10 @@ class AllOrderScreen extends React.Component {
         },
         orderList: [],
         orderItems: [],
+        visible_order: false,
+        visible_acc: false,
+        curOderId: "",
+        curAccId: "",
     }
 
     adminCheck = () => {
@@ -77,12 +82,34 @@ class AllOrderScreen extends React.Component {
         }
     }
 
+    showModalOrder = (order_id) => {
+        this.setState({
+            visible_order: true,
+            curOderId: order_id,
+        });
+    };
+
+    showModalAccount = (acc_id) => {
+        this.setState({
+            visible_acc: true,
+            curAccId: acc_id,
+        });
+    };
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible_order: false,
+            visible_acc: false,
+        });
+    };
+
     render() {
         return (
             <div style={{ margin: '5vw' }}>
                 {this.state.currentUser.is_admin ? (
                     <Row align='center'>
-                        
+
                         <Col span={20}>
                             <Title level={2} style={{ textAlign: 'center' }} >Pending orders</Title>
                         </Col>
@@ -104,18 +131,22 @@ class AllOrderScreen extends React.Component {
                                 </Col>
                             </Row>
                             {this.state.orderList.map((item, index) => {
-                                return(
+                                return (
                                     <div>
                                         {item.processed ? null : (
                                             <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }}>
-                                                        <Text>{item.order_id}</Text>
+                                                        <Button type='link' onClick={this.showModalOrder(item.order_id)}>
+                                                            <Text>{item.order_id}</Text>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={8}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.acc_id}</Text>
+                                                        <Button type='link' onClick={this.showModalAccount(item.acc_id)}>
+                                                            <Text>{item.acc_id}</Text>
+                                                        </Button>
                                                     </div>
                                                 </Col>
                                                 <Col span={4}>
@@ -127,7 +158,7 @@ class AllOrderScreen extends React.Component {
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Checkbox defaultChecked={false} onChange={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
-                                                                if(index===i){
+                                                                if (index === i) {
                                                                     return {
                                                                         order_id: item.order_id,
                                                                         acc_id: item.acc_id,
@@ -136,8 +167,8 @@ class AllOrderScreen extends React.Component {
                                                                         processed: true,
                                                                     };
                                                                 }
-                                                                else{
-                                                                return item;
+                                                                else {
+                                                                    return item;
                                                                 }
                                                             });
                                                             console.log(newOrderList)
@@ -166,17 +197,35 @@ class AllOrderScreen extends React.Component {
                                                                     console.log(error);
                                                                 });
                                                             ;
-                                                            }}
+                                                        }}
                                                         >
                                                             <Text style={{ color: "#ff0000" }} >Pending</Text>
                                                         </Checkbox>
                                                     </div>
-                                                </Col>       
-                                            </Row>   
+                                                </Col>
+                                            </Row>
                                         )}
                                     </div>
                                 )
                             })}
+                            <Modal
+                                title="Basic Modal"
+                                visible={this.state.visible_order}
+                                onOk={this.handleOk}
+                            >
+                                <p>{this.state.curOderId}</p>
+                                <p>Some contents...</p>
+                                <p>Some contents...</p>
+                            </Modal>
+                            <Modal
+                                title="Basic Modal"
+                                visible={this.state.visible_acc}
+                                onOk={this.handleOk}
+                            >
+                                <p>{this.state.curAccId}</p>
+                                <p>Some contents...</p>
+                                <p>Some contents...</p>
+                            </Modal>
                         </Col>
 
                         <Col span={20}>
@@ -199,7 +248,7 @@ class AllOrderScreen extends React.Component {
                                 </Col>
                             </Row>
                             {this.state.orderList.map((item, index) => {
-                                return(
+                                return (
                                     <div>
                                         {item.processed ? (
                                             <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
@@ -222,7 +271,7 @@ class AllOrderScreen extends React.Component {
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Checkbox defaultChecked onChange={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
-                                                                if(index===i){
+                                                                if (index === i) {
                                                                     return {
                                                                         order_id: item.order_id,
                                                                         acc_id: item.acc_id,
@@ -231,8 +280,8 @@ class AllOrderScreen extends React.Component {
                                                                         processed: false,
                                                                     };
                                                                 }
-                                                                else{
-                                                                return item;
+                                                                else {
+                                                                    return item;
                                                                 }
                                                             });
                                                             console.log(newOrderList)
@@ -261,20 +310,20 @@ class AllOrderScreen extends React.Component {
                                                                     console.log(error);
                                                                 });
                                                             ;
-                                                            }}
+                                                        }}
                                                         >
                                                             <Text style={{ color: "#00ba10" }} >Complete</Text>
                                                         </Checkbox>
                                                     </div>
-                                                </Col>       
-                                            </Row>   
-                                        ) : null }
+                                                </Col>
+                                            </Row>
+                                        ) : null}
                                     </div>
                                 )
                             })}
                         </Col>
                     </Row>
-                    
+
                 ) : null}
             </div>
         )
