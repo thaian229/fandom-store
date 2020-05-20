@@ -430,55 +430,76 @@ class ProductScreen extends React.Component {
                                 </div>
                             }
                             style={{ width: "100%", borderRadius: "25px 25px 0 0", backgroundColor: "#fcfcfc" }}>
-                            <Text level={4}><EyeOutlined /> Views: {this.state.prod_data.views} Sold: {this.state.prod_data.sold}</Text>
+                            <Text level={4}><EyeOutlined /> Views: {this.state.prod_data.views} <ShoppingCartOutlined /> Sold: {this.state.prod_data.sold}</Text>
                         </Card>
                         <Card
                             style={{
                                 width: "100%", backgroundColor: "#001529", opacity: 0.9, borderRadius: "0 0 25px 25px", border: "none"
                             }}
                         >
-                            {this.state.prod_data.stock ? (
-                                <Form
-                                    layout={'inline'}
-                                    onFinish={this.handleAddToCart}
-                                >
-                                    <Row style={{ width: "100%" }}>
-                                        <Col span={8}>
-                                            <Form.Item >
-                                                <InputNumber
-                                                    style={{
-                                                        marginBottom: "10px"
-                                                    }}
-                                                    placeholder='1'
-                                                    min={1}
-                                                    max={this.state.prod_data.stock}
-                                                    onChange={this.handleQuantityChange}
-                                                    value={this.state.quantity}
-                                                />
-                                                <br />
-                                                <Text level={4} style={{ color: 'white', marginTop: "10px", fontSize: "17px" }}>Stock: {this.state.prod_data.stock}</Text>
-                                            </Form.Item>
-                                        </Col>
-                                        <Col span={16} align="right" style={{ paddingTop: "40px" }}>
-                                            <Text style={{ color: 'white', fontWeight: "bold", fontSize: "17px" }}>TOTAL</Text>
-                                            <br />
-                                            <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}.00</Text>
-                                        </Col>
-                                        <Divider orientation="center" style={{ color: 'white', fontWeight: 'normal', width: "100%" }}></Divider>
-                                        <Col span={24} align="middle">
-                                            <Form.Item style={{ width: "100%" }}>
-                                                <Button
-                                                    htmlType="submit"
-                                                    style={{ color: '#fcfcfc', fontWeight: 'bold', fontSize: "27px", width: "100%", height: "60px", backgroundColor: "#fca541", border: "none", borderRadius: "13px" }}
-                                                >
-                                                    <ShoppingCartOutlined />Add To Cart
-                                            </Button>
+                            {this.state.currentUser.is_admin ? (
+                                <Row style={{ width: "100%" }}>
+                                    <Col span={24} align="middle" style={{ paddingTop: "41px" }}>
+                                        {
+                                            this.state.prod_data.stock ? (
+                                                <Text style={{ color: 'white', fontWeight: "bold", fontSize: "30px" }}>TOTAL EARNED</Text>
+                                            ) : (
+                                                    <Text style={{ color: 'white', fontWeight: "bold", fontSize: "30px", color: "orange" }}>OUT OF STOCK</Text>
+                                                )
+                                        }
 
-                                            </Form.Item>
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            ) : (<Text style={{ color: "white" }}>OUT OF STOCK</Text>)}
+                                    </Col>
+                                    <Col span={24} align="middle" style={{ paddingBottom: "42px" }}>
+                                        <Text style={{ color: '#3ac943', fontSize: "70px" }}>$ {this.state.prod_data.price * this.state.prod_data.sold}.00</Text>
+                                    </Col>
+                                </Row>
+                            ) : (
+
+                                    this.state.prod_data.stock ? (
+                                        <Form
+                                            layout={'inline'}
+                                            onFinish={this.handleAddToCart}
+                                        >
+                                            <Row style={{ width: "100%" }}>
+                                                <Col span={8}>
+                                                    <Form.Item >
+                                                        <InputNumber
+                                                            style={{
+                                                                marginBottom: "10px"
+                                                            }}
+                                                            placeholder='1'
+                                                            min={1}
+                                                            max={this.state.prod_data.stock}
+                                                            onChange={this.handleQuantityChange}
+                                                            value={this.state.quantity}
+                                                        />
+                                                        <br />
+                                                        <Text level={4} style={{ color: 'white', marginTop: "10px", fontSize: "17px" }}>Stock: {this.state.prod_data.stock}</Text>
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={16} align="right" style={{ paddingTop: "40px" }}>
+                                                    <Text style={{ color: 'white', fontWeight: "bold", fontSize: "17px" }}>TOTAL</Text>
+                                                    <br />
+                                                    <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}.00</Text>
+                                                </Col>
+                                                <Divider orientation="center" style={{ color: 'white', fontWeight: 'normal', width: "100%" }}></Divider>
+                                                <Col span={24} align="middle">
+                                                    <Form.Item style={{ width: "100%" }}>
+                                                        <Button
+                                                            htmlType="submit"
+                                                            style={{ color: '#fcfcfc', fontWeight: 'bold', fontSize: "27px", width: "100%", height: "60px", backgroundColor: "#fca541", border: "none", borderRadius: "13px" }}
+                                                        >
+                                                            <ShoppingCartOutlined />Add To Cart
+                                                            </Button>
+
+                                                    </Form.Item>
+                                                </Col>
+                                            </Row>
+                                        </Form>
+                                    ) : (<Text style={{ color: "white" }}>OUT OF STOCK</Text>)
+
+                                )}
+
 
                         </Card>
                         {this.state.errMessage ? (
@@ -652,7 +673,7 @@ class ProductScreen extends React.Component {
                             />
                         ) : null}
                     </Col>
-                    <Col span={23} style={{marginBottom: "30px"}}>
+                    <Col span={23} style={{ marginBottom: "30px" }}>
                         <Divider orientation="center" style={{ color: '#333', fontWeight: 'normal' }}></Divider>
                         <Text style={{ fontSize: "20px" }}>Related Products</Text>
                     </Col>

@@ -1,11 +1,12 @@
 .info{
     display: block;
-    margin-left: 330px;
-    width: auto;
+    margin-left: 350px;
+    width: 500px;
 }
 
 .fullName{
     font-size: 40px;
+    color: aliceblue
 }
 
 .address{
@@ -14,7 +15,6 @@
 }
 
 .changeAddress{
-    
     display: inline-block;
 }
 
@@ -50,39 +50,48 @@
     margin-top: 1vh;
     margin-bottom: 1vh;
     font-size: 16px;
+    color: white;
+
 }
 
 .phone-box{
     margin-top: 1vh;
     margin-bottom: 1vh;
     font-size: 16px;
+    color: white;
+
 }
 
 .dob-box{
     margin-top: 1vh;
     margin-bottom: 1vh;
     font-size: 16px;
+    color: white;
+
 }
 
 .email{
-    
     width: 50vh;
     display: inline-block;
     margin-top: 3vh;
     margin-bottom: 1vh;
     font-size: 16px;
+    color: white;
 }
 
 .profile{   
-    padding: 2vh;
+    padding: 2vh;  
+    margin-top: 20vh;
+    margin-left: auto;
+    margin-right: auto;  
 }
-
+/* 
 .pageProfile{
     background-size: cover;
     background-repeat: no-repeat;
     height: calc(100vh - 65px);
     padding: 10vh
-}
+} */
 
 .updateButon {
     margin-top: 2vh;

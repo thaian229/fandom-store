@@ -29,22 +29,22 @@ class NavBar extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-                fetch("http://localhost:3001/api/users/checkAdmin", {
-                    credentials: "include",
-                    method: "GET"
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
                 })
-                    .then(res => {
-                        return res.json();
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
+                        }
                     })
-                    .then(data => {
-                        this.setState({
-                            currentUser: {
-                                ...this.state.currentUser,
-                                is_admin: data.data.is_admin
-                            }
-                        })
-                    })
-            } 
+                })
+        }
     }
 
     componentWillMount() {
@@ -124,7 +124,7 @@ class NavBar extends React.Component {
 
     render() {
         return (
-            <Header style={{zIndex: 1, width: '100%', paddingLeft: "2vw", paddingRight: "2vw", height: "70px"}}>
+            <Header style={{ zIndex: 1, width: '100%', paddingLeft: "2vw", paddingRight: "2vw", height: "70px" }}>
                 <Row align="middle">
                     <Col span={4}>
                         <a className="logo" href="http://localhost:3000" />
@@ -149,19 +149,21 @@ class NavBar extends React.Component {
                     </Col>
                     {this.state.currentUser.id ? (
                         <Col span={6} align="right">
-                            <Badge dot={this.state.itemsInCart} style={{ marginTop: "4px" }}>
-                                <Button
-                                    onClick={event => {
-                                        this.handleCartClick()
-                                    }}
-                                    ghost={true}
-                                    type="link"
-                                    icon={
-                                        <img src={ShoppingCart} style={{ width: "80%", opacity: 0.9, marginBottom: "2px" }} />
-                                    }
-                                    size={'medium'}
-                                />
-                            </Badge>
+                            {!this.state.currentUser.is_admin ? (
+                                <Badge dot={this.state.itemsInCart} style={{ marginTop: "4px" }}>
+                                    <Button
+                                        onClick={event => {
+                                            this.handleCartClick()
+                                        }}
+                                        ghost={true}
+                                        type="link"
+                                        icon={
+                                            <img src={ShoppingCart} style={{ width: "80%", opacity: 0.9, marginBottom: "2px" }} />
+                                        }
+                                        size={'medium'}
+                                    />
+                                </Badge>
+                            ) : null}
                             <Dropdown
                                 style={{ marginLeft: "2vw", position: 'fixed' }}
                                 overlay={
@@ -170,26 +172,27 @@ class NavBar extends React.Component {
                                         padding: "10px",
                                         borderRadius: "10px"
                                     }}>
-                                        <Menu.Item
-                                            align="right"
-                                            style={{
-                                                borderRadius: "10px"
-                                            }}>
-                                            <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleHistory()}>
-                                                Order History
-                                            </a>
-                                        </Menu.Item>
                                         {this.state.currentUser.is_admin ? (
                                             <Menu.Item
-                                            align="right"
-                                            style={{
-                                                borderRadius: "10px"
-                                            }}>
-                                            <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
-                                                All Orders
-                                            </a>
-                                        </Menu.Item>
-                                        ) : null}
+                                                align="right"
+                                                style={{
+                                                    borderRadius: "10px"
+                                                }}>
+                                                <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
+                                                    All Orders
+                                                </a>
+                                            </Menu.Item>
+                                        ) : (
+                                                <Menu.Item
+                                                    align="right"
+                                                    style={{
+                                                        borderRadius: "10px"
+                                                    }}>
+                                                    <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleHistory()}>
+                                                        Order History
+                                                    </a>
+                                                </Menu.Item>
+                                            )}
                                         <Menu.Item
                                             align="right"
                                             style={{
