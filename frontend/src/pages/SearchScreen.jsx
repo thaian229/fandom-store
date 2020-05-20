@@ -180,7 +180,11 @@ class SearchScreen extends React.Component {
         }
     }
 
-
+    componentWillUnmount() {
+        this.setState({
+            data: []
+        })
+    }
 
     render() {
         return (
