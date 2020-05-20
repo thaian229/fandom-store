@@ -42,7 +42,8 @@
     height: 300px;
     width: 300px;
     float: left;
-    border: solid;
+    /* border: solid; */
+    background-repeat: no-repeat;
 }
 
 .address-box{

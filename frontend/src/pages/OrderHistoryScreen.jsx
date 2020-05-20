@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Typography, Button, Divider, Empty, Result, notification, Collapse } from "antd";
+import { Row, Col, Typography, Button, Divider, Empty, Result, notification, Collapse, Avatar } from "antd";
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 
@@ -15,7 +15,7 @@ class OrderHistoryScreen extends React.Component {
         emptyHistory: false,
     }
 
-    
+
     adminCheck = () => {
         if (this.state.currentUser.email) {
             fetch("http://localhost:3001/api/users/checkAdmin", {
@@ -93,11 +93,14 @@ class OrderHistoryScreen extends React.Component {
                     <Col span={4}></Col>
                     <Col span={16}>
                         <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
-                            <Col span={14}>
+                            <Col span={10}>
                                 <Title level={4} style={{ textAlign: 'center' }} > OrderID </Title>
                             </Col>
                             <Col span={10}>
                                 <Title level={4} style={{ textAlign: 'center' }} > Created At </Title>
+                            </Col>
+                            <Col span={4}>
+                                <Title level={4} style={{ textAlign: 'center' }} > Status </Title>
                             </Col>
                         </Row>
                         {(this.state.emptyHistory) ? (
@@ -113,7 +116,7 @@ class OrderHistoryScreen extends React.Component {
                             return (
                                 <>
                                     <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
-                                        <Col span={14}>
+                                        <Col span={10}>
                                             <div style={{ textAlign: 'center' }}>
                                                 <Text>{item.order_id}</Text>
                                             </div>
@@ -123,21 +126,27 @@ class OrderHistoryScreen extends React.Component {
                                                 <Text>{item.created_at}</Text>
                                             </div>
                                         </Col>
+                                        <Col span={4}>
+                                            <div style={{ textAlign: 'center' }} >
+                                                <Text>{(item.processed) ? <Text style={{ color: "#00ba10" }} >Done</Text> : <Text style={{ color: "#ff0000" }} >Pending</Text>}</Text>
+                                            </div>
+                                        </Col>
                                         <Col span={24}>
                                             <Collapse>
                                                 <Panel header="See Order Detail" key="1">
                                                     <Row>
+                                                        <Col span={2}></Col>
                                                         <Col span={8}>
                                                             <div style={{ textAlign: 'center' }} >
                                                                 <Text> Product Name </Text>
                                                             </div>
                                                         </Col>
-                                                        <Col span={8}>
+                                                        <Col span={10}>
                                                             <div style={{ textAlign: 'center' }} >
                                                                 <Text> Product ID </Text>
                                                             </div>
                                                         </Col>
-                                                        <Col span={8}>
+                                                        <Col span={4}>
                                                             <div style={{ textAlign: 'center' }} >
                                                                 <Text> Quantity </Text>
                                                             </div>
@@ -145,6 +154,9 @@ class OrderHistoryScreen extends React.Component {
                                                         {item.order_detail.map((element) => {
                                                             return (
                                                                 <>
+                                                                    <Col span={2}>
+                                                                        <Avatar shape="square" src={element.image_url[0]} size={"100%"} />
+                                                                    </Col>
                                                                     <Col span={8}>
                                                                         <div style={{ textAlign: 'center' }} >
                                                                             <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
@@ -152,12 +164,12 @@ class OrderHistoryScreen extends React.Component {
                                                                             </a>
                                                                         </div>
                                                                     </Col>
-                                                                    <Col span={8}>
+                                                                    <Col span={10}>
                                                                         <div style={{ textAlign: 'center' }} >
                                                                             <Text>{element.prod_id}</Text>
                                                                         </div>
                                                                     </Col>
-                                                                    <Col span={8}>
+                                                                    <Col span={4}>
                                                                         <div style={{ textAlign: 'center' }} >
                                                                             <Text>{element.quantity}</Text>
                                                                         </div>
