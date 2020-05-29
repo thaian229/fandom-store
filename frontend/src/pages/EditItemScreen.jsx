@@ -75,6 +75,7 @@ class EditItemScreen extends React.Component {
         previewImageT: '',
         previewTitleT: '',
         finalImgUrls: [],
+        submitLoading: false,
     }
 
     adminCheck = () => {
@@ -380,6 +381,9 @@ class EditItemScreen extends React.Component {
     }
 
     onFinish = () => {
+        this.setState({
+            submitLoading: true
+        })
         this.getImageUrlsAndUpdate();
     }
 
@@ -485,7 +489,7 @@ class EditItemScreen extends React.Component {
                                     <Input.TextArea style={{ maxWidth: "700px" }} onChange={this.handleDescriptionChange} />
                                 </Form.Item>
                                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-                                    <Button type="primary" htmlType="submit">
+                                    <Button type="primary" htmlType="submit" loading={this.state.submitLoading}>
                                         Submit
                                     </Button>
                                 </Form.Item>

@@ -13,6 +13,11 @@ const { SubMenu } = Menu;
 
 class NavBar extends React.Component {
 
+    state = {
+        loading: false,
+        searchValue: "",
+        itemsInCart: false,
+    }
 
     state = {
         loading: false,
@@ -52,6 +57,7 @@ class NavBar extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.state)
         const searchBox = document.querySelector(".ant-layout-header .ant-input");
         searchBox.style.backgroundColor = "#001529";
         searchBox.style.color = "#d9d9d9";

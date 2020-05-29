@@ -7,7 +7,6 @@ const { Meta } = Card;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 
-
 class HomeScreen extends React.Component {
 
     state = {
@@ -48,6 +47,9 @@ class HomeScreen extends React.Component {
 
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     window.addEventListener('scroll', this.handleScroll);
+        // }, false);
         window.addEventListener('scroll', this.handleScroll);
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
@@ -63,6 +65,8 @@ class HomeScreen extends React.Component {
         for (let i = 0; i < divs3.length; i++) {
             divs3[i].style.height = "18vw"
         }
+
+        console.log(this.state)
     }
 
     handleClick = e => {
@@ -70,6 +74,7 @@ class HomeScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
+        console.log(pageNumber);
         fetch(`http://localhost:3001/api/posts/getPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}`, {
             credentials: "include",
             method: "GET"

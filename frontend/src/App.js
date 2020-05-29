@@ -14,6 +14,7 @@ import ProductScreen from './pages/ProductScreen';
 import OrderHistoryScreen from './pages/OrderHistoryScreen';
 import AllOrderScreen from './pages/AllOrderScreen';
 import NavBar from './pages/NavBar';
+import NotFound from './pages/NotFound';    
 import './App.css';
 import CategoryScreen from './pages/CategoryScreen';
 import SearchScreen from './pages/SearchScreen';
@@ -26,12 +27,19 @@ class App extends React.Component {
         return (
             <div>
                 <Layout style={{ backgroundColor: "black" }}>
-                        <Router>
-                            <Route path='/' component={NavBar} />
-                        </Router>
+                    <Router>
+                        <Route
+                            path='/'
+                            component={NavBar}
+                        />
+                    </Router>
                 </Layout>
                 <Router>
-                    <Route path='/' exact={true} component={HomeScreen} />
+                    <Route
+                        path='/'
+                        exact={true}
+                        component={HomeScreen}
+                    />
                     <Route path='/category/:tag' component={CategoryScreen} />
                     <Route path='/product/:prod_id' component={ProductScreen} />
                     <Route path='/cart' component={CartScreen} />
@@ -42,9 +50,10 @@ class App extends React.Component {
                     <Route path='/edit/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
                     <Route path='/allorders' component={AllOrderScreen} />
-                    <Route path='/search/:keyword' component={SearchScreen}/>
+                    <Route path='/search/:keyword' component={SearchScreen} />
+                    {/* <Route path='/' exact component={NotFound} /> */}
                 </Router>
-            </div >
+            </div>
         );
     };
 }

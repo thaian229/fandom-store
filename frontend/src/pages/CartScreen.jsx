@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Typography, Button, Divider, Empty, Result, notification } from "antd";
+import { Row, Col, Typography, Button, Divider, Empty, Result, notification, Avatar } from "antd";
 const { Title } = Typography;
 
 const openSuccessRemoveNotification = (type) => {
@@ -67,7 +67,7 @@ class CartScreen extends React.Component {
                         cart_id: data.cart_id,
                         cart_items: data.data,
                     })
-
+                    console.log(data.data);
                     let cnt = 0
                     let total = 0
 
@@ -172,7 +172,9 @@ class CartScreen extends React.Component {
 
     render() {
         return (
-            <div style={{ marginTop: '100px' }}>
+            <div style={{
+                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)", minHeight: '100vh'
+            }}>
                 {this.state.placedOrderSuccess ? (
                     <Result
                         status="success"
@@ -193,23 +195,28 @@ class CartScreen extends React.Component {
                             </Col>
                             <Col span={5}></Col>
                             <Col span={14}>
-                                <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
-                                    <Col span={6}>
+                                <Row
+                                    align="middle"
+                                    style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', height: "50px", paddingTop: '5px' }}>
+                                    <Col span={5}>
+                                        <Title level={4} style={{ textAlign: 'center' }} > </Title>
+                                    </Col>
+                                    <Col span={8}>
                                         <Title level={4} style={{ textAlign: 'center' }} > Product Name </Title>
                                     </Col>
-                                    <Col span={6}>
+                                    <Col span={3}>
                                         <Title level={4} style={{ textAlign: 'center' }} > Quantity </Title>
                                     </Col>
-                                    <Col span={6}>
+                                    <Col span={4}>
                                         <Title level={4} style={{ textAlign: 'center' }} > Price </Title>
                                     </Col>
-                                    <Col span={6} style={{ paddingRight: '10px' }}>
-                                        <Title level={4} style={{ textAlign: 'right' }} > Option </Title>
+                                    <Col span={4} style={{}}>
+                                        <Title level={4} style={{ textAlign: 'center' }} > </Title>
                                     </Col>
                                 </Row>
                                 {(this.state.numItem === 0) ? (
                                     (
-                                        <div style={{ marginTop: '25px' }}>
+                                        <div style={{ marginTop: '25px', backgroundColor: '#fdfdfd' }}>
                                             <Empty description='Your Cart Is Empty'>
                                                 <Button type="primary" onClick={() => window.location.pathname = `/`}>Browse Products</Button>
                                             </Empty>
@@ -218,35 +225,42 @@ class CartScreen extends React.Component {
                                 ) : null}
                                 {this.state.cart_items.map((item) => {
                                     return (
-                                        <>
-                                            <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
-                                                <Col span={6}>
-                                                    <Title level={4} style={{ textAlign: 'center' }} ><a onClick={(event) => { this.handleProductClick(item.prod_id) }}>{item.prod_name}</a> </Title>
-                                                </Col>
-                                                <Col span={6}>
-                                                    <Title level={4} style={{ textAlign: 'center' }} >{item.quantity}</Title>
-                                                </Col>
-                                                <Col span={6}>
-                                                    <Title level={4} style={{ textAlign: 'center', color: 'green' }} >${item.price}</Title>
-                                                </Col>
-                                                <Col span={6}>
-                                                    <Button danger onClick={(event) => { this.handleRemoveItem(item.id) }} style={{ float: 'right' }}>Remove</Button>
-                                                </Col>
-                                            </Row>
-                                        </>
+
+                                        <Row align="middle" style={{ borderWidth: "2px", borderStyle: "solid", borderColor: '#f2f2f2', backgroundColor: '#fdfdfd' }}>
+                                            <Col span={5} align="center">
+                                                <Avatar shape="square" style={{ width: "100%", paddingLeft: "5px" }} src={item.image_url[0]} size={100} />
+                                            </Col>
+                                            <Col span={8}>
+                                                <Title level={4} style={{ textAlign: 'center' }} ><a onClick={(event) => { this.handleProductClick(item.prod_id) }}>{item.prod_name}</a> </Title>
+                                            </Col>
+                                            <Col span={3}>
+                                                <Title level={4} style={{ textAlign: 'center' }} >{item.quantity}</Title>
+                                            </Col>
+                                            <Col span={4}>
+                                                <Title level={4} style={{ textAlign: 'center', color: 'green' }} >${item.price}</Title>
+                                            </Col>
+                                            <Col span={4} align="center">
+                                                <Button danger ghost onClick={(event) => { this.handleRemoveItem(item.id) }}>Remove</Button>
+                                            </Col>
+                                        </Row>
                                     )
                                 })}
-                                <Divider></Divider>
-                                {(this.state.numItem === 0) ? null : (
-                                    <>
-                                        <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
-                                        <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
-                                    </>
-                                )}
+                                <Row
+                                    justify="right"
+                                    style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', paddingTop: '5px' }}>
+                                        {(this.state.numItem === 0) ? null : (
+                                            <Col>
+                                                <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
+                                                <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
+                                            </Col>
+                                        )}
+                
+                                </Row>
                             </Col>
                             <Col span={5}></Col>
                         </Row>
-                    )}
+                    )
+                }
             </div>
         )
     }
