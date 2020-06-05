@@ -7,8 +7,8 @@ const { Title, Text } = Typography;
 class AllOrderScreen extends React.Component {
     state = {
         currentUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
             is_admin: false
         },
         orderList: [],
@@ -133,10 +133,10 @@ class AllOrderScreen extends React.Component {
 
     render() {
 
-
-
         return (
-            <div style={{ margin: '5vw' }}>
+            <div style={{
+                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)", minHeight: '100vh'
+            }}>
                 {this.state.currentUser.is_admin ? (
                     <Row align='center'>
 
@@ -146,7 +146,7 @@ class AllOrderScreen extends React.Component {
 
 
                         <Col span={20}>
-                            <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
+                            <Row style={{ backgroundColor: '#fdfdfd', paddingTop: "9px", borderRadius: "25px 25px 0 0" }}>
                                 <Col span={8}>
                                     <Title level={4} style={{ textAlign: 'center' }} > Order ID </Title>
                                 </Col>
@@ -164,8 +164,8 @@ class AllOrderScreen extends React.Component {
                                 return (
                                     <div>
                                         {item.processed ? null : (
-                                            <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
-                                                <Col span={8}>
+                                            <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", backgroundColor: '#fdfdfd', height: "50px" }}>
+                                                <Col span={8} style={{ paddingTop: "7px" }}>
                                                     <div style={{ textAlign: 'center' }}>
                                                         <Button type='link'
                                                             onClick={event => this.showModalOrder(item.order_id)}
@@ -174,7 +174,7 @@ class AllOrderScreen extends React.Component {
                                                         </Button>
                                                     </div>
                                                 </Col>
-                                                <Col span={8}>
+                                                <Col span={8} style={{ paddingTop: "7px" }}>
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Button type='link'
                                                             onClick={event => this.showModalAccount(item.acc_id)}
@@ -183,12 +183,12 @@ class AllOrderScreen extends React.Component {
                                                         </Button>
                                                     </div>
                                                 </Col>
-                                                <Col span={4}>
+                                                <Col span={4} style={{ paddingTop: "14px" }}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.created_at.split('T')[0]}</Text>
+                                                        <Text>{item.created_at.split('T')[0] + " " + item.created_at.split('T')[1].split('.')[0]}</Text>
                                                     </div>
                                                 </Col>
-                                                <Col span={4}>
+                                                <Col span={4} style={{ paddingTop: "7px" }}>
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Button ghost style={{ width: '100px' }} onClick={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
@@ -255,33 +255,35 @@ class AllOrderScreen extends React.Component {
                             >
                                 {this.state.orderItems.map((element, index) => {
                                     return (
-                                        <Row>
-                                            <Col span={4}></Col>
-                                            <Col span={12}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text> Product Name </Text>
-                                                </div>
+                                        <Row align="center" style={{ marginBottom: "25px", marginTop: "25px" }}>
+                                            <Col span={6}>
+                                                <Avatar shape="square" src={element.image_url[0]} size={100} />
                                             </Col>
-                                            <Col span={8}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text> Quantity </Text>
-                                                </div>
-                                            </Col>
-
-                                            <Col span={4}>
-                                                <Avatar shape="square" src={element.image_url[0]} size={"100%"} />
-                                            </Col>
-                                            <Col span={12} align="middle">
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
-                                                        <Text style={{ color: 'blue' }}>{element.prod_name}</Text>
-                                                    </a>
-                                                </div>
-                                            </Col>
-                                            <Col span={8}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text>{element.quantity}</Text>
-                                                </div>
+                                            <Col span={18}>
+                                                <Row style={{ paddingTop: "25px" }}>
+                                                    <Col span={16}>
+                                                        <div style={{ textAlign: 'center' }} >
+                                                            <Text> Product Name </Text>
+                                                        </div>
+                                                    </Col>
+                                                    <Col span={8}>
+                                                        <div style={{ textAlign: 'center' }} >
+                                                            <Text> Quantity </Text>
+                                                        </div>
+                                                    </Col>
+                                                    <Col span={16} align="middle">
+                                                        <div style={{ textAlign: 'center' }} >
+                                                            <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
+                                                                <Text style={{ color: 'blue' }}>{element.prod_name}</Text>
+                                                            </a>
+                                                        </div>
+                                                    </Col>
+                                                    <Col span={8}>
+                                                        <div style={{ textAlign: 'center' }} >
+                                                            <Text>{element.quantity}</Text>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
                                             </Col>
                                         </Row>
                                     )
@@ -321,31 +323,13 @@ class AllOrderScreen extends React.Component {
                             </Modal>
                         </Col>
 
-                        {/* <Col span={20}>
-                            <Title level={2} style={{ textAlign: 'center' }} >Finish orders</Title>
-                        </Col> */}
-
                         <Col span={20}>
-                            {/* <Row style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#E6EFFF' }}>
-                                <Col span={8}>
-                                    <Title level={4} style={{ textAlign: 'center' }} > Order ID </Title>
-                                </Col>
-                                <Col span={8}>
-                                    <Title level={4} style={{ textAlign: 'center' }}> User ID</Title>
-                                </Col>
-                                <Col span={4}>
-                                    <Title level={4} style={{ textAlign: 'center' }} > Created At </Title>
-                                </Col>
-                                <Col span={4}>
-                                    <Title level={4} style={{ textAlign: 'center' }} >  </Title>
-                                </Col>
-                            </Row> */}
                             {this.state.orderList.map((item, index) => {
                                 return (
                                     <div>
                                         {item.processed ? (
-                                            <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2" }}>
-                                                <Col span={8}>
+                                            <Row key={item.order_id} style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", backgroundColor: '#fdfdfd', height: '50px' }}>
+                                                <Col span={8} style={{ paddingTop: "9px" }}>
                                                     <div style={{ textAlign: 'center' }}>
                                                         <Button type='link'
                                                             onClick={event => this.showModalOrder(item.order_id)}
@@ -354,7 +338,7 @@ class AllOrderScreen extends React.Component {
                                                         </Button>
                                                     </div>
                                                 </Col>
-                                                <Col span={8}>
+                                                <Col span={8} style={{ paddingTop: "9px" }}>
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Button type='link'
                                                             onClick={event => this.showModalAccount(item.acc_id)}
@@ -363,12 +347,12 @@ class AllOrderScreen extends React.Component {
                                                         </Button>
                                                     </div>
                                                 </Col>
-                                                <Col span={4}>
+                                                <Col span={4} style={{ paddingTop: "14px" }}>
                                                     <div style={{ textAlign: 'center' }} >
-                                                        <Text>{item.created_at.split('T')[0]}</Text>
+                                                        <Text>{item.created_at.split('T')[0] + " " + item.created_at.split('T')[1].split('.')[0]}</Text>
                                                     </div>
                                                 </Col>
-                                                <Col span={4}>
+                                                <Col span={4} style={{ paddingTop: "9px" }}>
                                                     <div style={{ textAlign: 'center' }} >
                                                         <Button ghost style={{ width: '100px' }} onClick={(event) => {
                                                             const newOrderList = this.state.orderList.map((item, i) => {
@@ -417,92 +401,23 @@ class AllOrderScreen extends React.Component {
                                                         </Button>
                                                     </div>
                                                 </Col>
+
                                             </Row>
+
                                         ) : null}
                                     </div>
                                 )
                             })}
-                            <Modal
-                                title="Order Info"
-                                visible={this.state.visible_order}
-                                onOk={this.handleOk}
-                                onCancel={this.handleOk}
-                                footer={[
-                                    <Button key="submit" type="primary" onClick={this.handleOk}>
-                                        Ok
-                                    </Button>
-                                ]}
-                            >
-                                {this.state.orderItems.map((element, index) => {
-                                    return (
-                                        <Row>
-                                            <Col span={4}></Col>
-                                            <Col span={12}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text> Product Name </Text>
-                                                </div>
-                                            </Col>
-                                            <Col span={8}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text> Quantity </Text>
-                                                </div>
-                                            </Col>
-
-                                            <Col span={4}>
-                                                <Avatar shape="square" src={element.image_url[0]} size={"100%"} />
-                                            </Col>
-                                            <Col span={12} align="middle">
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <a onClick={() => window.location.pathname = `/product/${element.prod_id}`}>
-                                                        <Text style={{ color: 'blue' }}>{element.prod_name}</Text>
-                                                    </a>
-                                                </div>
-                                            </Col>
-                                            <Col span={8}>
-                                                <div style={{ textAlign: 'center' }} >
-                                                    <Text>{element.quantity}</Text>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    )
-                                })}
-                            </Modal>
-
-                            <Modal
-                                title="User Info"
-                                visible={this.state.visible_acc}
-                                onOk={this.handleOk}
-                                onCancel={this.handleOk}
-                                footer={[
-                                    <Button key="submit" type="primary" onClick={this.handleOk}>
-                                        Ok
-                                    </Button>
-                                ]}
-                            >
-                                <Row>
-                                    <Col span={6} style={{ align: 'center' }}>
-                                        <Avatar shape="circle" size={100} src={this.state.ava_url} />
-                                    </Col>
-                                    <Col span={18}>
-                                        <div>
-                                            <Text>Full Name: {this.state.fullname}</Text>
-                                        </div>
-                                        <div>
-                                            <Text>Email: {this.state.email}</Text>
-                                        </div>
-                                        <div>
-                                            <Text>Address: {this.state.address}</Text>
-                                        </div>
-                                        <div>
-                                            <Text>Phone Number: {this.state.tel_num}</Text>
-                                        </div>
-                                    </Col>
-                                </Row>
-                            </Modal>
                         </Col>
+
                     </Row>
 
                 ) : null}
+                <Row align="center">
+                    <Col span={20} style={{ backgroundColor: '#fdfdfd', paddingTop: "9px", borderRadius: "0 0 25px 25px ", height: '30px' }}>
+
+                    </Col>
+                </Row>
             </div>
         )
     }

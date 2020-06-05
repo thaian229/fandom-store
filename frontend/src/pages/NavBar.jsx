@@ -13,16 +13,21 @@ const { SubMenu } = Menu;
 
 class NavBar extends React.Component {
 
+    state = {
+        loading: false,
+        searchValue: "",
+        itemsInCart: false,
+    }
 
     state = {
         loading: false,
         searchValue: "",
         currentUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
             is_admin: false,
-            ava_url: window.sessionStorage.getItem("ava_url"),
-            full_name: window.sessionStorage.getItem("full_name")
+            ava_url: window.localStorage.getItem("ava_url"),
+            full_name: window.localStorage.getItem("full_name")
         },
         itemsInCart: false,
     }
@@ -52,6 +57,7 @@ class NavBar extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.state)
         const searchBox = document.querySelector(".ant-layout-header .ant-input");
         searchBox.style.backgroundColor = "#001529";
         searchBox.style.color = "#d9d9d9";
@@ -93,7 +99,7 @@ class NavBar extends React.Component {
             })
             .then(data => {
                 console.log(data.message)
-                window.sessionStorage.clear();
+                window.localStorage.clear();
                 window.localStorage.clear();
                 window.location.pathname = '/'
             })

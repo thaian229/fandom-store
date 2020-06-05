@@ -35,111 +35,112 @@ const children = [];
     children.push(<Option key="J-Game">J-Game</Option>);
 }
 const layout = {
-                labelCol: {span: 6 },
-    wrapperCol: {span: 18 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
 };
 
 const validateMessages = {
-                required: '${label} is required!',
+    required: '${label} is required!',
     types: {
-                number: '${label} is not valid!',
+        number: '${label} is not valid!',
     },
     number: {
-                range: '${label} must be between ${min} and ${max}',
+        range: '${label} must be between ${min} and ${max}',
     }
 }
 
 class AddItemScreen extends React.Component {
-                state = {
-                    currentUser: {
-                        email: window.sessionStorage.getItem("email"),
-                        id: window.sessionStorage.getItem("id"),
-                        is_admin: false
-                    },
-                    data: {
-                        prod_name: '',
-                        price: 0,
-                        image_url: [],
-                        description: '',
-                        stock: 0,
-                        tags: ''
-                    },
-                    previewVisible: false,
-                    previewImage: '',
-                    previewTitle: '',
-                    fileList: [],
-                    thumbnail: [],
-                    previewVisibleT: false,
-                    previewImageT: '',
-                    previewTitleT: '',
-                    finalImgUrls: [],
-                }
+    state = {
+        currentUser: {
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
+            is_admin: false
+        },
+        data: {
+            prod_name: '',
+            price: 0,
+            image_url: [],
+            description: '',
+            stock: 0,
+            tags: ''
+        },
+        previewVisible: false,
+        previewImage: '',
+        previewTitle: '',
+        fileList: [],
+        thumbnail: [],
+        previewVisibleT: false,
+        previewImageT: '',
+        previewTitleT: '',
+        finalImgUrls: [],
+        submitLoading: false,
+    }
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-                fetch("http://localhost:3001/api/users/checkAdmin", {
-                    credentials: "include",
-                    method: "GET"
+            fetch("http://localhost:3001/api/users/checkAdmin", {
+                credentials: "include",
+                method: "GET"
+            })
+                .then(res => {
+                    return res.json();
                 })
-                    .then(res => {
-                        return res.json();
-                    })
-                    .then(data => {
-                        this.setState({
-                            currentUser: {
-                                ...this.state.currentUser,
-                                is_admin: data.data.is_admin
-                            }
-                        })
-                        if (!data.data.is_admin) {
-                            window.location.pathname = "/"
+                .then(data => {
+                    this.setState({
+                        currentUser: {
+                            ...this.state.currentUser,
+                            is_admin: data.data.is_admin
                         }
                     })
-            } else {
-                window.location.pathname = "/login"
-            }
+                    if (!data.data.is_admin) {
+                        window.location.pathname = "/"
+                    }
+                })
+        } else {
+            window.location.pathname = "/login"
+        }
     }
 
     componentWillMount() {
-                this.adminCheck()
-            }
+        this.adminCheck()
+    }
 
-    handleCancelImg = () => this.setState({previewVisible: false });
+    handleCancelImg = () => this.setState({ previewVisible: false });
 
     handlePreviewImg = async file => {
         if (!file.url && !file.preview) {
-                file.preview = await getBase64(file.originFileObj);
+            file.preview = await getBase64(file.originFileObj);
         }
 
         this.setState({
-                previewImage: file.url || file.preview,
+            previewImage: file.url || file.preview,
             previewVisible: true,
             previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
         });
     };
 
-    handleChangeImg = ({fileList}) => {this.setState({ fileList }); console.log(this.state.fileList) }
+    handleChangeImg = ({ fileList }) => { this.setState({ fileList }); console.log(this.state.fileList) }
 
-    handleCancelImgT = () => this.setState({previewVisibleT: false });
+    handleCancelImgT = () => this.setState({ previewVisibleT: false });
 
     handlePreviewImgT = async file => {
         if (!file.url && !file.preview) {
-                file.preview = await getBase64(file.originFileObj);
+            file.preview = await getBase64(file.originFileObj);
         }
 
         this.setState({
-                previewImageT: file.url || file.preview,
+            previewImageT: file.url || file.preview,
             previewVisibleT: true,
             previewTitleT: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
         });
     };
 
-    handleChangeImgT = ({fileList}) => this.setState({thumbnail: fileList });
+    handleChangeImgT = ({ fileList }) => this.setState({ thumbnail: fileList });
 
     itemCreate = () => {
-                console.log(this.state)
+        console.log(this.state)
         fetch(`http://localhost:3001/api/posts/addItem`, {
-                credentials: "include",
+            credentials: "include",
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -163,26 +164,26 @@ class AddItemScreen extends React.Component {
             })
             .catch(err => {
                 if (err) {
-                console.log(err);
+                    console.log(err);
                     window.alert(err.message);
                 }
             });
     }
 
     getImageUrlsAndCreate = (event) => {
-                let formDataProd = new FormData()
+        let formDataProd = new FormData()
         let formDataThumbnail = new FormData()
 
         formDataThumbnail.append('image', this.state.thumbnail[0].originFileObj)
         this.state.fileList.map(item => {
-                formDataProd.append('image', item.originFileObj);
+            formDataProd.append('image', item.originFileObj);
         })
 
         console.log(formDataThumbnail)
         console.log(formDataProd)
 
         fetch(`http://localhost:3001/api/uploads/post/thumbnail`, {
-                credentials: "include",
+            credentials: "include",
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -197,10 +198,10 @@ class AddItemScreen extends React.Component {
                 const finalImgUrls = []
                 finalImgUrls.push(data.imgUrl)
                 fetch(`http://localhost:3001/api/uploads/post/productImg`, {
-                credentials: "include",
+                    credentials: "include",
                     method: "POST",
                     headers: {
-                'Accept': 'application/json',
+                        'Accept': 'application/json',
                     },
                     body: formDataProd,
                 })
@@ -208,28 +209,28 @@ class AddItemScreen extends React.Component {
                         return res2.json();
                     })
                     .then(data2 => {
-                console.log(data2.imgUrls);
+                        console.log(data2.imgUrls);
                         data2.imgUrls.map(item => {
-                finalImgUrls.push(item)
-            })
+                            finalImgUrls.push(item)
+                        })
                         this.setState({
-                data: {
-                ...this.state.data,
-                image_url: finalImgUrls
+                            data: {
+                                ...this.state.data,
+                                image_url: finalImgUrls
                             }
                         })
                         this.itemCreate()
                     })
                     .catch(er => {
                         if (er) {
-                console.log(er);
+                            console.log(er);
                             window.alert(er.message);
                         }
                     });
             })
             .catch(err => {
                 if (err) {
-                console.log(err);
+                    console.log(err);
                     window.alert(err.message);
                 }
             });
@@ -239,19 +240,19 @@ class AddItemScreen extends React.Component {
     }
 
     handleChangeCategories = value => {
-                this.setState({
-                    data: {
-                        ...this.state.data,
-                        tags: value
-                    }
-                });
+        this.setState({
+            data: {
+                ...this.state.data,
+                tags: value
+            }
+        });
         console.log(value)
     };
 
     handleProdNameChange = event => {
-                event.preventDefault()
+        event.preventDefault()
         this.setState({
-                data: {
+            data: {
                 ...this.state.data,
                 prod_name: event.target.value
             }
@@ -259,27 +260,27 @@ class AddItemScreen extends React.Component {
     }
 
     handlePriceChange = value => {
-                this.setState({
-                    data: {
-                        ...this.state.data,
-                        price: value
-                    }
-                });
+        this.setState({
+            data: {
+                ...this.state.data,
+                price: value
+            }
+        });
     }
 
     handleStockChange = value => {
-                this.setState({
-                    data: {
-                        ...this.state.data,
-                        stock: value
-                    }
-                });
+        this.setState({
+            data: {
+                ...this.state.data,
+                stock: value
+            }
+        });
     }
 
     handleDescriptionChange = event => {
-                event.preventDefault()
+        event.preventDefault()
         this.setState({
-                data: {
+            data: {
                 ...this.state.data,
                 description: event.target.value
             }
@@ -287,12 +288,15 @@ class AddItemScreen extends React.Component {
     }
 
     onFinish = () => {
-                this.getImageUrlsAndCreate();
+        this.setState({
+            submitLoading: true
+        })
+        this.getImageUrlsAndCreate();
     }
 
     render() {
 
-        const {previewVisible, previewImage, fileList, previewTitle, thumbnail, previewVisibleT, previewImageT, previewTitleT} = this.state;
+        const { previewVisible, previewImage, fileList, previewTitle, thumbnail, previewVisibleT, previewImageT, previewTitleT } = this.state;
         const uploadButton = (
             <div>
                 <PlusOutlined />
@@ -380,7 +384,7 @@ class AddItemScreen extends React.Component {
                                 <Input.TextArea style={{ maxWidth: "700px" }} onChange={this.handleDescriptionChange} />
                             </Form.Item>
                             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-                                <Button type="primary" htmlType="submit">
+                                <Button type="primary" htmlType="submit" loading={this.state.submitLoading}>
                                     Submit
                             </Button>
                             </Form.Item>

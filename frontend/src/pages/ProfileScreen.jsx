@@ -7,8 +7,8 @@ import '../styles/ProfileScreen.css';
 
 class ProfileScreen extends React.Component {
     state = {
-        id: window.sessionStorage.getItem('id'),
-        email: window.sessionStorage.getItem('email'),
+        id: window.localStorage.getItem('id'),
+        email: window.localStorage.getItem('email'),
         full_name: '',
         password: '',
         tel_num: '',
@@ -195,7 +195,7 @@ class ProfileScreen extends React.Component {
                 } else {
                     // redirect user
                     window.location.href = '/profile';
-                    sessionStorage.setItem('ava_url', this.state.ava_url)
+                    localStorage.setItem('ava_url', this.state.ava_url)
                 }
             })
             .catch((error) => {

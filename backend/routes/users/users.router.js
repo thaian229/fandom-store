@@ -286,7 +286,7 @@ userRouter.get("/cart", async (req, res) => {
         // query and sent data
         try {
             const TEXT = `
-                SELECT ci.id, p.prod_name, ci.prod_id , ci.quantity, p.price
+                SELECT ci.id, p.prod_name, ci.prod_id , ci.quantity, p.price, p.image_url
                 FROM
                     cart_items ci JOIN products p ON (ci.prod_id = p.id)
                 WHERE ci.cart_id = $1::uuid

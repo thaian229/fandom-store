@@ -11,8 +11,8 @@ class SearchScreen extends React.Component {
 
     state = {
         currentUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
             is_admin: false,
         },
         data: [],
@@ -48,7 +48,9 @@ class SearchScreen extends React.Component {
 
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
-        window.addEventListener('scroll', this.handleScroll);
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('scroll', this.handleScroll);
+        }, false);
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
             divs[i].style.height = "18vw"
