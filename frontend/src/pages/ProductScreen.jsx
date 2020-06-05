@@ -64,11 +64,11 @@ const openSuccessAddToCartNotification = type => {
 class ProductScreen extends React.Component {
     state = {
         currentUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
             is_admin: false,
-            ava_url: window.sessionStorage.getItem("ava_url"),
-            full_name: window.sessionStorage.getItem("full_name")
+            ava_url: window.localStorage.getItem("ava_url"),
+            full_name: window.localStorage.getItem("full_name")
         },
         prod_id: undefined,
         prod_data: {

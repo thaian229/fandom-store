@@ -9,10 +9,10 @@ const logo = '../styles/LOGOsquare.png';
 class LoginScreen extends React.Component {
     state = {
         localUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
-            ava_url: window.sessionStorage.getItem("ava_url"),
-            full_name: window.sessionStorage.getItem("full_name"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
+            ava_url: window.localStorage.getItem("ava_url"),
+            full_name: window.localStorage.getItem("full_name"),
         },
         email: "",
         id: "",
@@ -75,10 +75,10 @@ class LoginScreen extends React.Component {
                     });
                 } else {
                     // save current user to session storage
-                    window.sessionStorage.setItem('email', data.data.email);
-                    window.sessionStorage.setItem('id', data.data.id);
-                    window.sessionStorage.setItem('ava_url', data.data.ava_url);
-                    window.sessionStorage.setItem('full_name', data.data.full_name);
+                    window.localStorage.setItem('email', data.data.email);
+                    window.localStorage.setItem('id', data.data.id);
+                    window.localStorage.setItem('ava_url', data.data.ava_url);
+                    window.localStorage.setItem('full_name', data.data.full_name);
                     // redirect user  
                     window.location.href = '/';
                 }

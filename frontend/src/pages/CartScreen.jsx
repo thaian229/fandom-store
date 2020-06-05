@@ -11,8 +11,8 @@ const openSuccessRemoveNotification = (type) => {
 class CartScreen extends React.Component {
     state = {
         currentUser: {
-            email: window.sessionStorage.getItem("email"),
-            id: window.sessionStorage.getItem("id"),
+            email: window.localStorage.getItem("email"),
+            id: window.localStorage.getItem("id"),
             is_admin: "false"
         },
         placedOrderSuccess: false,
