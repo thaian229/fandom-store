@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Layout } from 'antd';
+import { Layout, Statistic } from 'antd';
 import HomeScreen from './pages/HomeScreen';
 import CartScreen from './pages/CartScreen';
 import EditItemScreen from './pages/EditItemScreen';
@@ -14,6 +14,7 @@ import ProductScreen from './pages/ProductScreen';
 import OrderHistoryScreen from './pages/OrderHistoryScreen';
 import AllOrderScreen from './pages/AllOrderScreen';
 import NavBar from './pages/NavBar';
+import Statistics from './pages/Statistics'
 import NotFound from './pages/NotFound';    
 import './App.css';
 import CategoryScreen from './pages/CategoryScreen';
@@ -50,6 +51,7 @@ class App extends React.Component {
                     <Route path='/edit/:prod_id' component={EditItemScreen} />
                     <Route path='/history' component={OrderHistoryScreen} />
                     <Route path='/allorders' component={AllOrderScreen} />
+                    <Route path='/statistic' component={Statistics} />
                     <Route path='/search/:keyword' component={SearchScreen} />
                     {/* <Route path='/' exact component={NotFound} /> */}
                 </Router>

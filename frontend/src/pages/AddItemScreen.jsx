@@ -323,7 +323,7 @@ class AddItemScreen extends React.Component {
                             </Form.Item>
                             <FormItem label="Product Image" name={['product', 'prodImgs']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
                                 <Upload
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    action="http://localhost:3001/api/uploads/post/checkImg"
                                     listType="picture-card"
                                     fileList={fileList}
                                     onPreview={this.handlePreviewImg}
@@ -342,7 +342,7 @@ class AddItemScreen extends React.Component {
                             </Modal>
                             <FormItem label="Thumbnail" name={['product', 'thumbnail']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
                                 <Upload
-                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                    action="http://localhost:3001/api/uploads/post/checkImg"
                                     listType="picture-card"
                                     fileList={thumbnail}
                                     onPreview={this.handlePreviewImgT}

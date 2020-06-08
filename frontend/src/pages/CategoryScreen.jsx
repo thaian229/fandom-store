@@ -196,7 +196,7 @@ class CategoryScreen extends React.Component {
             <div
                 style={{
                     backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)",
-                    padding: "0 4vw 70px 4vw",
+                    padding: "30px 4vw 70px 4vw",
                     minHeight: "100vh"
                 }}>
                 <Row align="top"

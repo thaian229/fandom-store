@@ -135,13 +135,13 @@ class AllOrderScreen extends React.Component {
 
         return (
             <div style={{
-                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)", minHeight: '100vh'
+                backgroundImage: "linear-gradient(to bottom, #001529, #f5dba5)", minHeight: '100vh', paddingTop: "50px"
             }}>
                 {this.state.currentUser.is_admin ? (
                     <Row align='center'>
 
                         <Col span={20}>
-                            <Title level={2} style={{ textAlign: 'center' }} >Customer's orders</Title>
+                            <Title level={2} style={{ textAlign: 'center', color: 'white', marginBottom: "30px" }} >Customer's orders</Title>
                         </Col>
 
 

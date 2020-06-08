@@ -1,7 +1,7 @@
 .info{
     display: block;
-    margin-left: 350px;
-    width: 500px;
+    margin-left: 50px;
+    width: 50vw;
 }
 
 .fullName{
@@ -41,7 +41,6 @@
 .avatar{
     height: 300px;
     width: 300px;
-    float: left;
     /* border: solid; */
     background-repeat: no-repeat;
 }

@@ -450,7 +450,7 @@ class ProductScreen extends React.Component {
 
                                     </Col>
                                     <Col span={24} align="middle" style={{ paddingBottom: "42px" }}>
-                                        <Text style={{ color: '#3ac943', fontSize: "70px" }}>$ {this.state.prod_data.price * this.state.prod_data.sold}.00</Text>
+                                        <Text style={{ color: '#3ac943', fontSize: "70px" }}>$ {this.state.prod_data.total_earned}.00</Text>
                                     </Col>
                                 </Row>
                             ) : (
