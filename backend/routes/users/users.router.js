@@ -574,7 +574,7 @@ userRouter.post("/makeOrder", async (req, res) => {
                 const TEXT_ORDER_TOTAL = `
                     UPDATE orders 
                     SET total_price = (
-                        SELECT SUM(oi.price_at_time)
+                        SELECT SUM(oi.price_at_time * oi.quantity)
                         FROM order_items oi
                         GROUP BY oi.order_id
                         HAVING oi.order_id = $1::uuid)
@@ -589,7 +589,7 @@ userRouter.post("/makeOrder", async (req, res) => {
                 rows.forEach(async (item) => {
                     try {
                         console.log(item)
-                        await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity, item.price * item.quantity]);
+                        await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity, item.price]);
                     } catch (e1) {
                         console.log(e1)
                     }
