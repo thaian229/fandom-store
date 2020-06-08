@@ -158,6 +158,7 @@ postRouter.get("/getPagination", async (req, res) => {
             const TEXT = `
                     SELECT * 
                     FROM products
+                    ORDER BY created_at DESC
                     OFFSET $1
                     LIMIT $2
                 `
@@ -275,6 +276,7 @@ postRouter.get("/searchPagination", async (req, res) => {
                     SELECT * 
                     FROM products
                     WHERE prod_name ILIKE $1::text
+                    ORDER BY created_at DESC
                     OFFSET $2
                     LIMIT $3
                 `
