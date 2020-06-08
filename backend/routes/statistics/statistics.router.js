@@ -136,7 +136,7 @@ statRouter.get(`/getConversionRate`, async (req, res) => {
 statRouter.get(`/getDonut`, async (req, res) => {
 
     const TEXT = `
-        SELECT t1.sum, t1.tags, t2.total
+        SELECT SUM(t1.sum), t1.tags, t2.total
         FROM (
             SELECT SUM(oi.quantity), p.tags
             FROM order_items oi
@@ -148,13 +148,12 @@ statRouter.get(`/getDonut`, async (req, res) => {
         JOIN (
             SELECT SUM(oi.quantity) as total
             FROM order_items oi
-            INNER JOIN products p ON p.id = oi.prod_id
-            ORDER BY SUM(oi.quantity) DESC
         ) t2
         ON 1=1
+        GROUP BY t1.tags, t2.total
     `;
     const TEXTK = `
-        SELECT t1.sum, t1.tags, t2.k_total
+        SELECT SUM(t1.sum), t1.tags, t2.k_total
         FROM (
             SELECT SUM(oi.quantity), p.tags
             FROM order_items oi
@@ -172,9 +171,10 @@ statRouter.get(`/getDonut`, async (req, res) => {
             ORDER BY SUM(oi.quantity) DESC
         ) t2
         ON 1=1
+        GROUP BY t1.tags, t2.k_total
     `
     const TEXTJ = `
-        SELECT t1.sum, t1.tags, t2.j_total
+        SELECT SUM(t1.sum), t1.tags, t2.j_total
         FROM (
             SELECT SUM(oi.quantity), p.tags
             FROM order_items oi
@@ -192,39 +192,21 @@ statRouter.get(`/getDonut`, async (req, res) => {
             ORDER BY SUM(oi.quantity) DESC
         ) t2
         ON 1=1
+        GROUP BY t1.tags, t2.j_total
     `
     try {
         const a = await db.query(TEXT);
         const k = await db.query(TEXTK);
         const j = await db.query(TEXTJ);
-        if (!a.rows[0]) {
-            res.status(404).json({
-                success: false,
-                message: "NO PRODUCT"
-            });
-        }
-        else if (!k.rows[0]) {
-            res.status(404).json({
-                success: false,
-                message: "NO K PRODUCT"
-            });
-        }
-        else if (!j.rows[0]) {
-            res.status(404).json({
-                success: false,
-                message: "NO J PRODUCT"
-            });
-        }
-        else {
-            res.status(201).json({
-                success: true,
-                data: {
-                    a_data: a.rows,
-                    k_data: k.rows,
-                    j_data: j.rows
-                },
-            });
-        }
+        res.status(201).json({
+            success: true,
+            data: {
+                a_data: a.rows,
+                k_data: k.rows,
+                j_data: j.rows
+            },
+        });
+        // }
     }
     catch (error) {
         console.log(error)
