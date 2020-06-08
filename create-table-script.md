@@ -16,17 +16,17 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE products (
-	id uuid DEFAULT uuid_generate_v4 (),
-	prod_name TEXT NOT NULL,
-	price INT NOT NULL,
-	image_url TEXT[] DEFAULT '{}',
-	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	description TEXT,
-	views INT DEFAULT 0,
-	stock INT DEFAULT 100,
-	sold INT DEFAULT 0,
-	tags TEXT,
-	CONSTRAINT products_pkey PRIMARY KEY (id)
+	id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    prod_name text NOT NULL,
+    price numeric(10,2) NOT NULL,
+    image_url text[] DEFAULT '{}'::text[],
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    description text,
+    views integer DEFAULT 0,
+    stock integer DEFAULT 100,
+    sold integer DEFAULT 0,
+    tags text,
+    CONSTRAINT products_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE carts (
@@ -49,22 +49,34 @@ CREATE TABLE cart_items (
 );
 
 CREATE TABLE orders (
-	id uuid DEFAULT uuid_generate_v4 (),
-	acc_id uuid NOT NULL,
-	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT orders_pkey PRIMARY KEY (id),
-	CONSTRAINT orders_fk1 FOREIGN KEY (acc_id) REFERENCES accounts (id) ON DELETE CASCADE
-);
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    acc_id uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    processed boolean DEFAULT false,
+    total_price numeric(10,2) DEFAULT 0.00,
+    CONSTRAINT orders_pkey PRIMARY KEY (id),
+    CONSTRAINT orders_fk1 FOREIGN KEY (acc_id)
+        REFERENCES public.accounts (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
 
 CREATE TABLE order_items (
-	id uuid DEFAULT uuid_generate_v4 (),
-	order_id uuid NOT NULL,
-	prod_id uuid NOT NULL,
-	quantity INT NOT NULL DEFAULT 1,
-	created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT order_items_pkey PRIMARY KEY (id),
-	CONSTRAINT order_items_fk1 FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
-	CONSTRAINT order_items_fk2 FOREIGN KEY (prod_id) REFERENCES products (id) ON DELETE CASCADE
+	id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    order_id uuid NOT NULL,
+    prod_id uuid NOT NULL,
+    quantity integer NOT NULL DEFAULT 1,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    price_at_time numeric(10,2) DEFAULT 0,
+    CONSTRAINT order_items_pkey PRIMARY KEY (id),
+    CONSTRAINT order_items_fk1 FOREIGN KEY (order_id)
+        REFERENCES public.orders (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT order_items_fk2 FOREIGN KEY (prod_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
 );
 
 CREATE TABLE comments (

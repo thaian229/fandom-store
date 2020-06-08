@@ -426,7 +426,7 @@ class ProductScreen extends React.Component {
                                 <div style={{ paddingTop: "10px", marginBottom: "10px", border: "none" }}>
                                     <Text style={{ fontSize: "22px" }}>{this.state.prod_data.prod_name}</Text>
                                     <br />
-                                    <Text level={3} style={{}} >$ {this.state.prod_data.price}.00</Text>
+                                    <Text level={3} style={{}} >$ {this.state.prod_data.price}</Text>
                                 </div>
                             }
                             style={{ width: "100%", borderRadius: "25px 25px 0 0", backgroundColor: "#fcfcfc" }}>
@@ -450,7 +450,7 @@ class ProductScreen extends React.Component {
 
                                     </Col>
                                     <Col span={24} align="middle" style={{ paddingBottom: "42px" }}>
-                                        <Text style={{ color: '#3ac943', fontSize: "70px" }}>$ {this.state.prod_data.total_earned}.00</Text>
+                                        <Text style={{ color: '#3ac943', fontSize: "70px" }}>$ {this.state.prod_data.total_earned}</Text>
                                     </Col>
                                 </Row>
                             ) : (
@@ -480,7 +480,7 @@ class ProductScreen extends React.Component {
                                                 <Col span={16} align="right" style={{ paddingTop: "40px" }}>
                                                     <Text style={{ color: 'white', fontWeight: "bold", fontSize: "17px" }}>TOTAL</Text>
                                                     <br />
-                                                    <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}.00</Text>
+                                                    <Text style={{ color: '#3ac943', fontSize: "40px" }}>$ {this.state.prod_data.price * this.state.quantity}</Text>
                                                 </Col>
                                                 <Divider orientation="center" style={{ color: 'white', fontWeight: 'normal', width: "100%" }}></Divider>
                                                 <Col span={24} align="middle">
