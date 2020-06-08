@@ -50,10 +50,8 @@ class CategoryScreen extends React.Component {
 
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('scroll', this.handleScroll);
-        }, false);
-         console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
+        window.addEventListener('scroll', this.handleScroll);
+        console.log(window.location.href.split("/")[window.location.href.split("/").length - 1]);
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
             divs[i].style.height = "18vw"
