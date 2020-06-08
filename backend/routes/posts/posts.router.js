@@ -7,8 +7,8 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
     //Take id from URL
     // console.log(req.params.id);
     const prodID = req.params.id;
-
-    const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1'
+    const TEXT = 'SELECT * FROM products WHERE id = $1::uuid LIMIT 1';
+    const TEXT_GET_SOLD = 'SELECT SUM(oi.price_at_time) AS total FROM order_items oi GROUP BY oi.prod_id HAVING oi.prod_id = $1::uuid';
     //Check product from db
     try {
         const { rows } = await db.query(TEXT, [prodID]);
@@ -19,6 +19,7 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
             });
         }
         else {
+            const total_earned = await db.query(TEXT_GET_SOLD, [prodID]);            
             res.status(201).json({
                 success: true,
                 data: {
@@ -31,6 +32,7 @@ postRouter.get(`/getItem/:id`, async (req, res) => {
                     stock: rows[0].stock,
                     sold: rows[0].sold,
                     tags: rows[0].tags,
+                    total_earned: (total_earned.rows[0] ? total_earned.rows[0].total : 0)
                 },
             });
         }
@@ -415,5 +417,6 @@ postRouter.get("/getAllComment/:prodid", async (req, res) => {
         });
     }
 });
+
 
 module.exports = postRouter;

@@ -221,6 +221,7 @@ class EditItemScreen extends React.Component {
             })
             .then(data => {
                 if (data.success === true)
+                    // console.log(true)
                     window.location.pathname = "/";
                 else console.log(data)
             })
@@ -232,38 +233,39 @@ class EditItemScreen extends React.Component {
             });
     }
 
-
-
     getProdUrls = (formDataProd, oldItem, finalImgUrls) => {
         oldItem.map(item => {
             finalImgUrls.push(item);
         })
-        console.log(finalImgUrls)
-        fetch(`http://localhost:3001/api/uploads/post/productImg`, {
-            credentials: "include",
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-            },
-            body: formDataProd,
-        })
-            .then(res => {
-                return res.json();
+        if (formDataProd.length > 0) {
+            fetch(`http://localhost:3001/api/uploads/post/productImg`, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: formDataProd,
             })
-            .then(data => {
-                console.log(data.imgUrls);
-                data.imgUrls.map(item => {
-                    finalImgUrls.push(item)
+                .then(res => {
+                    return res.json();
                 })
-                console.log(this.state)
-                this.updateItem(finalImgUrls)
-            })
-            .catch(er => {
-                if (er) {
-                    console.log(er);
-                    window.alert(er.message);
-                }
-            });
+                .then(data => {
+                    console.log(data.imgUrls);
+                    data.imgUrls.map(item => {
+                        finalImgUrls.push(item)
+                    })
+                    console.log(this.state)
+                    this.updateItem(finalImgUrls)
+                })
+                .catch(er => {
+                    if (er) {
+                        console.log(er);
+                        window.alert(er.message);
+                    }
+                });
+        } else {
+            this.updateItem(finalImgUrls);
+        }
     }
 
     getThumbnailUrl = (formDataThumbnail, formDataProd, oldItem, finalImgUrls) => {
@@ -321,16 +323,13 @@ class EditItemScreen extends React.Component {
         if (!this.state.thumbnail[0].old) {
             this.getThumbnailUrl(formDataThumbnail, formDataProd, oldItem, finalImgUrls)
         } else {
-            if (oldItem.length === this.state.fileList.length + 1) {
+            if (oldItem.length === this.state.fileList.length + 1 && oldItem.length === this.state.data.image_url.length) {
                 finalImgUrls = this.state.data.image_url
                 this.updateItem(finalImgUrls)
             } else {
                 this.getProdUrls(formDataProd, oldItem, finalImgUrls)
             }
         }
-
-        console.log(this.state.finalImgUrls)
-
     }
 
     handleChangeCategories = value => {
@@ -428,7 +427,7 @@ class EditItemScreen extends React.Component {
                                 </Form.Item>
                                 <FormItem label="Product Image" name={['productImgs']} labelCol={{ ...layout.labelCol }}>
                                     <Upload
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        action="http://localhost:3001/api/uploads/post/checkImg"
                                         listType="picture-card"
                                         fileList={fileList}
                                         onPreview={this.handlePreviewImg}
@@ -447,7 +446,7 @@ class EditItemScreen extends React.Component {
                                 </Modal>
                                 <FormItem label="Thumbnail" name={['productThumbnail']} labelCol={{ ...layout.labelCol }}>
                                     <Upload
-                                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                        action="http://localhost:3001/api/uploads/post/checkImg"
                                         listType="picture-card"
                                         fileList={thumbnail}
                                         onPreview={this.handlePreviewImgT}

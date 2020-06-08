@@ -17,6 +17,13 @@ const uploadThumbnail = multer({
 	dest: "public/thumbnail",
 });
 
+uploadRouter.post("/post/checkImg", async (req, res) => {
+	res.status(200).json({
+		status: "done",
+		success: true,
+	});
+});
+
 uploadRouter.post("/post/productImg", uploadProductImg.array("image", 4), async (req, res) => {
 
 	console.log(req.files);

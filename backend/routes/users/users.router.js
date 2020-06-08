@@ -398,21 +398,21 @@ userRouter.post("/updateProcess", async (req, res) => {
                         SET processed = $1
                         WHERE id = $2::uuid;
                         `
-        try{
-            await db.query(TEXT, [processed ,id]);
+        try {
+            await db.query(TEXT, [processed, id]);
             res.status(201).json({
                 success: true,
                 message: 'Update successfully',
             })
         }
-        catch(error){
+        catch (error) {
             res.status(500).json({
                 success: false,
                 message: error.message,
             });
         }
     }
-    else{
+    else {
         res.status(403).json({
             success: false,
             message: 'Unauthenticated, access denied',
@@ -430,7 +430,7 @@ userRouter.get("/allOders", async (req, res) => {
                 `
             const results = await db.query(TEXT);
             const orderList = results.rows;
-            try{
+            try {
                 let sendBackData = []
                 var itemDone = 0;
                 orderList.forEach(async (item) => {
@@ -462,7 +462,7 @@ userRouter.get("/allOders", async (req, res) => {
                     }
                 })
             }
-            catch(error){
+            catch (error) {
                 res.status(500).json({
                     success: false,
                     message: error.message,
@@ -552,8 +552,10 @@ userRouter.post("/makeOrder", async (req, res) => {
         const userID = req.session.currentUser.id;
         // take list of product
         const TEXT = `
-                SELECT  ci.prod_id, ci.quantity
-                FROM cart_items ci JOIN carts c ON (ci.cart_id = c.id)
+                SELECT  ci.prod_id, ci.quantity, p.price
+                FROM cart_items ci 
+                JOIN carts c ON (ci.cart_id = c.id)
+                JOIN products p ON (ci.prod_id = p.id) 
                 WHERE c.acc_id = $1::uuid
                 `
         const { rows } = await db.query(TEXT, [userID]);
@@ -565,9 +567,18 @@ userRouter.post("/makeOrder", async (req, res) => {
             // make list of order items
             try {
                 const TEXT_ORDER_ITEM = `
-                    INSERT INTO order_items (order_id, prod_id, quantity)
+                    INSERT INTO order_items (order_id, prod_id, quantity, price_at_time)
                     VALUES
-                        ($1::uuid, $2::uuid, $3)
+                        ($1::uuid, $2::uuid, $3, $4)
+                `
+                const TEXT_ORDER_TOTAL = `
+                    UPDATE orders 
+                    SET total_price = (
+                        SELECT SUM(oi.price_at_time)
+                        FROM order_items oi
+                        GROUP BY oi.order_id
+                        HAVING oi.order_id = $1::uuid)
+                    WHERE id = $1::uuid
                 `
                 const TEXT_UPDATE_PROD = `
                     UPDATE products
@@ -577,12 +588,15 @@ userRouter.post("/makeOrder", async (req, res) => {
                 `
                 rows.forEach(async (item) => {
                     try {
-                        // console.log(item)
-                        await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity]);
+                        console.log(item)
+                        await db.query(TEXT_ORDER_ITEM, [order_id, item.prod_id, item.quantity, item.price * item.quantity]);
                     } catch (e1) {
                         console.log(e1)
                     }
                 })
+
+                await db.query(TEXT_ORDER_TOTAL, [order_id]);
+
                 rows.forEach(async (item1) => {
                     try {
                         // console.log(item)
@@ -634,7 +648,7 @@ userRouter.get("/checkAdmin", async (req, res) => {
                 success: true,
                 data: {
                     is_admin: req.session.currentUser.is_admin
-                },    
+                },
             })
         } catch (err) {
             res.status(500).json({
@@ -642,7 +656,7 @@ userRouter.get("/checkAdmin", async (req, res) => {
                 message: err.message,
             });
         }
-    }  
+    }
 });
 
 module.exports = userRouter;

@@ -229,164 +229,168 @@ class ProfileScreen extends React.Component {
                 paddingBottom: "70px",
                 minHeight: "100vh"
             }}>
-                <Row align="center">
-                    <div className='profile'>
-                        <div className='avatar'>
-                            <Popover style={{ borderRadius: "20px" }} placement="bottom" content={(
-                                <div style={{ borderRadius: "20px" }}>
-                                    <Button shape="round" type="primary" onClick={this.showModal}>
-                                        Change avatar
+                <Row align="center" style={{paddingTop: "20vh"}}>
+                    {/* <div className='profile'> */}
+                        <Col span={11} align='right'>
+                            <div className='avatar'>
+                                <Popover style={{ borderRadius: "20px" }} placement="bottom" content={(
+                                    <div style={{ borderRadius: "20px" }}>
+                                        <Button shape="round" type="primary" onClick={this.showModal}>
+                                            Change avatar
                                 </Button>
-                                    <Modal
-                                        title="Choose new avatar"
-                                        visible={this.state.visible}
-                                        onOk={this.handleOk}
-                                        onCancel={this.handleCancel}
-                                    >
-                                        <div>
+                                        <Modal
+                                            title="Choose new avatar"
+                                            visible={this.state.visible}
+                                            onOk={this.handleOk}
+                                            onCancel={this.handleCancel}
+                                        >
                                             <div>
-                                                <button><label htmlFor='file' className="btn" >Select Image</label></button>
-                                                <input
-                                                    id='file'
-                                                    type='file'
-                                                    accept="image/*"
-                                                    className='form-control'
-                                                    style={{
-                                                        backgroundColor: `transparent`,
-                                                        margin: `0 auto`,
-                                                        textIndent: `-999em`,
-                                                    }}
-                                                    onChange={this.handleImageChange}
-                                                >
-                                                </input>
-                                                <div style={{ marginBottom: '2vh' }}></div>
-                                                {this.state.imageSource ? (
-                                                    <div style={{ textAlign: `center`, width: '100%' }}>
-                                                        <img
-                                                            src={this.state.imageSource}
-                                                            alt='preview image'
-                                                            style={{
-                                                                // height: `400px`,
-                                                                height: `auto`,
-                                                                width: '100%'
-                                                            }}
-                                                        />
-                                                    </div>
-                                                ) : null}
+                                                <div>
+                                                    <button><label htmlFor='file' className="btn" >Select Image</label></button>
+                                                    <input
+                                                        id='file'
+                                                        type='file'
+                                                        accept="image/*"
+                                                        className='form-control'
+                                                        style={{
+                                                            backgroundColor: `transparent`,
+                                                            margin: `0 auto`,
+                                                            textIndent: `-999em`,
+                                                        }}
+                                                        onChange={this.handleImageChange}
+                                                    >
+                                                    </input>
+                                                    <div style={{ marginBottom: '2vh' }}></div>
+                                                    {this.state.imageSource ? (
+                                                        <div style={{ textAlign: `center`, width: '100%' }}>
+                                                            <img
+                                                                src={this.state.imageSource}
+                                                                alt='preview image'
+                                                                style={{
+                                                                    // height: `400px`,
+                                                                    height: `auto`,
+                                                                    width: '100%'
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            </div>
+                                        </Modal>
+                                    </div>
+                                )}>
+                                    <Avatar shape="circle" size={297} src={this.state.ava_url} />
+                                </Popover>
+
+                            </div>
+                        </Col>
+                        <Col span={13} align='left'>
+                            <div className='info'>
+                                <Form
+                                    scrollToFirstError
+                                    onFinish={this.handleFormSubmit}
+                                >
+                                    <div>
+
+                                        <div className='fullname-box'>
+                                            <div className='fullName'>
+                                                {this.state.full_name}
+                                            </div>
+                                            <div className='changeName'>
+                                                <Popover placement="right" content={(
+                                                    <Form.Item
+                                                        name="full-name"
+                                                        label={
+                                                            <span>
+                                                                New name&nbsp;
+                                                <Tooltip title="What do you want others to call you?">
+                                                                    <QuestionCircleOutlined />
+                                                                </Tooltip>
+                                                            </span>
+                                                        }
+                                                    >
+                                                        <Input onChange={this.handleNameChange} />
+                                                    </Form.Item>
+                                                )} trigger="click">
+                                                    <Button shape="round" size='small'>Change name</Button>
+                                                </Popover>
                                             </div>
                                         </div>
-                                    </Modal>
-                                </div>
-                            )}>
-                                <Avatar shape="circle" size={297} src={this.state.ava_url} />
-                            </Popover>
 
-                        </div>
-                        <div className='info'>
-                            <Form
-                                scrollToFirstError
-                                onFinish={this.handleFormSubmit}
-                            >
-                                <div>
-
-                                    <div className='fullname-box'>
-                                        <div className='fullName'>
-                                            {this.state.full_name}
+                                        <div className='email'>
+                                            Email: {this.state.email}
                                         </div>
-                                        <div className='changeName'>
-                                            <Popover placement="right" content={(
-                                                <Form.Item
-                                                    name="full-name"
-                                                    label={
-                                                        <span>
-                                                            New name&nbsp;
-                                                <Tooltip title="What do you want others to call you?">
-                                                                <QuestionCircleOutlined />
-                                                            </Tooltip>
-                                                        </span>
-                                                    }
-                                                >
-                                                    <Input onChange={this.handleNameChange} />
-                                                </Form.Item>
-                                            )} trigger="click">
-                                                <Button shape="round" size='small'>Change name</Button>
-                                            </Popover>
-                                        </div>
-                                    </div>
 
-                                    <div className='email'>
-                                        Email: {this.state.email}
-                                    </div>
-
-                                    <div className='address-box'>
-                                        <div className='address'>
-                                            Address: {this.state.address}
-                                        </div>
-                                        <div className='changeAddress'>
-                                            <Popover placement="right" content={(
-                                                <Form.Item
-                                                    name="telNum"
-                                                    label={
-                                                        <span>
-                                                            New Address&nbsp;
+                                        <div className='address-box'>
+                                            <div className='address'>
+                                                Address: {this.state.address}
+                                            </div>
+                                            <div className='changeAddress'>
+                                                <Popover placement="right" content={(
+                                                    <Form.Item
+                                                        name="telNum"
+                                                        label={
+                                                            <span>
+                                                                New Address&nbsp;
                                             </span>
-                                                    }
-                                                >
-                                                    <Input onChange={this.handleAddressChange} />
-                                                </Form.Item>
+                                                        }
+                                                    >
+                                                        <Input onChange={this.handleAddressChange} />
+                                                    </Form.Item>
+                                                )} trigger="click">
+                                                    <Button type="link"><EditOutlined /></Button>
+                                                </Popover>
+                                            </div>
+                                        </div>
+
+                                        <div className='phone-box'>
+                                            <div className='phone'>
+                                                Phone number: {this.state.tel_num}
+                                            </div>
+                                            <div className='changePhone'>
+                                                <Popover placement="right" content={(
+                                                    <Form.Item
+                                                        name="telNum"
+                                                        label={
+                                                            <span>
+                                                                New phone number&nbsp;
+                                            </span>
+                                                        }
+                                                    >
+                                                        <Input onOpenChange={this.handlePhoneChange} />
+                                                    </Form.Item>
+                                                )} trigger="click">
+                                                    <Button type="link"><EditOutlined /></Button>
+                                                </Popover>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='dob-box'>
+                                        <div className='dob'>
+                                            Date of birth: {currentDob}
+                                        </div>
+                                        <div className='changeDob'>
+                                            <Popover placement="right" content={(
+                                                <DatePicker onChange={this.handleDobChange} />
                                             )} trigger="click">
                                                 <Button type="link"><EditOutlined /></Button>
                                             </Popover>
                                         </div>
                                     </div>
 
-                                    <div className='phone-box'>
-                                        <div className='phone'>
-                                            Phone number: {this.state.tel_num}
-                                        </div>
-                                        <div className='changePhone'>
-                                            <Popover placement="right" content={(
-                                                <Form.Item
-                                                    name="telNum"
-                                                    label={
-                                                        <span>
-                                                            New phone number&nbsp;
-                                            </span>
-                                                    }
-                                                >
-                                                    <Input onOpenChange={this.handlePhoneChange} />
-                                                </Form.Item>
-                                            )} trigger="click">
-                                                <Button type="link"><EditOutlined /></Button>
-                                            </Popover>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='dob-box'>
-                                    <div className='dob'>
-                                        Date of birth: {currentDob}
-                                    </div>
-                                    <div className='changeDob'>
-                                        <Popover placement="right" content={(
-                                            <DatePicker onChange={this.handleDobChange} />
-                                        )} trigger="click">
-                                            <Button type="link"><EditOutlined /></Button>
-                                        </Popover>
-                                    </div>
-                                </div>
 
 
 
-
-                                <Form.Item>
-                                    <Button className='updateButon' shape="round" type="primary" htmlType="submit">
-                                        Update profile
+                                    <Form.Item>
+                                        <Button className='updateButon' shape="round" type="primary" htmlType="submit">
+                                            Update profile
                                 </Button>
-                                </Form.Item>
-                            </Form>
-                        </div>
-                    </div>
+                                    </Form.Item>
+                                </Form>
+                            </div>
+                        </Col>
+                    {/* </div> */}
                 </Row>
             </div>
         )

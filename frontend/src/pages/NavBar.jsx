@@ -173,12 +173,14 @@ class NavBar extends React.Component {
                             <Dropdown
                                 style={{ marginLeft: "2vw", position: 'fixed' }}
                                 overlay={
-                                    <Menu style={{
-                                        marginTop: "5px",
-                                        padding: "10px",
-                                        borderRadius: "10px"
-                                    }}>
-                                        {this.state.currentUser.is_admin ? (
+
+
+                                    this.state.currentUser.is_admin ? (
+                                        <Menu style={{
+                                            marginTop: "5px",
+                                            padding: "10px",
+                                            borderRadius: "10px"
+                                        }}>
                                             <Menu.Item
                                                 align="right"
                                                 style={{
@@ -186,9 +188,42 @@ class NavBar extends React.Component {
                                                 }}>
                                                 <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
                                                     All Orders
-                                                </a>
+                                                    </a>
                                             </Menu.Item>
-                                        ) : (
+                                            <Menu.Item
+                                                align="right"
+                                                style={{
+                                                    borderRadius: "10px"
+                                                }}>
+                                                <a rel="noopener noreferrer" href="http://localhost:3000/statistic">
+                                                    Summary
+                                                    </a>
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                align="right"
+                                                style={{
+                                                    borderRadius: "10px"
+                                                }}>
+                                                <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
+                                                    Profile
+                                            </a>
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                align="right"
+                                                style={{
+                                                    borderRadius: "10px"
+                                                }}>
+                                                <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleLogout()}>
+                                                    Logout
+                                            </a>
+                                            </Menu.Item>
+                                        </Menu>
+                                    ) : (
+                                            <Menu style={{
+                                                marginTop: "5px",
+                                                padding: "10px",
+                                                borderRadius: "10px"
+                                            }}>
                                                 <Menu.Item
                                                     align="right"
                                                     style={{
@@ -198,26 +233,28 @@ class NavBar extends React.Component {
                                                         Order History
                                                     </a>
                                                 </Menu.Item>
-                                            )}
-                                        <Menu.Item
-                                            align="right"
-                                            style={{
-                                                borderRadius: "10px"
-                                            }}>
-                                            <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
-                                                Profile
+                                                <Menu.Item
+                                                    align="right"
+                                                    style={{
+                                                        borderRadius: "10px"
+                                                    }}>
+                                                    <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
+                                                        Profile
                                             </a>
-                                        </Menu.Item>
-                                        <Menu.Item
-                                            align="right"
-                                            style={{
-                                                borderRadius: "10px"
-                                            }}>
-                                            <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleLogout()}>
-                                                Logout
+                                                </Menu.Item>
+                                                <Menu.Item
+                                                    align="right"
+                                                    style={{
+                                                        borderRadius: "10px"
+                                                    }}>
+                                                    <a target="_blank" rel="noopener noreferrer" onClick={event => this.handleLogout()}>
+                                                        Logout
                                             </a>
-                                        </Menu.Item>
-                                    </Menu>
+                                                </Menu.Item>
+                                            </Menu>
+                                        )
+
+
                                 } placement="bottomRight">
                                 <Avatar shape="circle" src={this.state.currentUser.ava_url} style={{ marginLeft: "30px", marginBottom: "0px", width: "41px", height: "41px" }} />
                             </Dropdown>
