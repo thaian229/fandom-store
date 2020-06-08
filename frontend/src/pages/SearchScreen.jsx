@@ -48,9 +48,7 @@ class SearchScreen extends React.Component {
 
     componentDidMount() {
         this.dataFetch(this.state.pageSize, this.state.pageNumber);
-        document.addEventListener('DOMContentLoaded', function () {
-            window.addEventListener('scroll', this.handleScroll);
-        }, false);
+        window.addEventListener('scroll', this.handleScroll);
         const divs = document.querySelectorAll(".ant-carousel .slick-slide")
         for (let i = 0; i < divs.length; i++) {
             divs[i].style.height = "18vw"
