@@ -1,7 +1,12 @@
 import React from 'react';
 import { Donut, Column, Liquid } from '@ant-design/charts';
 import { Row, Col, Card, Statistic, Tabs, Table } from 'antd';
-import Item from 'antd/lib/list/Item';
+// import Item from 'antd/lib/list/Item';
+
+import {
+    DollarOutlined,
+    UserOutlined
+} from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -15,8 +20,8 @@ class Statistics extends React.Component {
         total_sale: 0,
         this_month_sale: 0,
         user_number: 0,
-        product_data: [0, 0, 0, 0],
-        revenue_data: [0, 0, 0, 0],
+        product_data: [1, 1, 1, 1],
+        revenue_data: [1, 1, 1, 1],
         sale_for_conversion: 0,
         views_for_conversion: 1,
         a_data: [],
@@ -412,7 +417,7 @@ class Statistics extends React.Component {
             xField: 'Quater',
             yField: 'Products',
             conversionTag: {
-                visible: true,
+                visible: false,
             },
         };
 
@@ -429,7 +434,7 @@ class Statistics extends React.Component {
             xField: 'Quater',
             yField: 'Revenue',
             conversionTag: {
-                visible: true,
+                visible: false,
             },
         };
 
@@ -560,19 +565,20 @@ class Statistics extends React.Component {
                     }}>
                     <Col span={6}>
                         <Card bordered={true} style={{ width: '100%' }}>
-                            <Statistic title="Revenue" value={this.state.total_sale} />
+                            <Statistic title="Revenue" value={this.state.total_sale} prefix={<DollarOutlined />} valueStyle={{ color: '#22946b' }}
+                            />
 
                         </Card>
                     </Col>
                     <Col span={6}>
                         <Card bordered={true} style={{ width: '100%' }}>
-                            <Statistic title="Month Revenue" value={this.state.this_month_sale} />
+                            <Statistic title="Month Revenue" value={this.state.this_month_sale} prefix={<DollarOutlined />} valueStyle={{ color: '#22946b' }}/>
 
                         </Card>
                     </Col>
                     <Col span={6}>
                         <Card bordered={true} style={{ width: '100%' }}>
-                            <Statistic title="Users" value={this.state.user_number} />
+                            <Statistic title="Users" value={this.state.user_number} prefix={<UserOutlined />} valueStyle={{color: '#a900d4'}}/>
                         </Card>
                     </Col>
                     <Col span={22} style={{ marginTop: '50px' }}>

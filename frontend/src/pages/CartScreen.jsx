@@ -1,6 +1,10 @@
 import React from "react";
-import { Row, Col, Typography, Button, Divider, Empty, Result, notification, Avatar } from "antd";
+import { Row, Col, Typography, Button, Divider, Empty, Result, notification, Avatar, Statistic } from "antd";
+import {
+    DollarOutlined,
+} from '@ant-design/icons';
 const { Title } = Typography;
+
 
 const openSuccessRemoveNotification = (type) => {
     notification[type]({
@@ -173,10 +177,12 @@ class CartScreen extends React.Component {
     render() {
         return (
             <div style={{
-                backgroundImage: "linear-gradient(to bottom, #001529, #FCAE58)", minHeight: '100vh'
+                backgroundImage: "linear-gradient(to bottom, #001529, #f5dba5)",
+                minHeight: '100vh'
             }}>
                 {this.state.placedOrderSuccess ? (
                     <Result
+                        style={{ color: "white" }}
                         status="success"
                         title="Successfully Purchased!"
                         subTitle="Thank you for your patronage"
@@ -191,32 +197,35 @@ class CartScreen extends React.Component {
                         <Row align='top'>
                             <Col span={5}></Col>
                             <Col span={19}>
-                                <Title level={2} style={{}} >Here your cart:</Title>
+                                <Title level={2} style={{ color: '#f5f5f7', marginTop: '50px', marginBottom: '30px', paddingLeft: '30px' }} >Here is your cart:</Title>
                             </Col>
                             <Col span={5}></Col>
                             <Col span={14}>
-                                <Row
-                                    align="middle"
-                                    style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', height: "50px", paddingTop: '5px' }}>
-                                    <Col span={5}>
-                                        <Title level={4} style={{ textAlign: 'center' }} > </Title>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Title level={4} style={{ textAlign: 'center' }} > Product Name </Title>
-                                    </Col>
-                                    <Col span={3}>
-                                        <Title level={4} style={{ textAlign: 'center' }} > Quantity </Title>
-                                    </Col>
-                                    <Col span={4}>
-                                        <Title level={4} style={{ textAlign: 'center' }} > Price </Title>
-                                    </Col>
-                                    <Col span={4} style={{}}>
-                                        <Title level={4} style={{ textAlign: 'center' }} > </Title>
-                                    </Col>
-                                </Row>
+                                {this.state.cart_items[0] ? (
+                                    <Row
+                                        align="middle"
+                                        style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', height: "70px", padding: '15px 30px 5px 30px', borderRadius: "10px 10px 0 0" }}>
+                                        <Col span={5}>
+                                            <Title level={4} style={{ textAlign: 'center' }} > </Title>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Title level={4} style={{ textAlign: 'center' }} > Product Name </Title>
+                                        </Col>
+                                        <Col span={3}>
+                                            <Title level={4} style={{ textAlign: 'center' }} > Quantity </Title>
+                                        </Col>
+                                        <Col span={4}>
+                                            <Title level={4} style={{ textAlign: 'center' }} > Price </Title>
+                                        </Col>
+                                        <Col span={4} style={{}}>
+                                            <Title level={4} style={{ textAlign: 'center' }} > </Title>
+                                        </Col>
+                                    </Row>
+                                ) : null}
+
                                 {(this.state.numItem === 0) ? (
                                     (
-                                        <div style={{ marginTop: '25px', backgroundColor: '#fdfdfd' }}>
+                                        <div style={{ backgroundColor: '#fdfdfd', padding: '50px' }}>
                                             <Empty description='Your Cart Is Empty'>
                                                 <Button type="primary" onClick={() => window.location.pathname = `/`}>Browse Products</Button>
                                             </Empty>
@@ -226,7 +235,7 @@ class CartScreen extends React.Component {
                                 {this.state.cart_items.map((item) => {
                                     return (
 
-                                        <Row align="middle" style={{ borderWidth: "2px", borderStyle: "solid", borderColor: '#f2f2f2', backgroundColor: '#fdfdfd' }}>
+                                        <Row align="middle" style={{ borderWidth: "2px", borderStyle: "solid", borderColor: '#f2f2f2', backgroundColor: '#fdfdfd', padding: '30px' }}>
                                             <Col span={5} align="center">
                                                 <Avatar shape="square" style={{ width: "100%", paddingLeft: "5px" }} src={item.image_url[0]} size={100} />
                                             </Col>
@@ -237,7 +246,7 @@ class CartScreen extends React.Component {
                                                 <Title level={4} style={{ textAlign: 'center' }} >{item.quantity}</Title>
                                             </Col>
                                             <Col span={4}>
-                                                <Title level={4} style={{ textAlign: 'center', color: 'green' }} >${item.price}</Title>
+                                                <Title level={4} style={{ textAlign: 'center', color: '#22946b' }} >${item.price}</Title>
                                             </Col>
                                             <Col span={4} align="center">
                                                 <Button danger ghost onClick={(event) => { this.handleRemoveItem(item.id) }}>Remove</Button>
@@ -245,17 +254,20 @@ class CartScreen extends React.Component {
                                         </Row>
                                     )
                                 })}
-                                <Row
-                                    justify="right"
-                                    style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', paddingTop: '5px' }}>
-                                        {(this.state.numItem === 0) ? null : (
-                                            <Col>
-                                                <Title level={3} style={{ textAlign: 'right' }}>Total: ${this.state.totalCost}</Title>
-                                                <Button type='primary' onClick={this.handlePlaceOrder} style={{ float: 'right' }}>Place Order</Button>
-                                            </Col>
-                                        )}
-                
-                                </Row>
+                                {(this.state.numItem === 0) ? null : (
+                                    <Row
+                                        align="middle"
+                                        style={{ borderWidth: "2px", borderStyle: "solid", borderColor: "#f2f2f2", lineHeight: '0', borderBottom: 'none', backgroundColor: '#fdfdfd', padding: '25px', borderRadius: "0 0 10px 10px" }}>
+
+                                        <Col span={17} align="middle">
+                                            <Button type='primary' onClick={this.handlePlaceOrder} style={{ width: "100%", maxWidth: "1000px", height: "80px", fontSize: "40px", backgroundColor: "#0b1b2b", borderRadius: "5px 5px 5px 10px", border: "none" }}>Place Order</Button>
+                                        </Col>
+                                        <Col span={7} align="middle" style={{ padding: 0 }}>
+                                            <Statistic style={{ padding: "20px", height: "80px", margin: "0px", paddingTop: "0" }} value={this.state.totalCost} prefix='$' valueStyle={{ color: '#22946b', fontSize: '50px' }} />
+                                        </Col>
+                                    </Row>
+                                )}
+
                             </Col>
                             <Col span={5}></Col>
                         </Row>

@@ -233,11 +233,12 @@ class EditItemScreen extends React.Component {
             });
     }
 
-    getProdUrls = (formDataProd, oldItem, finalImgUrls) => {
+    getProdUrls = async (formDataProd, oldItem, finalImgUrls) => {
         oldItem.map(item => {
             finalImgUrls.push(item);
         })
-        if (formDataProd.length > 0) {
+        console.log(formDataProd)
+        if (formDataProd) {
             fetch(`http://localhost:3001/api/uploads/post/productImg`, {
                 credentials: "include",
                 method: "POST",
@@ -300,7 +301,7 @@ class EditItemScreen extends React.Component {
             });
     }
 
-    getImageUrlsAndUpdate = (event) => {
+    getImageUrlsAndUpdate = async (event) => {
         let formDataProd = new FormData()
         let formDataThumbnail = new FormData()
         let oldItem = []
@@ -326,8 +327,11 @@ class EditItemScreen extends React.Component {
             if (oldItem.length === this.state.fileList.length + 1 && oldItem.length === this.state.data.image_url.length) {
                 finalImgUrls = this.state.data.image_url
                 this.updateItem(finalImgUrls)
+                console.log('here1');
             } else {
                 this.getProdUrls(formDataProd, oldItem, finalImgUrls)
+                console.log('here2');
+                console.log(formDataProd)
             }
         }
     }
@@ -397,7 +401,7 @@ class EditItemScreen extends React.Component {
         );
 
         return (
-            <Row align="middle" justify="space-around" style={{ paddingTop: "50px" }}>
+            <Row align="middle" justify="space-around" style={{ backgroundColor: "#001529", minHeight: "100vh" }}>
                 {this.state.data.prod_name && this.state.currentUser.is_admin
                     ? (
                         <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
