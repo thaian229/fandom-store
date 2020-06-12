@@ -59,7 +59,7 @@ CREATE TABLE orders (
         REFERENCES public.accounts (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
-)
+);
 
 CREATE TABLE order_items (
 	id uuid NOT NULL DEFAULT uuid_generate_v4(),

@@ -192,7 +192,7 @@ class Statistics extends React.Component {
     }
 
     render() {
-        console.log(this.state)
+        // console.log(this.state)
         const dataColP = [
             {
                 Quater: 'Q1',

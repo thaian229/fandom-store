@@ -595,8 +595,6 @@ userRouter.post("/makeOrder", async (req, res) => {
                     }
                 })
 
-                await db.query(TEXT_ORDER_TOTAL, [order_id]);
-
                 rows.forEach(async (item1) => {
                     try {
                         // console.log(item)
@@ -605,6 +603,9 @@ userRouter.post("/makeOrder", async (req, res) => {
                         console.log(e2)
                     }
                 })
+
+                await db.query(TEXT_ORDER_TOTAL, [order_id]);
+
                 res.status(201).json({
                     success: true,
                     message: 'Make order successfully',
