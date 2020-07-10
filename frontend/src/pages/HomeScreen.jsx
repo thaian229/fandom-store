@@ -323,18 +323,14 @@ class HomeScreen extends React.Component {
                                             style={{ width: "100%" }}
                                         />
                                     </div>
+
                                     <div>
                                         <img
-                                            src='https://cdn.hijabista.com.my/2020/03/kpop-11_52_598104.jpg'
+                                            src='https://www.allkpop.com/upload/2020/03/content/020357/1583139451-iu-header-1.jpg'
                                             style={{ width: "100%" }}
                                         />
                                     </div>
-                                    <div>
-                                        <img
-                                            src='https://i.ytimg.com/vi/UmvTi2_8wGk/maxresdefault.jpg'
-                                            style={{ width: "100%" }}
-                                        />
-                                    </div>
+
                                 </Carousel>
                             </Col>
                             <Col span={12} style={{ padding: "4vw", marginBottom: "1vw", paddingTop: "3px", paddingRight: "2vw", paddingLeft: "1vw" }}>
@@ -343,24 +339,14 @@ class HomeScreen extends React.Component {
                                     dotPosition={"bottom"}
                                     style={{ width: "100%" }}
                                 >
-                                    <div>
-                                        <img
-                                            src='https://lh3.googleusercontent.com/4zh3h4w4ZNFNvXqFnL5mYwjmfPQkKoz2aRXd9QybY2lAVbunSeYKZWuh1JP4uzGRYmFNjUoKcCsNpMziFv9WFKHYNUUcEZz2=w1200-h630-rj-pp'
-                                            style={{ width: "100%" }}
-                                        />
-                                    </div>
+
                                     <div>
                                         <img
                                             src='https://i.ytimg.com/vi/tRiW2TKGG60/maxresdefault.jpg'
                                             style={{ width: "100%" }}
                                         />
                                     </div>
-                                    <div>
-                                        <img
-                                            src='https://i.ytimg.com/vi/29YL4gEdutY/maxresdefault.jpg'
-                                            style={{ width: "100%" }}
-                                        />
-                                    </div>
+
                                 </Carousel>
                             </Col>
 

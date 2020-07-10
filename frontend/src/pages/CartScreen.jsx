@@ -184,8 +184,16 @@ class CartScreen extends React.Component {
                     <Result
                         style={{ color: "white" }}
                         status="success"
-                        title="Successfully Purchased!"
-                        subTitle="Thank you for your patronage"
+                        title={
+                            <div style={{ color: "white" }}>
+                                Successfully Purchased!
+                            </div>
+                        }
+                        subTitle={
+                            <div style={{ color: "white" }}>
+                                Thank you for your patronage
+                            </div>
+                        }
                         extra={[
                             <Button type="primary" key="console" onClick={() => window.location.pathname = `/`}>
                                 Back Home
