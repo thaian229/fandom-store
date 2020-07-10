@@ -143,7 +143,6 @@ statRouter.get(`/getDonut`, async (req, res) => {
             INNER JOIN products p ON p.id = oi.prod_id
             GROUP BY (oi.prod_id), p.tags
             ORDER BY SUM(oi.quantity) DESC
-            LIMIT 5
         ) t1
         JOIN (
             SELECT SUM(oi.quantity) as total
@@ -151,6 +150,7 @@ statRouter.get(`/getDonut`, async (req, res) => {
         ) t2
         ON 1=1
         GROUP BY t1.tags, t2.total
+        LIMIT 5
     `;
     const TEXTK = `
         SELECT SUM(t1.sum), t1.tags, t2.k_total
@@ -161,7 +161,6 @@ statRouter.get(`/getDonut`, async (req, res) => {
             GROUP BY (oi.prod_id), p.tags
             HAVING p.tags ILIKE 'K-%'
             ORDER BY SUM(oi.quantity) DESC
-            LIMIT 4
         ) t1
         JOIN (
             SELECT SUM(oi.quantity) as k_total
@@ -172,6 +171,7 @@ statRouter.get(`/getDonut`, async (req, res) => {
         ) t2
         ON 1=1
         GROUP BY t1.tags, t2.k_total
+        LIMIT 4
     `
     const TEXTJ = `
         SELECT SUM(t1.sum), t1.tags, t2.j_total
@@ -182,7 +182,6 @@ statRouter.get(`/getDonut`, async (req, res) => {
             GROUP BY (oi.prod_id), p.tags
             HAVING p.tags ILIKE 'J-%'
             ORDER BY SUM(oi.quantity) DESC
-            LIMIT 4
         ) t1
         JOIN (
             SELECT SUM(oi.quantity) as j_total
@@ -193,6 +192,7 @@ statRouter.get(`/getDonut`, async (req, res) => {
         ) t2
         ON 1=1
         GROUP BY t1.tags, t2.j_total
+        LIMIT 4
     `
     try {
         const a = await db.query(TEXT);

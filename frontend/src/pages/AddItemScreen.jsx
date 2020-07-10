@@ -305,8 +305,7 @@ class AddItemScreen extends React.Component {
         );
 
         return (
-
-            <Row align="middle" justify="space-around" style={{ paddingTop: "50px" }}>
+            <Row align="middle" justify="space-around" style={{ backgroundColor: "#001529", minHeight: "100vh" }}>
                 {this.state.currentUser.is_admin ? (
                     <Col sm={{ span: 22 }} lg={{ span: 18 }} style={{ padding: "5px" }} style={{ borderWidth: "1px", borderStyle: "solid", borderColor: "#ceebeb", borderRadius: "50px", backgroundColor: "#fcffff" }}>
                         {/* <Button onClick={this.getImageUrls}>TEST</Button> */}
