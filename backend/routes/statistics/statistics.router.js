@@ -68,14 +68,14 @@ statRouter.get(`/getColChart`, async (req, res) => {
             res.status(201).json({
                 success: true,
                 data: {
-                    product_data: [1, 1, 1, 1],
-                    revenue_data: [1, 1, 1, 1]
+                    product_data: [0, 0, 0, 0],
+                    revenue_data: [0, 0, 0, 0]
                 },
             });
         }
         else {
-            const dataProduct = [1, 1, 1, 1];
-            const dataRevenue = [1, 1, 1, 1];
+            const dataProduct = [0, 0, 0, 0];
+            const dataRevenue = [0, 0, 0, 0];
             p.rows.forEach(element => {
                 dataProduct[element.quater - 1] = element.q;
             });
