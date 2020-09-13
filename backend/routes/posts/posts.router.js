@@ -180,6 +180,29 @@ postRouter.get("/getPagination", async (req, res) => {
 
 });
 
+postRouter.get("/all", async (req, res) => {
+    
+        try {
+            const TEXT = `
+                    SELECT * 
+                    FROM products
+                    ORDER BY created_at DESC
+                `
+                
+            const { rows } = await db.query(TEXT);
+            res.status(201).json({
+                success: true,
+                data: rows,
+            })
+        }
+        catch (error) {
+            res.status(500).json({
+                success: false,
+                message: error
+            });
+        }
+});
+
 postRouter.get("/getRecommended", async (req, res) => {
     const pageSize = 4;
     const tag = String(req.query.tag);

@@ -17,7 +17,7 @@ app.use(
 app.use(express.static('public'));
 
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'keyboard cat'
 }));
 
 app.use(bodyParser.json());

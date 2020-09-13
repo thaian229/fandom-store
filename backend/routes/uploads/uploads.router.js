@@ -156,4 +156,9 @@ uploadRouter.get("/get/thumbnail/:filename", async (req, res) => {
 	res.sendFile(path.resolve(`public/thumbnail/${req.params.filename}`));
 });
 
+uploadRouter.get("/get/logoSquare/", async (req, res) => {
+	res.sendFile(path.resolve(`public/LOGOsquare.png`));
+});
+
+
 module.exports = uploadRouter;

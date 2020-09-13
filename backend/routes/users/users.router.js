@@ -77,6 +77,9 @@ userRouter.post("/login", async (req, res) => {
     // get email and password from req.body
     const { email, password } = req.body;
 
+    console.log(email, password)
+
+
     // check email existance
     try {
         const TEXT = `
@@ -118,7 +121,9 @@ userRouter.post("/login", async (req, res) => {
                 },
             });
             req.session.cookie.expires = false;
+
         }
+
     } catch (err) {
         res.status(500).json({
             success: false,
