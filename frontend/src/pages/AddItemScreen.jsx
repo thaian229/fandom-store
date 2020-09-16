@@ -78,7 +78,7 @@ class AddItemScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -139,7 +139,7 @@ class AddItemScreen extends React.Component {
 
     itemCreate = () => {
         console.log(this.state)
-        fetch(`http://localhost:3001/api/posts/addItem`, {
+        fetch(`http://192.168.68.120:3001/api/posts/addItem`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -182,7 +182,7 @@ class AddItemScreen extends React.Component {
         console.log(formDataThumbnail)
         console.log(formDataProd)
 
-        fetch(`http://localhost:3001/api/uploads/post/thumbnail`, {
+        fetch(`http://192.168.68.120:3001/api/uploads/post/thumbnail`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -197,7 +197,7 @@ class AddItemScreen extends React.Component {
                 console.log(data.imgUrl)
                 const finalImgUrls = []
                 finalImgUrls.push(data.imgUrl)
-                fetch(`http://localhost:3001/api/uploads/post/productImg`, {
+                fetch(`http://192.168.68.120:3001/api/uploads/post/productImg`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
@@ -322,7 +322,7 @@ class AddItemScreen extends React.Component {
                             </Form.Item>
                             <FormItem label="Product Image" name={['product', 'prodImgs']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
                                 <Upload
-                                    action="http://localhost:3001/api/uploads/post/checkImg"
+                                    action="http://192.168.68.120:3001/api/uploads/post/checkImg"
                                     listType="picture-card"
                                     fileList={fileList}
                                     onPreview={this.handlePreviewImg}
@@ -341,7 +341,7 @@ class AddItemScreen extends React.Component {
                             </Modal>
                             <FormItem label="Thumbnail" name={['product', 'thumbnail']} rules={[{ required: true }]} labelCol={{ ...layout.labelCol }}>
                                 <Upload
-                                    action="http://localhost:3001/api/uploads/post/checkImg"
+                                    action="http://192.168.68.120:3001/api/uploads/post/checkImg"
                                     listType="picture-card"
                                     fileList={thumbnail}
                                     onPreview={this.handlePreviewImgT}

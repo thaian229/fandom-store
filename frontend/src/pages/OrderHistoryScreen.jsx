@@ -18,7 +18,7 @@ class OrderHistoryScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -46,7 +46,7 @@ class OrderHistoryScreen extends React.Component {
             window.alert('Access Denied, Please Login')
             window.location.pathname = `/`
         } else { // fetch orders info
-            fetch(`http://localhost:3001/api/users/orderHistory`, {
+            fetch(`http://192.168.68.120:3001/api/users/orderHistory`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

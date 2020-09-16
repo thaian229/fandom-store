@@ -34,7 +34,7 @@ class Statistics extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -68,7 +68,7 @@ class Statistics extends React.Component {
             window.location.pathname = `/login`
         }
         else { //fetch
-            fetch(`http://localhost:3001/api/stats/getFirstRow`, {
+            fetch(`http://192.168.68.120:3001/api/stats/getFirstRow`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -89,7 +89,7 @@ class Statistics extends React.Component {
                     console.log(err)
                 })
 
-            fetch(`http://localhost:3001/api/stats/getColChart`, {
+            fetch(`http://192.168.68.120:3001/api/stats/getColChart`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -110,7 +110,7 @@ class Statistics extends React.Component {
                     console.log(err)
                 })
 
-            fetch(`http://localhost:3001/api/stats/getConversionRate`, {
+            fetch(`http://192.168.68.120:3001/api/stats/getConversionRate`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -131,7 +131,7 @@ class Statistics extends React.Component {
                     console.log(err)
                 })
 
-            fetch(`http://localhost:3001/api/stats/getDonut`, {
+            fetch(`http://192.168.68.120:3001/api/stats/getDonut`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -153,7 +153,7 @@ class Statistics extends React.Component {
                     console.log(err)
                 })
 
-            fetch(`http://localhost:3001/api/stats/ranking`, {
+            fetch(`http://192.168.68.120:3001/api/stats/ranking`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -174,7 +174,7 @@ class Statistics extends React.Component {
                     console.log(err)
                 })
 
-            fetch(`http://localhost:3001/api/stats/loyalCustomers`, {
+            fetch(`http://192.168.68.120:3001/api/stats/loyalCustomers`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -292,7 +292,7 @@ class Statistics extends React.Component {
         this.state.viewRanking.forEach(element => {
             vRanking.push({
                 'key': i,
-                'name': <a href={'http://localhost:3000/product/' + element.id}>{element.prod_name}</a>,
+                'name': <a href={'http://192.168.68.120:3000/product/' + element.id}>{element.prod_name}</a>,
                 'id': element.id,
                 'views': element.views
             })
@@ -306,7 +306,7 @@ class Statistics extends React.Component {
         this.state.saleRanking.forEach(element => {
             sRanking.push({
                 'key': i,
-                'name': <a href={'http://localhost:3000/product/' + element.id}>{element.prod_name}</a>,
+                'name': <a href={'http://192.168.68.120:3000/product/' + element.id}>{element.prod_name}</a>,
                 'id': element.id,
                 'sold': element.sold
             })

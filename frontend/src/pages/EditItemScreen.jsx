@@ -80,7 +80,7 @@ class EditItemScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -104,7 +104,7 @@ class EditItemScreen extends React.Component {
     }
 
     getItem = () => {
-        fetch(`http://localhost:3001/api/posts/getItem/${this.state.prod_id}`, {
+        fetch(`http://192.168.68.120:3001/api/posts/getItem/${this.state.prod_id}`, {
             credentials: "include",
             method: "GET"
         })
@@ -200,7 +200,7 @@ class EditItemScreen extends React.Component {
     handleChangeImgT = ({ fileList }) => this.setState({ thumbnail: fileList });
 
     updateItem = (finalImgUrls) => {
-        fetch(`http://localhost:3001/api/posts/editItem`, {
+        fetch(`http://192.168.68.120:3001/api/posts/editItem`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -239,7 +239,7 @@ class EditItemScreen extends React.Component {
         })
         console.log(formDataProd)
         if (formDataProd) {
-            fetch(`http://localhost:3001/api/uploads/post/productImg`, {
+            fetch(`http://192.168.68.120:3001/api/uploads/post/productImg`, {
                 credentials: "include",
                 method: "POST",
                 headers: {
@@ -270,7 +270,7 @@ class EditItemScreen extends React.Component {
     }
 
     getThumbnailUrl = (formDataThumbnail, formDataProd, oldItem, finalImgUrls) => {
-        fetch(`http://localhost:3001/api/uploads/post/thumbnail`, {
+        fetch(`http://192.168.68.120:3001/api/uploads/post/thumbnail`, {
             credentials: "include",
             method: "POST",
             headers: {
@@ -431,7 +431,7 @@ class EditItemScreen extends React.Component {
                                 </Form.Item>
                                 <FormItem label="Product Image" name={['productImgs']} labelCol={{ ...layout.labelCol }}>
                                     <Upload
-                                        action="http://localhost:3001/api/uploads/post/checkImg"
+                                        action="http://192.168.68.120:3001/api/uploads/post/checkImg"
                                         listType="picture-card"
                                         fileList={fileList}
                                         onPreview={this.handlePreviewImg}
@@ -450,7 +450,7 @@ class EditItemScreen extends React.Component {
                                 </Modal>
                                 <FormItem label="Thumbnail" name={['productThumbnail']} labelCol={{ ...layout.labelCol }}>
                                     <Upload
-                                        action="http://localhost:3001/api/uploads/post/checkImg"
+                                        action="http://192.168.68.120:3001/api/uploads/post/checkImg"
                                         listType="picture-card"
                                         fileList={thumbnail}
                                         onPreview={this.handlePreviewImgT}

@@ -23,7 +23,7 @@ class HomeScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -75,7 +75,7 @@ class HomeScreen extends React.Component {
 
     dataFetch = (pageSize, pageNumber) => {
         console.log(pageNumber);
-        fetch(`http://localhost:3001/api/posts/getPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}`, {
+        fetch(`http://192.168.68.120:3001/api/posts/getPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}`, {
             credentials: "include",
             method: "GET"
         })
@@ -130,7 +130,7 @@ class HomeScreen extends React.Component {
             onOk() {
                 var successDelete = false;
 
-                fetch(`http://localhost:3001/api/posts/removeItem`, {
+                fetch(`http://192.168.68.120:3001/api/posts/removeItem`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
@@ -286,7 +286,7 @@ class HomeScreen extends React.Component {
                                     // onBack={() => null}
                                     title={
                                         <Breadcrumb>
-                                            <Breadcrumb.Item href="http://localhost:3000">
+                                            <Breadcrumb.Item href="http://192.168.68.120:3000">
                                                 <HomeOutlined style={{ marginBottom: "1px", marginLeft: "6px", fontSize: "20px" }} />
                                             </Breadcrumb.Item>
                                         </Breadcrumb>

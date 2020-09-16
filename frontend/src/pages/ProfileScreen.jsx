@@ -27,7 +27,7 @@ class ProfileScreen extends React.Component {
             window.location.pathname = `/login`
         }
         else {
-            fetch(`http://localhost:3001/api/users/profile`, {
+            fetch(`http://192.168.68.120:3001/api/users/profile`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -133,7 +133,7 @@ class ProfileScreen extends React.Component {
             // Upload file and take local path from database
             const formData = new FormData();
             formData.append('image', this.state.imageFile);
-            fetch(`http://localhost:3001/api/uploads/post/avatar`, {
+            fetch(`http://192.168.68.120:3001/api/uploads/post/avatar`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -168,7 +168,7 @@ class ProfileScreen extends React.Component {
 
     handleFormSubmit = (event) => {
         console.log(this.state.password);
-        fetch(`http://localhost:3001/api/users/update`, {
+        fetch(`http://192.168.68.120:3001/api/users/update`, {
             method: "POST",
             credentials: 'include',
             headers: {

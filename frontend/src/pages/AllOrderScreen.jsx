@@ -27,7 +27,7 @@ class AllOrderScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -61,7 +61,7 @@ class AllOrderScreen extends React.Component {
             window.location.pathname = `/login`
         }
         else { // fetch orders info
-            fetch(`http://localhost:3001/api/users/allOders`, {
+            fetch(`http://192.168.68.120:3001/api/users/allOders`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -210,7 +210,7 @@ class AllOrderScreen extends React.Component {
                                                                 orderList: newOrderList,
                                                             });
                                                             console.log(item.order_id)
-                                                            fetch(`http://localhost:3001/api/users/updateProcess`, {
+                                                            fetch(`http://192.168.68.120:3001/api/users/updateProcess`, {
                                                                 method: "POST",
                                                                 credentials: 'include',
                                                                 headers: {
@@ -374,7 +374,7 @@ class AllOrderScreen extends React.Component {
                                                                 orderList: newOrderList,
                                                             });
                                                             console.log(item.order_id)
-                                                            fetch(`http://localhost:3001/api/users/updateProcess`, {
+                                                            fetch(`http://192.168.68.120:3001/api/users/updateProcess`, {
                                                                 method: "POST",
                                                                 credentials: 'include',
                                                                 headers: {

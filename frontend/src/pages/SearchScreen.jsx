@@ -24,7 +24,7 @@ class SearchScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -70,7 +70,7 @@ class SearchScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
-        fetch(`http://localhost:3001/api/posts/searchPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&searchValue=${this.state.searchValue}`, {
+        fetch(`http://192.168.68.120:3001/api/posts/searchPagination?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&searchValue=${this.state.searchValue}`, {
             credentials: "include",
             method: "GET"
         })
@@ -125,7 +125,7 @@ class SearchScreen extends React.Component {
             onOk() {
                 var successDelete = false;
 
-                fetch(`http://localhost:3001/api/posts/removeItem`, {
+                fetch(`http://192.168.68.120:3001/api/posts/removeItem`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
@@ -278,7 +278,7 @@ class SearchScreen extends React.Component {
                                     // onBack={() => null}
                                     title={
                                         <Breadcrumb>
-                                            <Breadcrumb.Item href="http://localhost:3000">
+                                            <Breadcrumb.Item href="http://192.168.68.120:3000">
                                                 <HomeOutlined style={{ marginBottom: "1px" }} />
                                             </Breadcrumb.Item>
                                             <Breadcrumb.Item>

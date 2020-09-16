@@ -25,7 +25,7 @@ class CategoryScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -73,7 +73,7 @@ class CategoryScreen extends React.Component {
     };
 
     dataFetch = (pageSize, pageNumber) => {
-        fetch(`http://localhost:3001/api/posts/category?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&tag=${this.state.currentMarket[0] + '-' + this.state.currentCategory}`, {
+        fetch(`http://192.168.68.120:3001/api/posts/category?pageSize=${this.state.pageSize}&pageNumber=${this.state.pageNumber + 1}&tag=${this.state.currentMarket[0] + '-' + this.state.currentCategory}`, {
             credentials: "include",
             method: "GET"
         })
@@ -128,7 +128,7 @@ class CategoryScreen extends React.Component {
             onOk() {
                 var successDelete = false;
 
-                fetch(`http://localhost:3001/api/posts/removeItem`, {
+                fetch(`http://192.168.68.120:3001/api/posts/removeItem`, {
                     credentials: "include",
                     method: "POST",
                     headers: {
@@ -282,7 +282,7 @@ class CategoryScreen extends React.Component {
                                     // onBack={() => null}
                                     title={
                                         <Breadcrumb>
-                                            <Breadcrumb.Item href="http://localhost:3000">
+                                            <Breadcrumb.Item href="http://192.168.68.120:3000">
                                                 <HomeOutlined style={{ marginBottom: "1px" }} />
                                             </Breadcrumb.Item>
                                             <Breadcrumb.Item>

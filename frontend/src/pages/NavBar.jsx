@@ -34,7 +34,7 @@ class NavBar extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -66,7 +66,7 @@ class NavBar extends React.Component {
         console.log(this.state.currentUser)
         if (this.state.currentUser.id) {
             // fetch cart info
-            fetch(`http://localhost:3001/api/users/cart`, {
+            fetch(`http://192.168.68.120:3001/api/users/cart`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -90,7 +90,7 @@ class NavBar extends React.Component {
     }
 
     handleLogout = () => {
-        fetch(`http://localhost:3001/api/users/logout`, {
+        fetch(`http://192.168.68.120:3001/api/users/logout`, {
             credentials: "include",
             method: "GET"
         })
@@ -133,7 +133,7 @@ class NavBar extends React.Component {
             <Header style={{ zIndex: 1, width: '100%', paddingLeft: "2vw", paddingRight: "2vw", height: "70px" }}>
                 <Row align="middle">
                     <Col span={4}>
-                        <a className="logo" href="http://localhost:3000" />
+                        <a className="logo" href="http://192.168.68.120:3000" />
                     </Col>
                     <Col span={14}
                         style={{
@@ -186,7 +186,7 @@ class NavBar extends React.Component {
                                                 style={{
                                                     borderRadius: "10px"
                                                 }}>
-                                                <a rel="noopener noreferrer" href="http://localhost:3000/allorders">
+                                                <a rel="noopener noreferrer" href="http://192.168.68.120:3000/allorders">
                                                     All Orders
                                                     </a>
                                             </Menu.Item>
@@ -195,7 +195,7 @@ class NavBar extends React.Component {
                                                 style={{
                                                     borderRadius: "10px"
                                                 }}>
-                                                <a rel="noopener noreferrer" href="http://localhost:3000/statistic">
+                                                <a rel="noopener noreferrer" href="http://192.168.68.120:3000/statistic">
                                                     Summary
                                                     </a>
                                             </Menu.Item>
@@ -204,7 +204,7 @@ class NavBar extends React.Component {
                                                 style={{
                                                     borderRadius: "10px"
                                                 }}>
-                                                <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
+                                                <a target="_blank" rel="noopener noreferrer" href="http://192.168.68.120:3000/profile">
                                                     Profile
                                             </a>
                                             </Menu.Item>
@@ -238,7 +238,7 @@ class NavBar extends React.Component {
                                                     style={{
                                                         borderRadius: "10px"
                                                     }}>
-                                                    <a target="_blank" rel="noopener noreferrer" href="http://localhost:3000/profile">
+                                                    <a target="_blank" rel="noopener noreferrer" href="http://192.168.68.120:3000/profile">
                                                         Profile
                                             </a>
                                                 </Menu.Item>

@@ -86,7 +86,7 @@ class ProductScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -142,7 +142,7 @@ class ProductScreen extends React.Component {
             prod_id: prod_id,
         });
         // Update views
-        fetch(`http://localhost:3001/api/posts/updateViews`, {
+        fetch(`http://192.168.68.120:3001/api/posts/updateViews`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -156,7 +156,7 @@ class ProductScreen extends React.Component {
                 console.log(err)
             });
         // fetch product details
-        fetch(`http://localhost:3001/api/posts/getItem/${prod_id}`, {
+        fetch(`http://192.168.68.120:3001/api/posts/getItem/${prod_id}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -174,7 +174,7 @@ class ProductScreen extends React.Component {
                     currentCategory: data.data.tags.split('-')[1],
                 });
                 // fetch comment of product
-                fetch(`http://localhost:3001/api/posts/getAllComment/${prod_id}`, {
+                fetch(`http://192.168.68.120:3001/api/posts/getAllComment/${prod_id}`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -189,7 +189,7 @@ class ProductScreen extends React.Component {
                             cmt_data: data.data,
                         });
                         // fetch related products
-                        fetch(`http://localhost:3001/api/posts/getRecommended?tag=${this.state.prod_data.tags}`, {
+                        fetch(`http://192.168.68.120:3001/api/posts/getRecommended?tag=${this.state.prod_data.tags}`, {
                             method: 'GET',
                             credentials: 'include',
                             headers: {
@@ -225,7 +225,7 @@ class ProductScreen extends React.Component {
     }
 
     handleAddToCart = () => {
-        fetch(`http://localhost:3001/api/users/addToCart`, {
+        fetch(`http://192.168.68.120:3001/api/users/addToCart`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -268,7 +268,7 @@ class ProductScreen extends React.Component {
         });
 
         fetch(
-            `http://localhost:3001/api/posts/makeComment`,
+            `http://192.168.68.120:3001/api/posts/makeComment`,
             {
                 method: "POST",
                 credentials: "include",
@@ -311,7 +311,7 @@ class ProductScreen extends React.Component {
     }
 
     handleDelete = (event) => {
-        fetch(`http://localhost:3001/api/posts/removeItem`, {
+        fetch(`http://192.168.68.120:3001/api/posts/removeItem`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -358,7 +358,7 @@ class ProductScreen extends React.Component {
                             // onBack={() => null}
                             title={
                                 <Breadcrumb>
-                                    <Breadcrumb.Item href="http://localhost:3000">
+                                    <Breadcrumb.Item href="http://192.168.68.120:3000">
                                         <HomeOutlined style={{ marginBottom: "1px" }} />
                                     </Breadcrumb.Item>
                                     <Breadcrumb.Item>
@@ -367,7 +367,7 @@ class ProductScreen extends React.Component {
                                     <Breadcrumb.Item>
                                         <span>{this.state.currentMarket}</span>
                                     </Breadcrumb.Item>
-                                    <Breadcrumb.Item href={"http://localhost:3000/category/" + this.state.prod_data.tags}>
+                                    <Breadcrumb.Item href={"http://192.168.68.120:3000/category/" + this.state.prod_data.tags}>
                                         <span>{this.state.currentCategory}</span>
                                     </Breadcrumb.Item>
                                 </Breadcrumb>

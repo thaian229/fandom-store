@@ -41,7 +41,7 @@ class RegisterScreen extends React.Component {
     };
 
     handleFormSubmit = (event) => {
-        fetch(`http://localhost:3001/api/users/register`, {
+        fetch(`http://192.168.68.120:3001/api/users/register`, {
             method: "POST",
             credentials: 'include',
             headers: {

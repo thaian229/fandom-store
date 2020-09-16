@@ -28,7 +28,7 @@ class CartScreen extends React.Component {
 
     adminCheck = () => {
         if (this.state.currentUser.email) {
-            fetch("http://localhost:3001/api/users/checkAdmin", {
+            fetch("http://192.168.68.120:3001/api/users/checkAdmin", {
                 credentials: "include",
                 method: "GET"
             })
@@ -56,7 +56,7 @@ class CartScreen extends React.Component {
             window.alert('Access Denied, Please Login')
             window.location.pathname = `/`
         } else { // fetch cart info
-            fetch(`http://localhost:3001/api/users/cart`, {
+            fetch(`http://192.168.68.120:3001/api/users/cart`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -96,7 +96,7 @@ class CartScreen extends React.Component {
     }
 
     handleRemoveItem = (id) => {
-        fetch(`http://localhost:3001/api/users/removeFromCart`, {
+        fetch(`http://192.168.68.120:3001/api/users/removeFromCart`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -128,7 +128,7 @@ class CartScreen extends React.Component {
             window.alert('Your cart is empty, cannot place empty order')
             window.location.pathname = `/`
         } else {
-            fetch(`http://localhost:3001/api/users/makeOrder`, {
+            fetch(`http://192.168.68.120:3001/api/users/makeOrder`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -143,7 +143,7 @@ class CartScreen extends React.Component {
                         window.alert(data.message)
                     } else {
 
-                        fetch(`http://localhost:3001/api/users/clearCart`, {
+                        fetch(`http://192.168.68.120:3001/api/users/clearCart`, {
                             method: 'POST',
                             credentials: 'include',
                             headers: {
